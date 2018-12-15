@@ -57,15 +57,24 @@ public class TraceMojo extends AbstractMojo
     private Path getOutputPath()
     {
         final Path outputPath = outputDirectory.toPath().resolve("tracing-report.txt");
+        createDir(outputPath.getParent());
+        return outputPath;
+    }
+
+    private void createDir(final Path path)
+    {
+        if (Files.exists(path))
+        {
+            return;
+        }
         try
         {
-            Files.createDirectories(outputPath.getParent());
+            Files.createDirectories(path);
         }
         catch (final IOException e)
         {
-            throw new UncheckedIOException("Error creating directory " + outputPath.getParent(), e);
+            throw new UncheckedIOException("Error creating directory " + path, e);
         }
-        return outputPath;
     }
 
     private ImportSettings createImportSettings()
