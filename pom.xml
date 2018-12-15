@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.itsallcode</groupId>
-    <artifactId>openfasttrace-maven</artifactId>
+    <artifactId>openfasttrace-maven-plugin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>openfasttrace-maven Maven Plugin</name>
 
-    <url>https://github.com/itsallcode/openfasttrace-maven</url>
+    <url>https://github.com/itsallcode/openfasttrace-maven-plugin</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
