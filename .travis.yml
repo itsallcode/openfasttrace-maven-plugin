@@ -20,7 +20,7 @@ before_install:
 
 script:
   - echo "Parsed the version $version from pom.xml" 
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Prun-its
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
@@ -35,7 +35,3 @@ addons:
     build_command_prepend: mvn clean
     build_command: mvn -DskipTests=true compile
     branch_pattern: coverity_scan
-  sonarcloud:
-    organization: "itsallcode"
-    token:
-      secure: "nUDa4gVazWutDcF4wErlJGlhIUSIfmhtUStdvaMac4GEK+vyXPpdNBmEcx2C4p0uBENUfxuO9ro6XVAevJPpIKLhzx+RV3n70MRz/yq5TRRJgh/s6PfpyBI3MYJ6ID9hqRFej777icqvL5kldHSDLo7IbEmfbJ//9UVVKGZ209IjDVdL+cyzRvAFgsnfQL7RfuYpsa4JC/h2SDPYqaKCIB5TaC9wQMiQ6c4Vz9bqV436HXOoDMGWiSzUenSXtEcX8n7vBAFy8CLoiViVVFnKTeFFhYkmdeXGZ4ZxMni4RNcdFZCD5TlhIgZ1rW59DYeD0Fy94HBsiL4IpohqunrwssigSFh6kpyr3m9/rMuos4isyAgTUMhdBuXCvU3w7gNJXAfkh8CUtDoof25lu7e7ckhNU82iqAyhIhInAsA6OSD/GvB1bWE7JCJd72ts7ENHiYrQ4NdWOvh3ln8lYRG20jAjzp6/A3cnar4uY6k5AAGe3glgAVc2b7xqH0MQU5PpwjB+a9khxLzPpXvXf/tqky4vE4udus6li9oTghObwSWkfbDkESWnPJRYm6B4bRhEYw1Ex6EXVTn0vHmnMp2iKR2mYFf387rFG2/habexGOZ7X64/kSGrR43d349XXFwGM33yXQpInWBx7bkZyjh4fmool4jtljuWi+kWeuSKzmo="
