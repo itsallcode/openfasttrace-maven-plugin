@@ -1,18 +1,26 @@
 package org.itsallcode.openfasttrace.maven;
 
+import static java.util.stream.Collectors.toList;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
 import org.itsallcode.openfasttrace.ImportSettings;
+import org.itsallcode.openfasttrace.ImportSettings.Builder;
 import org.itsallcode.openfasttrace.Oft;
 import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.core.OftRunner;
@@ -30,6 +38,9 @@ public class TraceMojo extends AbstractMojo
      */
     @Parameter(defaultValue = "${project.build.directory}", property = "outputDir", required = true)
     private File outputDirectory;
+
+    @Component
+    private MavenProject project;
 
     @Override
     public void execute() throws MojoExecutionException
@@ -79,6 +90,28 @@ public class TraceMojo extends AbstractMojo
 
     private ImportSettings createImportSettings()
     {
-        return ImportSettings.builder().build();
+        final Builder settings = ImportSettings.builder() //
+                .addInputs(getSourcePaths());
+        final Optional<Path> docPath = getProjectSubPath("doc");
+        if (docPath.isPresent())
+        {
+            settings.addInputs(docPath.get());
+        }
+        return settings.build();
+    }
+
+    private List<Path> getSourcePaths()
+    {
+        return Stream
+                .concat(project.getCompileSourceRoots().stream(),
+                        project.getTestCompileSourceRoots().stream())
+                .map(Paths::get) //
+                .collect(toList());
+    }
+
+    private Optional<Path> getProjectSubPath(String dir)
+    {
+        final File file = new File(project.getBasedir(), dir);
+        return file.exists() ? Optional.of(file.toPath()) : Optional.empty();
     }
 }
