@@ -1,13 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace-maven-plugin</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2</version>
     <packaging>maven-plugin</packaging>
 
-    <name>openfasttrace-maven Maven Plugin</name>
+    <name>OpenFastTrace Maven Plugin</name>
+    <description>Maven plugin for requirement tracking</description>
 
     <url>https://github.com/itsallcode/openfasttrace-maven-plugin</url>
 
@@ -16,6 +18,51 @@
         <java.version>1.8</java.version>
         <oft.version>2.2.0</oft.version>
     </properties>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>redcatbear</id>
+            <url>https://github.com/redcatbear</url>
+            <organization>itsallcode</organization>
+            <organizationUrl>https://github.com/itsallcode</organizationUrl>
+        </developer>
+
+        <developer>
+            <id>kaklakariada</id>
+            <url>https://github.com/kaklakariada</url>
+            <organization>itsallcode</organization>
+            <organizationUrl>https://github.com/itsallcode</organizationUrl>
+            <email>github@chp1.net</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/itsallcode/openfasttrace-maven-plugin.git</connection>
+        <developerConnection>scm:git:https://github.com/itsallcode/openfasttrace-maven-plugin.git</developerConnection>
+        <url>https://github.com/itsallcode/openfasttrace-maven-plugin</url>
+    </scm>
+
+    <repositories>
+        <repository>
+            <id>jcenter</id>
+            <url>http://jcenter.bintray.com/</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>itsallcode-maven-repo</id>
+            <url>https://api.bintray.com/maven/itsallcode/itsallcode/openfasttrace-maven-plugin/;publish=0</url>
+        </repository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
@@ -100,27 +147,95 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.0.0</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
                 <executions>
                     <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
+                        <id>attach-sources</id>
                         <goals>
-                            <goal>add-source</goal>
+                            <goal>jar</goal>
                         </goals>
-                        <configuration>
-                            <sources>
-                            </sources>
-                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <charset>UTF-8</charset>
+                    <doclint></doclint>
+                    <serialwarn>true</serialwarn>
+                    <failOnError>true</failOnError>
+                    <failOnWarnings>true</failOnWarnings>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>1.16</version>
+                <configuration>
+                    <verbose>false</verbose>
+                    <detail>true</detail>
+                    <licenseName>gpl_v3</licenseName>
+                    <organizationName>itsallcode.org</organizationName>
+                    <inceptionYear>2018</inceptionYear>
+                    <failOnMissingHeader>true</failOnMissingHeader>
+                    <failIfWarning>true</failIfWarning>
+                    <failOnNotUptodateHeader>true</failOnNotUptodateHeader>
+                    <addJavaLicenseAfterPackage>true</addJavaLicenseAfterPackage>
+                    <encoding>UTF-8</encoding>
+                    <dryRun>false</dryRun>
+                    <excludes>
+                        <exclude>plugin/org/itsallcode/openfasttrace/maven/HelpMojo.java</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>check-file-header</id>
+                        <goals>
+                            <goal>check-file-header</goal>
+                        </goals>
+                        <phase>validate</phase>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
+
         <pluginManagement>
             <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                <!--This plugin's configuration is used to store Eclipse 
+                    m2e settings only. It has no influence on the Maven build itself. -->
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
                     <artifactId>lifecycle-mapping</artifactId>
