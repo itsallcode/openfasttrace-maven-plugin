@@ -48,6 +48,8 @@ The plugin binds to the `verify` lifecycle, so you can also use `mvn verify`.
 
 The tracing report will be written to `target/tracing-report.txt`.
 
+See [src/test/resources/empty-project](src/test/resources/empty-project) for an example project.
+
 ## Development
 
 ### Installation of Initial Build Dependencies on Linux
