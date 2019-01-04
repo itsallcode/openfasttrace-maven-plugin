@@ -24,6 +24,30 @@ Sonarcloud status:
 
 ## Usage
 
+Add the openfasttrace-maven-plugin to your `pom.xml`:
+
+```xml
+<plugin>
+    <groupId>org.itsallcode</groupId>
+    <artifactId>openfasttrace-maven-plugin</artifactId>
+    <version>0.0.2</version>
+    <executions>
+        <execution>
+            <id>trace-requirements</id>
+            <goals>
+                <goal>trace</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+```
+
+Then you can run tracing by calling the goal directly: `mvn openfasttrace:trace`.
+
+The plugin binds to the `verify` lifecycle, so you can also use `mvn verify`.
+
+The tracing report will be written to `target/tracing-report.txt`.
+
 ## Development
 
 ### Installation of Initial Build Dependencies on Linux
