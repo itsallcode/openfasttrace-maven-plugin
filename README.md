@@ -4,7 +4,7 @@ Maven Plugin for [OpenFastTrace](https://github.com/itsallcode/openfasttrace)
 
 ## Project Information
 
-[![Build Status](https://travis-ci.org/itsallcode/openfasttrace-maven-plugin.svg)](https://travis-ci.org/itsallcode/openfasttrace-maven-plugin)
+[![Build Status](https://travis-ci.com/itsallcode/openfasttrace-maven-plugin.svg)](https://travis-ci.com/itsallcode/openfasttrace-maven-plugin)
 [![codecov](https://codecov.io/gh/itsallcode/openfasttrace-maven-plugin/branch/develop/graph/badge.svg)](https://codecov.io/gh/itsallcode/openfasttrace-maven-plugin)
 [![Maven Central](https://img.shields.io/maven-central/v/org.itsallcode/openfasttrace-maven-plugin.svg?label=Maven%20Central)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.itsallcode%22%20a%3A%22openfasttrace-maven-plugin%22)
 
