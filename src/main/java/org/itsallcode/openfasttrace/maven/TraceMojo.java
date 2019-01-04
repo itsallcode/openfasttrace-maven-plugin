@@ -94,7 +94,7 @@ public class TraceMojo extends AbstractMojo
 
     private void createDir(final Path path)
     {
-        if (Files.exists(path))
+        if (path.toFile().exists())
         {
             return;
         }
