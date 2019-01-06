@@ -50,7 +50,7 @@ import org.itsallcode.openfasttrace.core.Trace;
 /**
  * Trace requirements using OpenFastTrace
  */
-@Mojo(name = "trace", defaultPhase = LifecyclePhase.NONE)
+@Mojo(name = "trace", defaultPhase = LifecyclePhase.VERIFY)
 public class TraceMojo extends AbstractMojo
 {
     /**

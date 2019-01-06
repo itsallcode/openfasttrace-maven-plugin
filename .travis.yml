@@ -26,14 +26,5 @@ after_success:
   - bash <(curl -s https://codecov.io/bash)
 
 addons:
-  coverity_scan:
-    project:
-      name: itsallcode/openfasttrace-maven
-      version: $version
-      description: OpenFastTrace Maven Plugin
-    notification_email: christoph@users.sourceforge.net
-    build_command_prepend: mvn clean
-    build_command: mvn -DskipTests=true compile
-    branch_pattern: coverity_scan
   sonarcloud:
     organization: "itsallcode"
