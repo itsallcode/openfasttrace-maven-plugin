@@ -43,7 +43,7 @@ public class TraceMojoTest
     private static Path EMPTY_PROJECT = BASE_TEST_DIR.resolve("empty-project");
 
     @Test
-    public void testSomething() throws Exception
+    public void testEmptyProject() throws Exception
     {
         runTracingMojo(EMPTY_PROJECT);
         assertFileContent(EMPTY_PROJECT.resolve("target/tracing-report.txt"), "ok - 0 total");
