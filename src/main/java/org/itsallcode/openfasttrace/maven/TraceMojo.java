@@ -39,13 +39,12 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.itsallcode.openfasttrace.ImportSettings;
-import org.itsallcode.openfasttrace.ImportSettings.Builder;
 import org.itsallcode.openfasttrace.Oft;
 import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.core.OftRunner;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.core.Trace;
+import org.itsallcode.openfasttrace.importer.ImportSettings;
 
 /**
  * Trace requirements using OpenFastTrace
@@ -110,7 +109,7 @@ public class TraceMojo extends AbstractMojo
 
     private ImportSettings createImportSettings()
     {
-        final Builder settings = ImportSettings.builder() //
+        final ImportSettings.Builder settings = ImportSettings.builder() //
                 .addInputs(getSourcePaths());
         final Optional<Path> docPath = getProjectSubPath("doc");
         if (docPath.isPresent())
