@@ -39,12 +39,12 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.itsallcode.openfasttrace.Oft;
-import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.core.Trace;
+import org.itsallcode.openfasttrace.api.importer.ImportSettings;
+import org.itsallcode.openfasttrace.core.Oft;
 import org.itsallcode.openfasttrace.core.OftRunner;
-import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.core.Trace;
-import org.itsallcode.openfasttrace.importer.ImportSettings;
 
 /**
  * Trace requirements using OpenFastTrace
