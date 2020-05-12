@@ -30,7 +30,7 @@ Add the openfasttrace-maven-plugin to your `pom.xml`:
 <plugin>
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace-maven-plugin</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <executions>
         <execution>
             <id>trace-requirements</id>
@@ -58,7 +58,7 @@ See [src/test/resources/empty-project](src/test/resources/empty-project) for an 
 
 If you want to build OFT:
 
-    apt-get install openjdk-8-jdk maven
+    apt-get install openjdk-11-jdk maven
 
 ### Essential Build Steps
 
