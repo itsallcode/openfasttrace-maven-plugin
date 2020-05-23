@@ -55,7 +55,7 @@ public class TraceMojo extends AbstractMojo
     /**
      * Location of the directory where the reports are generated.
      */
-    @Parameter(defaultValue = "${project.build.directory}", property = "outputDir", required = true)
+    @Parameter(defaultValue = "${project.build.directory}", property = "outputDirectory", required = true)
     private File outputDirectory;
 
     /**

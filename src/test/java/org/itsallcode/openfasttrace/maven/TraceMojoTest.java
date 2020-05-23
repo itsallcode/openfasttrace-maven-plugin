@@ -58,20 +58,11 @@ public class TraceMojoTest
     }
 
     @Test
-    public void testSimpleProject() throws Exception
-    {
-        runTracingMojo(SIMPLE_PROJECT);
-
-        assertThat(fileContent(SIMPLE_PROJECT.resolve("target/reports/tracing-report.txt")))
-                .isEqualTo("ok - 3 total\n");
-    }
-
-    @Test
     public void testTracingSuccessful() throws Exception
     {
         runTracingMojo(SIMPLE_PROJECT);
 
-        assertThat(fileContent(SIMPLE_PROJECT.resolve("target/tracing-report.txt")))
+        assertThat(fileContent(SIMPLE_PROJECT.resolve("target/reports/tracing-report.txt")))
                 .isEqualTo("ok - 3 total\n");
     }
 
