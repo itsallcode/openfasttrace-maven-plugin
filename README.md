@@ -22,6 +22,11 @@ Sonarcloud status:
 [![Technical Dept](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace-maven-plugin&metric=sqale_index)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace-maven-plugin)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace-maven-plugin&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace-maven-plugin)
 
+* [Blog](https://blog.itsallcode.org/)
+* [Changelog](CHANGELOG.md)
+* [Contributing guide](CONTRIBUTING.md)
+* [OpenFastTrace stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
+
 ## Usage
 
 Add the openfasttrace-maven-plugin to your `pom.xml`:
@@ -39,6 +44,9 @@ Add the openfasttrace-maven-plugin to your `pom.xml`:
             </goals>
         </execution>
     </executions>
+    <configuration>
+        <!-- ... -->
+    </configuration>
 </plugin>
 ```
 
@@ -46,9 +54,19 @@ Then you can run tracing by calling the goal directly: `mvn openfasttrace:trace`
 
 The plugin binds to the `verify` lifecycle, so you can also use `mvn verify`.
 
-The tracing report will be written to `target/tracing-report.txt`.
+See [src/test/resources/empty-project](src/test/resources/simple-project) for an example project.
 
-See [src/test/resources/empty-project](src/test/resources/empty-project) for an example project.
+### Configuration
+
+You can configure the plugin using the `<configuration>` element.
+
+#### Report
+
+The tracing report will be written to `target/tracing-report.txt` by default. You can configure the location with `<outputDirectory>${project.build.directory}/reports/</outputDirectory>`.
+
+#### Fail build
+
+By default the build will fail when there are errors found during tracing. To continue with the build when tracing fails, use configuration `<failBuild>false</failBuild>`.
 
 ## Development
 
