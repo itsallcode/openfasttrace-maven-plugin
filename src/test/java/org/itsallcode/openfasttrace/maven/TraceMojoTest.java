@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.maven;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 /*-
  * #%L
  * OpenFastTrace Maven Plugin
@@ -32,6 +33,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.testing.MojoRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -44,6 +46,9 @@ public class TraceMojoTest
     private static Path BASE_TEST_DIR = Paths.get("src/test/resources").toAbsolutePath();
     private static Path EMPTY_PROJECT = BASE_TEST_DIR.resolve("empty-project");
     private static Path SIMPLE_PROJECT = BASE_TEST_DIR.resolve("simple-project");
+    private static Path TRACING_DEFECTS = BASE_TEST_DIR.resolve("project-with-tracing-defects");
+    private static Path TRACING_DEFECTS_FAIL_BUILD = BASE_TEST_DIR
+            .resolve("project-with-tracing-defects-fail-build");
 
     @Test
     public void testEmptyProject() throws Exception
@@ -57,8 +62,37 @@ public class TraceMojoTest
     {
         runTracingMojo(SIMPLE_PROJECT);
 
+        assertThat(fileContent(SIMPLE_PROJECT.resolve("target/reports/tracing-report.txt")))
+                .isEqualTo("ok - 3 total\n");
+    }
+
+    @Test
+    public void testTracingSuccessful() throws Exception
+    {
+        runTracingMojo(SIMPLE_PROJECT);
+
         assertThat(fileContent(SIMPLE_PROJECT.resolve("target/tracing-report.txt")))
                 .isEqualTo("ok - 3 total\n");
+    }
+
+    @Test
+    public void testTracingFindsDefects() throws Exception
+    {
+        runTracingMojo(TRACING_DEFECTS);
+
+        assertThat(fileContent(TRACING_DEFECTS.resolve("target/tracing-report.txt")))
+                .contains("not ok - 2 total, 1 defect");
+    }
+
+    @Test
+    public void testTracingFindsDefectsFailBuild() throws Exception
+    {
+        assertThatThrownBy(() -> runTracingMojo(TRACING_DEFECTS_FAIL_BUILD))
+                .isInstanceOf(MojoFailureException.class)
+                .hasMessage("Tracing found 1 out of 2 items");
+
+        assertThat(fileContent(TRACING_DEFECTS_FAIL_BUILD.resolve("target/tracing-report.txt")))
+                .contains("not ok - 2 total, 1 defect");
     }
 
     private void assertFileContent(Path file, String... lines) throws IOException

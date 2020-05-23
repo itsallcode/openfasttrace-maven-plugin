@@ -34,7 +34,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -58,11 +58,17 @@ public class TraceMojo extends AbstractMojo
     @Parameter(defaultValue = "${project.build.directory}", property = "outputDir", required = true)
     private File outputDirectory;
 
+    /**
+     * Let build fail when tracing fails.
+     */
+    @Parameter(defaultValue = "true", property = "failBuild", required = true)
+    private boolean failBuild;
+
     @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
 
     @Override
-    public void execute() throws MojoExecutionException
+    public void execute() throws MojoFailureException
     {
         final Oft oft = new OftRunner();
         getLog().info("Importing spec items...");
@@ -70,16 +76,24 @@ public class TraceMojo extends AbstractMojo
         getLog().info("Imported " + items.size() + " items.");
         final List<LinkedSpecificationItem> linkedItems = oft.link(items);
         final Trace trace = oft.trace(linkedItems);
-        final Path outputPath = getOutputPath();
-        if (trace.countDefects() > 0)
-        {
-            getLog().warn("Tracing found " + trace.countDefects() + " out of " + trace.count()
-                    + " items");
-        }
-        else
+        writeTracingReport(oft, trace);
+        if (trace.countDefects() == 0)
         {
             getLog().info("Tracing found no defects in " + trace.count() + " items");
+            return;
         }
+        final String message = "Tracing found " + trace.countDefects() + " out of " + trace.count()
+                + " items";
+        getLog().warn(message);
+        if (failBuild)
+        {
+            throw new MojoFailureException(message);
+        }
+    }
+
+    private void writeTracingReport(final Oft oft, final Trace trace)
+    {
+        final Path outputPath = getOutputPath();
         getLog().info("Writing tracing report to " + outputPath);
         oft.reportToPath(trace, outputPath);
     }
