@@ -53,7 +53,7 @@ import org.itsallcode.openfasttrace.core.OftRunner;
 public class TraceMojo extends AbstractMojo
 {
     /**
-     * Location of the file.
+     * Location of the directory where the reports are generated.
      */
     @Parameter(defaultValue = "${project.build.directory}", property = "outputDir", required = true)
     private File outputDirectory;

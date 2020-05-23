@@ -1,5 +1,6 @@
 package org.itsallcode.openfasttrace.maven;
 
+import static org.assertj.core.api.Assertions.assertThat;
 /*-
  * #%L
  * OpenFastTrace Maven Plugin
@@ -23,6 +24,7 @@ package org.itsallcode.openfasttrace.maven;
  */
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -41,12 +43,22 @@ public class TraceMojoTest
 
     private static Path BASE_TEST_DIR = Paths.get("src/test/resources").toAbsolutePath();
     private static Path EMPTY_PROJECT = BASE_TEST_DIR.resolve("empty-project");
+    private static Path SIMPLE_PROJECT = BASE_TEST_DIR.resolve("simple-project");
 
     @Test
     public void testEmptyProject() throws Exception
     {
         runTracingMojo(EMPTY_PROJECT);
         assertFileContent(EMPTY_PROJECT.resolve("target/tracing-report.txt"), "ok - 0 total");
+    }
+
+    @Test
+    public void testSimpleProject() throws Exception
+    {
+        runTracingMojo(SIMPLE_PROJECT);
+
+        assertThat(fileContent(SIMPLE_PROJECT.resolve("target/tracing-report.txt")))
+                .isEqualTo("ok - 3 total\n");
     }
 
     private void assertFileContent(Path file, String... lines) throws IOException
@@ -60,6 +72,7 @@ public class TraceMojoTest
 
     private String fileContent(Path file) throws IOException
     {
+        assertTrue("File does not exist: " + file, Files.exists(file));
         return new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
     }
 
