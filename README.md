@@ -35,7 +35,7 @@ Add the openfasttrace-maven-plugin to your `pom.xml`:
 <plugin>
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace-maven-plugin</artifactId>
-    <version>0.0.3</version>
+    <version>0.1.0</version>
     <executions>
         <execution>
             <id>trace-requirements</id>
@@ -122,11 +122,11 @@ See analysis results at https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopen
     ```
 
 1. Checkout the `develop` branch.
-1. Update version in `pom.xml` and `README.md`, commit and push.
+1. Update version in `pom.xml`, `CHANGELOG.md` and `README.md`, commit and push.
 1. Run command
 
     ```bash
-    mvn deploy
+    mvn clean deploy
     ```
 1. Create a [release](https://github.com/itsallcode/openfasttrace/releases) of the `develop` branch on GitHub.
 1. Sign in at [bintray.com](https://bintray.com)
