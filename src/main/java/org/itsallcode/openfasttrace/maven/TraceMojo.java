@@ -73,9 +73,9 @@ public class TraceMojo extends AbstractMojo
     /**
      * The report output format, e.g. <code>plain</code> or <code>html</code>.
      * <p>
-     * Default: <code>plain</code>
+     * Default: <code>html</code>
      */
-    @Parameter(defaultValue = "plain", property = "reportOutputFormat", required = true)
+    @Parameter(defaultValue = "html", property = "reportOutputFormat", required = true)
     private String reportOutputFormat;
 
     /**

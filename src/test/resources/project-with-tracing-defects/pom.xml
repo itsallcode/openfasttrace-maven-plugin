@@ -34,6 +34,7 @@
                 </executions>
                 <configuration>
                     <failBuild>false</failBuild>
+                    <reportOutputFormat>plain</reportOutputFormat>
                 </configuration>
             </plugin>
         </plugins>

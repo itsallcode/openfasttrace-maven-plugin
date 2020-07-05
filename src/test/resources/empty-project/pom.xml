@@ -47,6 +47,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <reportOutputFormat>plain</reportOutputFormat>
+                </configuration>
             </plugin>
         </plugins>
     </build>
