@@ -138,8 +138,17 @@ public class TraceMojo extends AbstractMojo
                 .verbosity(reportVerbosity)
                 .showOrigin(reportShowOrigin)
                 .build();
-        getLog().info("Writing tracing report to " + outputPath + " using settings " + reportSettings);
+        getLog().info("Writing tracing report to " + outputPath + " using settings " + formatSettings(reportSettings));
         oft.reportToPath(trace, outputPath, reportSettings);
+    }
+
+    private String formatSettings(ReportSettings reportSettings)
+    {
+        return "[output format: " + reportSettings.getOutputFormat()
+                + ", verbosity: " + reportSettings.getReportVerbosity()
+                + ", show origin: " + reportSettings.showOrigin()
+                + ", newline: " + reportSettings.getNewline().name()
+                + "]";
     }
 
     private Path getOutputPath()
