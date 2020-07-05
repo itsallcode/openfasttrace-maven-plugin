@@ -39,10 +39,12 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.itsallcode.openfasttrace.api.ReportSettings;
 import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.api.importer.ImportSettings;
+import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.core.Oft;
 import org.itsallcode.openfasttrace.core.OftRunner;
 
@@ -54,15 +56,52 @@ public class TraceMojo extends AbstractMojo
 {
     /**
      * Location of the directory where the reports are generated.
+     * <p>
+     * Default: ${project.build.directory}
      */
     @Parameter(defaultValue = "${project.build.directory}", property = "outputDirectory", required = true)
     private File outputDirectory;
 
     /**
      * Let build fail when tracing fails.
+     * <p>
+     * Default: <code>true</code>
      */
     @Parameter(defaultValue = "true", property = "failBuild", required = true)
     private boolean failBuild;
+
+    /**
+     * The report output format, e.g. <code>plain</code> or <code>html</code>.
+     * <p>
+     * Default: <code>plain</code>
+     */
+    @Parameter(defaultValue = "plain", property = "reportOutputFormat", required = true)
+    private String reportOutputFormat;
+
+    /**
+     * The report verbosity
+     * <ul>
+     * <li><code>QUIET</code></li>
+     * <li><code>MINIMAL</code></li>
+     * <li><code>SUMMARY</code></li>
+     * <li><code>FAILURES</code></li>
+     * <li><code>FAILURE_SUMMARIES</code></li>
+     * <li><code>FAILURE_DETAILS</code></li>
+     * <li><code>ALL</code></li>
+     * </ul>
+     * <p>
+     * Default: <code>FAILURE_DETAILS</code>
+     */
+    @Parameter(defaultValue = "FAILURE_DETAILS", property = "reportVerbosity", required = true)
+    private ReportVerbosity reportVerbosity;
+
+    /**
+     * Show the origin in the tracing report.
+     * <p>
+     * Default: <code>false</code>
+     */
+    @Parameter(defaultValue = "false", property = "reportShowOrigin", required = true)
+    private boolean reportShowOrigin;
 
     @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
@@ -94,13 +133,19 @@ public class TraceMojo extends AbstractMojo
     private void writeTracingReport(final Oft oft, final Trace trace)
     {
         final Path outputPath = getOutputPath();
-        getLog().info("Writing tracing report to " + outputPath);
-        oft.reportToPath(trace, outputPath);
+        final ReportSettings reportSettings = ReportSettings.builder()
+                .outputFormat(reportOutputFormat)
+                .verbosity(reportVerbosity)
+                .showOrigin(reportShowOrigin)
+                .build();
+        getLog().info("Writing tracing report to " + outputPath + " using settings " + reportSettings);
+        oft.reportToPath(trace, outputPath, reportSettings);
     }
 
     private Path getOutputPath()
     {
-        final Path outputPath = outputDirectory.toPath().resolve("tracing-report.txt");
+        final String reportSuffix = "html".equals(reportOutputFormat) ? "html" : "txt";
+        final Path outputPath = outputDirectory.toPath().resolve("tracing-report." + reportSuffix);
         createDir(outputPath.getParent());
         return outputPath;
     }
