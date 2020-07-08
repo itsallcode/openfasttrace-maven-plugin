@@ -45,7 +45,10 @@ Add the openfasttrace-maven-plugin to your `pom.xml`:
         </execution>
     </executions>
     <configuration>
-        <!-- ... -->
+        <failBuild>true</failBuild>
+        <reportOutputFormat>html</reportOutputFormat>
+        <reportVerbosity>ALL</reportVerbosity>
+        <reportShowOrigin>true</reportShowOrigin>
     </configuration>
 </plugin>
 ```
