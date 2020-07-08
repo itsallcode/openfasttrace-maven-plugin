@@ -133,6 +133,21 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>src/test/resources</directory>
+                            <includes>
+                                <include>*/target/**</include>
+                            </includes>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
@@ -235,7 +250,7 @@
                     <dryRun>false</dryRun>
                     <excludes>
                         <exclude>plugin/org/itsallcode/openfasttrace/maven/HelpMojo.java</exclude>
-                        <exclude>test/resources/empty-project/target/maven-archiver/pom.properties</exclude>
+                        <exclude>test/resources/*/target/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>

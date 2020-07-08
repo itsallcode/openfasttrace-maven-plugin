@@ -48,7 +48,9 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <reportOutputFormat>plain</reportOutputFormat>
+                    <reportOutputFormat>html</reportOutputFormat>
+                    <reportVerbosity>ALL</reportVerbosity>
+                    <reportShowOrigin>true</reportShowOrigin>
                 </configuration>
             </plugin>
         </plugins>

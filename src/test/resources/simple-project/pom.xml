@@ -49,6 +49,7 @@
                 </executions>
                 <configuration>
                     <outputDirectory>${project.build.directory}/reports/</outputDirectory>
+                    <reportOutputFormat>plain</reportOutputFormat>
                 </configuration>
             </plugin>
         </plugins>

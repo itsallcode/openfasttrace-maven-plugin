@@ -49,6 +49,8 @@ public class TraceMojoTest
     private static Path TRACING_DEFECTS = BASE_TEST_DIR.resolve("project-with-tracing-defects");
     private static Path TRACING_DEFECTS_FAIL_BUILD = BASE_TEST_DIR
             .resolve("project-with-tracing-defects-fail-build");
+    private static Path HTML_REPORT_PROJECT = BASE_TEST_DIR
+            .resolve("html-report");
 
     @Test
     public void testEmptyProject() throws Exception
@@ -84,6 +86,15 @@ public class TraceMojoTest
 
         assertThat(fileContent(TRACING_DEFECTS_FAIL_BUILD.resolve("target/tracing-report.txt")))
                 .contains("not ok - 2 total, 1 defect");
+    }
+
+    @Test
+    public void testHtmlReport() throws Exception
+    {
+        runTracingMojo(HTML_REPORT_PROJECT);
+
+        assertThat(fileContent(HTML_REPORT_PROJECT.resolve("target/tracing-report.html")))
+                .contains("<span class=\"green\">&check;</span> 3 total");
     }
 
     private void assertFileContent(Path file, String... lines) throws IOException
