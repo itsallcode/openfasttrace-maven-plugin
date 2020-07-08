@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2020-07-08
+
+### Changed
+
+- [#4](https://github.com/itsallcode/openfasttrace-maven-plugin/issues/4) Allow configuration of report format, using HTML by default
+
 ## [0.1.0] - 2020-05-23
 
 ### Changed
@@ -21,4 +27,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.2] - Initial release
 
-### Changed
+- Initial release

@@ -35,7 +35,7 @@ Add the openfasttrace-maven-plugin to your `pom.xml`:
 <plugin>
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace-maven-plugin</artifactId>
-    <version>0.1.0</version>
+    <version>1.0.0</version>
     <executions>
         <execution>
             <id>trace-requirements</id>
