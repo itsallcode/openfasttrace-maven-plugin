@@ -109,6 +109,16 @@ mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
 
 See analysis results at https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace-maven-plugin
 
+## Check for updated dependencies / plugins
+
+```bash
+mvn versions:display-dependency-updates
+```
+
+```bash
+mvn versions:display-plugin-updates
+```
+
 ## Publishing to JCenter and Maven Central
 
 1. Add the following to your `~/.m2/settings.xml`:
