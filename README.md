@@ -115,13 +115,27 @@ See analysis results at https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopen
 1. Add the following to your `~/.m2/settings.xml`:
 
     ```xml
-    <servers>
-        <server>
-            <id>itsallcode-maven-repo</id>
-            <username>[bintray-username]</username>
-            <password>[bintray-api-key]</password>
-        </server>
-    </servers>
+    <settings>
+        <servers>
+            <server>
+                <id>ossrh</id>
+                <username>your-jira-id</username>
+                <password>your-jira-pwd</password>
+            </server>
+        </servers>
+        <profiles>
+            <profile>
+                <id>ossrh</id>
+                <activation>
+                    <activeByDefault>true</activeByDefault>
+                </activation>
+                <properties>
+                    <gpg.executable>gpg</gpg.executable>
+                    <gpg.passphrase>the_pass_phrase</gpg.passphrase>
+                </properties>
+            </profile>
+        </profiles>
+    </settings>
     ```
 
 1. Checkout the `develop` branch.
@@ -129,7 +143,7 @@ See analysis results at https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopen
 1. Run command
 
     ```bash
-    mvn clean deploy
+    mvn -DskipSigningArtifacts=false clean deploy
     ```
 1. Create a [release](https://github.com/itsallcode/openfasttrace-maven-plugin/releases) of the `develop` branch on GitHub.
 1. Sign in at [bintray.com](https://bintray.com)
