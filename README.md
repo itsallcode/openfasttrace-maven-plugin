@@ -4,8 +4,7 @@ Maven Plugin for [OpenFastTrace](https://github.com/itsallcode/openfasttrace)
 
 ## Project Information
 
-[![Build Status](https://travis-ci.com/itsallcode/openfasttrace-maven-plugin.svg)](https://travis-ci.com/itsallcode/openfasttrace-maven-plugin)
-[![codecov](https://codecov.io/gh/itsallcode/openfasttrace-maven-plugin/branch/develop/graph/badge.svg)](https://codecov.io/gh/itsallcode/openfasttrace-maven-plugin)
+[![Build](https://github.com/itsallcode/openfasttrace-maven-plugin/actions/workflows/build.yml/badge.svg)](https://github.com/itsallcode/openfasttrace-maven-plugin/actions/workflows/build.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/org.itsallcode/openfasttrace-maven-plugin.svg?label=Maven%20Central)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.itsallcode%22%20a%3A%22openfasttrace-maven-plugin%22)
 
 Sonarcloud status:
@@ -110,18 +109,42 @@ mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
 
 See analysis results at https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace-maven-plugin
 
+## Check for updated dependencies / plugins
+
+```bash
+mvn versions:display-dependency-updates
+```
+
+```bash
+mvn versions:display-plugin-updates
+```
+
 ## Publishing to JCenter and Maven Central
 
 1. Add the following to your `~/.m2/settings.xml`:
 
     ```xml
-    <servers>
-        <server>
-            <id>itsallcode-maven-repo</id>
-            <username>[bintray-username]</username>
-            <password>[bintray-api-key]</password>
-        </server>
-    </servers>
+    <settings>
+        <servers>
+            <server>
+                <id>ossrh</id>
+                <username>your-jira-id</username>
+                <password>your-jira-pwd</password>
+            </server>
+        </servers>
+        <profiles>
+            <profile>
+                <id>ossrh</id>
+                <activation>
+                    <activeByDefault>true</activeByDefault>
+                </activation>
+                <properties>
+                    <gpg.executable>gpg</gpg.executable>
+                    <gpg.passphrase>the_pass_phrase</gpg.passphrase>
+                </properties>
+            </profile>
+        </profiles>
+    </settings>
     ```
 
 1. Checkout the `develop` branch.
@@ -129,10 +152,7 @@ See analysis results at https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopen
 1. Run command
 
     ```bash
-    mvn clean deploy
+    mvn -DskipSigningArtifacts=false clean deploy
     ```
 1. Create a [release](https://github.com/itsallcode/openfasttrace-maven-plugin/releases) of the `develop` branch on GitHub.
-1. Sign in at [bintray.com](https://bintray.com)
-1. Go to the [Bintray project page](https://bintray.com/itsallcode/itsallcode/openfasttrace-maven-plugin)
-1. There should be a notice saying "You have 16 unpublished item(s) for this package". Click the "Publish" link. Binaries will be available for download at [JCenter](https://jcenter.bintray.com/org/itsallcode/openfasttrace-maven-plugin/)
-1. Publish to Maven Central by clicking the "Sync" button at https://bintray.com/itsallcode/itsallcode/openfasttrace-maven-plugin#central. After some time the new version will appear at https://repo1.maven.org/maven2/org/itsallcode/openfasttrace-maven-plugin/
+1. After some time the new version will appear at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace-maven-plugin/)
