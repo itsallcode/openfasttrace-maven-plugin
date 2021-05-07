@@ -19,4 +19,6 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-[test->dsn~exampleA~1]
+// [test->dsn~exampleA~1]
+class test {
+}

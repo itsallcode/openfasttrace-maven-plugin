@@ -19,4 +19,6 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-[impl->dsn~exampleA~1]
+// [impl->dsn~exampleA~1]
+class source {
+}
