@@ -36,6 +36,18 @@ jobs:
       run: mvn --errors --batch-mode clean org.jacoco:jacoco-maven-plugin:prepare-agent install
       env:
         MAVEN_OPTS: "-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
+    - name: Build example projects
+      run: |
+        cd src/test/resources/empty-project/
+        mvn verify
+        cd ../simple-project/
+        mvn verify
+        cd ../html-report/
+        mvn verify
+        cd ../project-with-tracing-defects
+        mvn verify
+        cd ../project-with-tracing-defects-fail-build/
+        mvn verify || true
     - name: Sonar analysis
       if: ${{ env.SONAR_TOKEN != null }}
       run: mvn --errors --batch-mode -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=itsallcode -Dsonar.login=$SONAR_TOKEN org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar
