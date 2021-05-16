@@ -22,19 +22,34 @@ package org.itsallcode.openfasttrace.maven;
  * #L%
  */
 
+import java.io.File;
 import java.nio.file.Path;
 
+import com.exasol.mavenpluginintegrationtesting.MavenIntegrationTestEnvironment;
 import org.apache.maven.it.VerificationException;
 import org.apache.maven.it.Verifier;
 import org.junit.Test;
+import org.junit.BeforeClass;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter.getCurrentProjectVersion;
 
 public class TraceMojoVerifierTest extends AbstractTraceMojoTest
 {
-
+    private static final String CURRENT_PLUGIN_VERSION = getCurrentProjectVersion();
+    private static final File CURRENT_PLUGIN_JAR = Path
+            .of("target", "openfasttrace-maven-plugin-" + CURRENT_PLUGIN_VERSION + ".jar")
+            .toFile();
+    private static final File CURRENT_PLUGIN_POM = Path.of("pom.xml").toFile();
     private static Path PROJECT_WITH_PATH_PATTERN = BASE_TEST_DIR.resolve("project-with-path-pattern");
     private static Path PROJECT_WITHOUT_PATH_PATTERN = BASE_TEST_DIR.resolve("project-without-path-pattern-fails");
+
+    @BeforeClass
+    public static void setup()
+    {
+        final MavenIntegrationTestEnvironment mvnITEnv = new MavenIntegrationTestEnvironment();
+        mvnITEnv.installPlugin(CURRENT_PLUGIN_JAR, CURRENT_PLUGIN_POM);
+    }
 
     @Test
     public void testTracingWithPathPatternSuccessful() throws Exception
@@ -51,9 +66,12 @@ public class TraceMojoVerifierTest extends AbstractTraceMojoTest
     public void testTracingWithPathPatternThrows() throws Exception
     {
         final Verifier verifier = new Verifier(PROJECT_WITHOUT_PATH_PATTERN.toAbsolutePath().toString());
-        try {
+        try
+        {
             verifier.executeGoal("verify");
-        } catch (final Exception exception) {
+        }
+        catch (final Exception exception)
+        {
             verifier.verifyTextInLog("Tracing found 1 out of 4 items");
             throw exception;
         }
