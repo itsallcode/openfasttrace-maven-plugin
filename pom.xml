@@ -125,6 +125,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.apache.maven.shared</groupId>
+            <artifactId>maven-verifier</artifactId>
+            <version>1.7.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>3.19.0</version>

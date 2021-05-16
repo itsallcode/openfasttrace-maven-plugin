@@ -5,3 +5,4 @@
 /.settings/org.eclipse.jdt.apt.core.prefs
 /target/
 /src/test/resources/*/target/
+/src/test/resources/*/log.txt

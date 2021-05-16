@@ -10,12 +10,12 @@ package org.itsallcode.openfasttrace.maven;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -29,6 +29,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -44,6 +45,7 @@ import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.api.importer.ImportSettings;
+import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.core.Oft;
 import org.itsallcode.openfasttrace.core.OftRunner;
@@ -57,7 +59,7 @@ public class TraceMojo extends AbstractMojo
     /**
      * Location of the directory where the reports are generated.
      * <p>
-     * Default: ${project.build.directory}
+     * Default: <code>${project.build.directory}</code>
      */
     @Parameter(defaultValue = "${project.build.directory}", property = "outputDirectory", required = true)
     private File outputDirectory;
@@ -102,6 +104,12 @@ public class TraceMojo extends AbstractMojo
      */
     @Parameter(defaultValue = "false", property = "reportShowOrigin", required = true)
     private boolean reportShowOrigin;
+
+    /**
+     * Set path pattern for additional locations.
+     */
+    @Parameter(property = "pathPattern", required = false)
+    private String pathPattern;
 
     @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
@@ -183,6 +191,15 @@ public class TraceMojo extends AbstractMojo
         if (docPath.isPresent())
         {
             settings.addInputs(docPath.get());
+        }
+        if (pathPattern != null && !pathPattern.isEmpty()) {
+            getLog().info("Using path pattern '" + pathPattern + "' for importing items.");
+            PathConfig pathConfig = PathConfig.builder() //
+                .patternPathMatcher(pathPattern) //
+                .coveredItemArtifactType("") //
+                .tagArtifactType("") //
+                .build();
+            settings.pathConfigs(Collections.singletonList(pathConfig));
         }
         return settings.build();
     }
