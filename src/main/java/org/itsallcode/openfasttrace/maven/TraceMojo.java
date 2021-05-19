@@ -29,7 +29,6 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -104,12 +103,6 @@ public class TraceMojo extends AbstractMojo
      */
     @Parameter(defaultValue = "false", property = "reportShowOrigin", required = true)
     private boolean reportShowOrigin;
-
-    /**
-     * Set path pattern for additional locations.
-     */
-    @Parameter(property = "pathPattern", required = false)
-    private String pathPattern;
 
     @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
@@ -191,15 +184,6 @@ public class TraceMojo extends AbstractMojo
         if (docPath.isPresent())
         {
             settings.addInputs(docPath.get());
-        }
-        if (pathPattern != null && !pathPattern.isEmpty()) {
-            getLog().info("Using path pattern '" + pathPattern + "' for importing items.");
-            PathConfig pathConfig = PathConfig.builder() //
-                .patternPathMatcher(pathPattern) //
-                .coveredItemArtifactType("") //
-                .tagArtifactType("") //
-                .build();
-            settings.pathConfigs(Collections.singletonList(pathConfig));
         }
         return settings.build();
     }
