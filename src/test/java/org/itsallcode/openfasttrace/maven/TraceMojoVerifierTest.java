@@ -41,8 +41,7 @@ public class TraceMojoVerifierTest extends AbstractTraceMojoTest
             .of("target", "openfasttrace-maven-plugin-" + CURRENT_PLUGIN_VERSION + ".jar")
             .toFile();
     private static final File CURRENT_PLUGIN_POM = Path.of("pom.xml").toFile();
-    private static Path PROJECT_WITH_PATH_PATTERN = BASE_TEST_DIR.resolve("project-with-path-pattern");
-    private static Path PROJECT_WITHOUT_PATH_PATTERN = BASE_TEST_DIR.resolve("project-without-path-pattern-fails");
+    private static Path PROJECT_WITH_MULTIPLE_LANGUAGES = BASE_TEST_DIR.resolve("project-with-multiple-languages");
 
     @BeforeClass
     public static void setup()
@@ -52,29 +51,14 @@ public class TraceMojoVerifierTest extends AbstractTraceMojoTest
     }
 
     @Test
-    public void testTracingWithPathPatternSuccessful() throws Exception
+    public void testTracingWithMultipleLanguages() throws Exception
     {
 
-        final Verifier verifier = new Verifier(PROJECT_WITH_PATH_PATTERN.toAbsolutePath().toString());
+        final Verifier verifier = new Verifier(PROJECT_WITH_MULTIPLE_LANGUAGES.toAbsolutePath().toString());
         verifier.executeGoal("verify");
         verifier.verifyErrorFreeLog();
-        assertThat(fileContent(PROJECT_WITH_PATH_PATTERN.resolve("target/tracing-report.txt")))
+        assertThat(fileContent(PROJECT_WITH_MULTIPLE_LANGUAGES.resolve("target/tracing-report.txt")))
                 .isEqualTo("ok - 6 total\n");
-    }
-
-    @Test(expected = VerificationException.class)
-    public void testTracingWithPathPatternThrows() throws Exception
-    {
-        final Verifier verifier = new Verifier(PROJECT_WITHOUT_PATH_PATTERN.toAbsolutePath().toString());
-        try
-        {
-            verifier.executeGoal("verify");
-        }
-        catch (final Exception exception)
-        {
-            verifier.verifyTextInLog("Tracing found 1 out of 4 items");
-            throw exception;
-        }
     }
 
 }

@@ -297,6 +297,7 @@
                     <dryRun>false</dryRun>
                     <excludes>
                         <exclude>plugin/org/itsallcode/openfasttrace/maven/HelpMojo.java</exclude>
+                        <exclude>test/resources/*/src/**</exclude>
                         <exclude>test/resources/*/target/**</exclude>
                     </excludes>
                 </configuration>
