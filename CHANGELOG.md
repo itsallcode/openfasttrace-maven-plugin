@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0]
+
+### Changed
+
+- [#22](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/22) Upgrade to [OpenFastTrace 3.1.0](https://github.com/itsallcode/openfasttrace/releases/tag/3.1.0), adding support for JVM languages Clojure, Kotlin and Scala.
+
 ## [1.0.0] - 2020-07-08
 
 ### Changed
