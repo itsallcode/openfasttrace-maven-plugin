@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2021-05-30
+
+### Changed
+
+- [#20](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/20) Upgrade to Maven 3.8.1
+- [#20](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/20) Upgrade to OpenFastTrace 3.2.0 including
+  - [#271](https://github.com/itsallcode/openfasttrace/issues/271)
+  - [#258](https://github.com/itsallcode/openfasttrace/pull/258)
+
 ## [1.1.0] - 2021-05-21
 
 ### Changed
