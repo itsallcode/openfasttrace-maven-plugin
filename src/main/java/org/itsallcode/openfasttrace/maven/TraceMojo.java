@@ -121,13 +121,23 @@ public class TraceMojo extends AbstractMojo
             getLog().info("Tracing found no defects in " + trace.count() + " items");
             return;
         }
-        final String message = "Tracing found " + trace.countDefects() + " out of " + trace.count()
-                + " items";
+        final String message = "Tracing found " + trace.countDefects() + " defects out of " + trace.count() + " items";
         getLog().warn(message);
+        logTracingReport(oft, trace);
         if (failBuild)
         {
             throw new MojoFailureException(message);
         }
+    }
+
+    private void logTracingReport(final Oft oft, final Trace trace)
+    {
+        final ReportSettings reportSettings = ReportSettings.builder()
+                .outputFormat("plain")
+                .verbosity(ReportVerbosity.FAILURE_DETAILS)
+                .showOrigin(false)
+                .build();
+        oft.reportToStdOut(trace, reportSettings);
     }
 
     private void writeTracingReport(final Oft oft, final Trace trace)
