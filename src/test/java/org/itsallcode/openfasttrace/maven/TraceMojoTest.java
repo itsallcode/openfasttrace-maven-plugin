@@ -75,7 +75,7 @@ public class TraceMojoTest extends AbstractTraceMojoTest
     {
         assertThatThrownBy(() -> runTracingMojo(TRACING_DEFECTS_FAIL_BUILD))
                 .isInstanceOf(MojoFailureException.class)
-                .hasMessage("Tracing found 1 out of 2 items");
+                .hasMessage("Tracing found 1 defects out of 2 items");
 
         assertThat(fileContent(TRACING_DEFECTS_FAIL_BUILD.resolve("target/tracing-report.txt")))
                 .contains("not ok - 2 total, 1 defect");
