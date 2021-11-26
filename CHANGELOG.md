@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## Changed
+### Changed
 
 - [#29](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/29) Upgrade dependencies, using OpenFastTrace [OpenFastTrace 3.2.1](https://github.com/itsallcode/openfasttrace/releases/tag/3.2.1) and test with Java 16.
 - [#33](https://github.com/itsallcode/openfasttrace-maven-plugin/issues/33) Print tracing summary report
