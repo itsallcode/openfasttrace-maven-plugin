@@ -26,7 +26,6 @@ import java.io.File;
 import java.nio.file.Path;
 
 import com.exasol.mavenpluginintegrationtesting.MavenIntegrationTestEnvironment;
-import org.apache.maven.it.VerificationException;
 import org.apache.maven.it.Verifier;
 import org.junit.Test;
 import org.junit.BeforeClass;
