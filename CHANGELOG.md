@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Changed
+
+- Upgrade dependencies
+- [#33](https://github.com/itsallcode/openfasttrace-maven-plugin/issues/33) Print tracing summary report
+
 ## [1.2.0] - 2021-05-30
 
 ### Changed
