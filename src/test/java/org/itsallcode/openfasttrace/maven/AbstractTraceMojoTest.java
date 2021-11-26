@@ -32,7 +32,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-public class AbstractTraceMojoTest
+abstract class AbstractTraceMojoTest
 {
     protected static Path BASE_TEST_DIR = Paths.get("src/test/resources").toAbsolutePath();
 
