@@ -22,6 +22,10 @@ package org.itsallcode.openfasttrace.maven;
  * #L%
  */
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.itsallcode.openfasttrace.maven.TestHelper.*;
+
 import java.nio.file.Path;
 
 import org.apache.maven.plugin.MojoFailureException;
@@ -29,20 +33,16 @@ import org.apache.maven.plugin.testing.MojoRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-public class TraceMojoTest extends AbstractTraceMojoTest
+public class TraceMojoTest
 {
     @Rule
     public MojoRule rule = new MojoRule();
-
-    private static Path EMPTY_PROJECT = BASE_TEST_DIR.resolve("empty-project");
-    private static Path SIMPLE_PROJECT = BASE_TEST_DIR.resolve("simple-project");
-    private static Path TRACING_DEFECTS = BASE_TEST_DIR.resolve("project-with-tracing-defects");
-    private static Path TRACING_DEFECTS_FAIL_BUILD = BASE_TEST_DIR
+    private static final Path EMPTY_PROJECT = BASE_TEST_DIR.resolve("empty-project");
+    private static final Path SIMPLE_PROJECT = BASE_TEST_DIR.resolve("simple-project");
+    private static final Path TRACING_DEFECTS = BASE_TEST_DIR.resolve("project-with-tracing-defects");
+    private static final Path TRACING_DEFECTS_FAIL_BUILD = BASE_TEST_DIR
             .resolve("project-with-tracing-defects-fail-build");
-    private static Path HTML_REPORT_PROJECT = BASE_TEST_DIR
+    private static final Path HTML_REPORT_PROJECT = BASE_TEST_DIR
             .resolve("html-report");
 
     @Test

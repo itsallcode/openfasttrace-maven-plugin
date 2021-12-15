@@ -6,3 +6,6 @@
 /target/
 /src/test/resources/*/target/
 /src/test/resources/*/log.txt
+/src/test/resources/project-with-sub-module/my-module/target/
+/src/test/resources/project-with-sub-module/my-module/log.txt
+.idea/

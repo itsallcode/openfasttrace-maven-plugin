@@ -22,42 +22,58 @@ package org.itsallcode.openfasttrace.maven;
  * #L%
  */
 
+import static com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter.getCurrentProjectVersion;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.itsallcode.openfasttrace.maven.TestHelper.BASE_TEST_DIR;
+import static org.itsallcode.openfasttrace.maven.TestHelper.fileContent;
+
 import java.io.File;
 import java.nio.file.Path;
 
-import com.exasol.mavenpluginintegrationtesting.MavenIntegrationTestEnvironment;
 import org.apache.maven.it.Verifier;
-import org.junit.Test;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter.getCurrentProjectVersion;
+import com.exasol.mavenpluginintegrationtesting.MavenIntegrationTestEnvironment;
 
-public class TraceMojoVerifierTest extends AbstractTraceMojoTest
+class TraceMojoVerifierTest
 {
     private static final String CURRENT_PLUGIN_VERSION = getCurrentProjectVersion();
     private static final File CURRENT_PLUGIN_JAR = Path
             .of("target", "openfasttrace-maven-plugin-" + CURRENT_PLUGIN_VERSION + ".jar")
             .toFile();
     private static final File CURRENT_PLUGIN_POM = Path.of("pom.xml").toFile();
-    private static Path PROJECT_WITH_MULTIPLE_LANGUAGES = BASE_TEST_DIR.resolve("project-with-multiple-languages");
+    private static final Path PROJECT_WITH_MULTIPLE_LANGUAGES = BASE_TEST_DIR
+            .resolve("project-with-multiple-languages");
+    private static final Path PROJECT_WITH_SUB_MODULE = BASE_TEST_DIR.resolve("project-with-sub-module");
+    private static MavenIntegrationTestEnvironment mvnITEnv;
 
-    @BeforeClass
-    public static void setup()
+    @BeforeAll
+    static void beforeAll()
     {
-        final MavenIntegrationTestEnvironment mvnITEnv = new MavenIntegrationTestEnvironment();
+        mvnITEnv = new MavenIntegrationTestEnvironment();
         mvnITEnv.installPlugin(CURRENT_PLUGIN_JAR, CURRENT_PLUGIN_POM);
     }
 
     @Test
-    public void testTracingWithMultipleLanguages() throws Exception
+    void testTracingWithMultipleLanguages() throws Exception
     {
 
-        final Verifier verifier = new Verifier(PROJECT_WITH_MULTIPLE_LANGUAGES.toAbsolutePath().toString());
+        final Verifier verifier = mvnITEnv.getVerifier(PROJECT_WITH_MULTIPLE_LANGUAGES);
         verifier.executeGoal("verify");
         verifier.verifyErrorFreeLog();
         assertThat(fileContent(PROJECT_WITH_MULTIPLE_LANGUAGES.resolve("target/tracing-report.txt")))
                 .isEqualTo("ok - 6 total\n");
     }
 
+    @Test
+    void testTracingWithSubModule() throws Exception
+    {
+        final Verifier verifier = mvnITEnv.getVerifier(PROJECT_WITH_SUB_MODULE);
+        verifier.executeGoal("verify");
+        verifier.verifyErrorFreeLog();
+        System.out.println(verifier.getLogFileName());
+        assertThat(fileContent(PROJECT_WITH_SUB_MODULE.resolve("target/tracing-report.txt")))
+                .isEqualTo("ok - 3 total\n");
+    }
 }

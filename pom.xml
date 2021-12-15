@@ -19,6 +19,7 @@
         <oft.version>3.3.0</oft.version>
         <maven.core.version>3.6.3</maven.core.version>
         <skipSigningArtifacts>true</skipSigningArtifacts>
+        <junit.version>5.8.2</junit.version>
     </properties>
 
     <licenses>
@@ -93,7 +94,7 @@
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
-            <version>3.6.1</version>
+            <version>3.6.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -126,12 +127,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.maven.shared</groupId>
-            <artifactId>maven-verifier</artifactId>
-            <version>1.7.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>maven-project-version-getter</artifactId>
             <version>1.0.0</version>
@@ -147,6 +142,18 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>3.21.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -298,8 +305,8 @@
                     <dryRun>false</dryRun>
                     <excludes>
                         <exclude>plugin/org/itsallcode/openfasttrace/maven/HelpMojo.java</exclude>
-                        <exclude>test/resources/*/src/**</exclude>
-                        <exclude>test/resources/*/target/**</exclude>
+                        <exclude>test/resources/**/src/**</exclude>
+                        <exclude>test/resources/**/target/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>

@@ -22,21 +22,19 @@ package org.itsallcode.openfasttrace.maven;
  * #L%
  */
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-abstract class AbstractTraceMojoTest
-{
-    protected static Path BASE_TEST_DIR = Paths.get("src/test/resources").toAbsolutePath();
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
 
-    protected void assertFileContent(Path file, String... lines) throws IOException
+class TestHelper
+{
+    static Path BASE_TEST_DIR = Paths.get("src/test/resources").toAbsolutePath();
+
+    static void assertFileContent(Path file, String... lines) throws IOException
     {
         final String fileContent = fileContent(file);
         for (final String line : lines)
@@ -45,10 +43,9 @@ abstract class AbstractTraceMojoTest
         }
     }
 
-    protected String fileContent(Path file) throws IOException
+    static String fileContent(Path file) throws IOException
     {
         assertTrue("File does not exist: " + file, Files.exists(file));
         return new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
     }
-
 }

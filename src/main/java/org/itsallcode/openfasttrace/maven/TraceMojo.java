@@ -21,28 +21,21 @@ package org.itsallcode.openfasttrace.maven;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import static java.util.stream.Collectors.toList;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
+import java.nio.file.*;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
+import org.apache.maven.plugins.annotations.*;
+import org.apache.maven.project.*;
 import org.itsallcode.openfasttrace.api.ReportSettings;
-import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
-import org.itsallcode.openfasttrace.api.core.Trace;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportSettings;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.core.Oft;
@@ -105,6 +98,12 @@ public class TraceMojo extends AbstractMojo
 
     @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
+
+    @Component
+    private ProjectBuilder mavenProjectBuilder;
+
+    @Parameter(defaultValue = "${session}", readonly = true)
+    private MavenSession session;
 
     @Override
     public void execute() throws MojoFailureException
