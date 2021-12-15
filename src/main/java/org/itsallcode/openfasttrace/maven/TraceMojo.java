@@ -198,11 +198,39 @@ public class TraceMojo extends AbstractMojo
 
     private List<Path> getSourcePaths()
     {
-        return Stream
+        return getSourcePathOfProject(this.project);
+    }
+
+    private Path getPomOfSubModule(String moduleName)
+    {
+        return this.project.getBasedir().toPath().resolve(moduleName).resolve("pom.xml");
+    }
+
+    public MavenProject readProject(final Path pomFile)
+    {
+        try
+        {
+            final ProjectBuildingResult build = this.mavenProjectBuilder.build(pomFile.toFile(),
+                    this.session.getProjectBuildingRequest());
+            return build.getProject();
+        }
+        catch (final ProjectBuildingException exception)
+        {
+            throw new IllegalStateException(
+                    "Failed to read sub module \"" + pomFile + "\".", exception);
+        }
+    }
+
+    private List<Path> getSourcePathOfProject(MavenProject project)
+    {
+        final Stream<Path> sourcePathsOfSubModules = project.getModules().stream()
+                .map(moduleName -> readProject(getPomOfSubModule(moduleName)))
+                .flatMap(eachProject -> this.getSourcePathOfProject(eachProject).stream());
+        final Stream<Path> thisProjectsSourcePaths = Stream
                 .concat(project.getCompileSourceRoots().stream(),
                         project.getTestCompileSourceRoots().stream())
-                .map(Paths::get) //
-                .collect(toList());
+                .map(Paths::get);
+        return Stream.concat(sourcePathsOfSubModules, thisProjectsSourcePaths).collect(Collectors.toList());
     }
 
     private Optional<Path> getProjectSubPath(String dir)
