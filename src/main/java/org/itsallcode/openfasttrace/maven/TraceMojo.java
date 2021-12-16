@@ -206,7 +206,7 @@ public class TraceMojo extends AbstractMojo
         return this.project.getBasedir().toPath().resolve(moduleName).resolve("pom.xml");
     }
 
-    public MavenProject readProject(final Path pomFile)
+    private MavenProject readProject(final Path pomFile)
     {
         try
         {
