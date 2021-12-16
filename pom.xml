@@ -103,12 +103,6 @@
             <version>3.4.1</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.apache.maven.plugin-testing</groupId>
             <artifactId>maven-plugin-testing-harness</artifactId>
             <version>3.3.0</version>
@@ -277,6 +271,9 @@
                     <includes>
                         <include>**VerifierTest.java</include>
                     </includes>
+                    <systemPropertyVariables>
+                        <test.coverage>true</test.coverage>
+                    </systemPropertyVariables>
                 </configuration>
                 <executions>
                     <execution>
