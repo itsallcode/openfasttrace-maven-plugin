@@ -49,7 +49,7 @@ class TraceMojoVerifierTest
     private static final Path PROJECT_WITH_MULTIPLE_LANGUAGES = BASE_TEST_DIR
             .resolve("project-with-multiple-languages");
     private static final Path PROJECT_WITH_SUB_MODULE = BASE_TEST_DIR.resolve("project-with-sub-module");
-    private static MavenIntegrationTestEnvironment mvnITEnv;
+    private static final Path PROJECT_WITH_NESTED_SUB_MODULE = BASE_TEST_DIR.resolve("project-with-nested-sub-module");
     private static final Path EMPTY_PROJECT = BASE_TEST_DIR.resolve("empty-project");
     private static final Path SIMPLE_PROJECT = BASE_TEST_DIR.resolve("simple-project");
     private static final Path TRACING_DEFECTS = BASE_TEST_DIR.resolve("project-with-tracing-defects");
@@ -57,6 +57,7 @@ class TraceMojoVerifierTest
             .resolve("project-with-tracing-defects-fail-build");
     private static final Path HTML_REPORT_PROJECT = BASE_TEST_DIR
             .resolve("html-report");
+    private static MavenIntegrationTestEnvironment mvnITEnv;
 
     @BeforeAll
     static void beforeAll()
@@ -68,7 +69,6 @@ class TraceMojoVerifierTest
     @Test
     void testTracingWithMultipleLanguages() throws Exception
     {
-
         final Verifier verifier = mvnITEnv.getVerifier(PROJECT_WITH_MULTIPLE_LANGUAGES);
         verifier.executeGoal("verify");
         verifier.verifyErrorFreeLog();
@@ -83,6 +83,16 @@ class TraceMojoVerifierTest
         verifier.executeGoal("verify");
         verifier.verifyErrorFreeLog();
         assertThat(fileContent(PROJECT_WITH_SUB_MODULE.resolve("target/tracing-report.txt")))
+                .isEqualTo("ok - 3 total\n");
+    }
+
+    @Test
+    void testTracingWithNestedSubModule() throws Exception
+    {
+        final Verifier verifier = mvnITEnv.getVerifier(PROJECT_WITH_NESTED_SUB_MODULE);
+        verifier.executeGoal("verify");
+        verifier.verifyErrorFreeLog();
+        assertThat(fileContent(PROJECT_WITH_NESTED_SUB_MODULE.resolve("target/tracing-report.txt")))
                 .isEqualTo("ok - 3 total\n");
     }
 
