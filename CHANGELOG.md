@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.3.0] - 2021-12-17
+## [1.3.0] - 2021-12-20
 
 - [#35](https://github.com/itsallcode/openfasttrace-maven-plugin/issues/35) Support tracing projects with multiple modules.
 
