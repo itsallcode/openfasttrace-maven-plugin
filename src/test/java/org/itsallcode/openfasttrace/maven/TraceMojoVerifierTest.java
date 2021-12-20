@@ -30,6 +30,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.List;
 
 import org.apache.maven.it.VerificationException;
 import org.apache.maven.it.Verifier;
@@ -42,6 +43,8 @@ class TraceMojoVerifierTest
 {
     static Path BASE_TEST_DIR = Paths.get("src/test/resources").toAbsolutePath();
     private static final String CURRENT_PLUGIN_VERSION = getCurrentProjectVersion();
+    private static final String OFT_GOAL = "org.itsallcode:openfasttrace-maven-plugin:" + CURRENT_PLUGIN_VERSION
+            + ":trace";
     private static final File CURRENT_PLUGIN_JAR = Path
             .of("target", "openfasttrace-maven-plugin-" + CURRENT_PLUGIN_VERSION + ".jar")
             .toFile();
@@ -70,7 +73,8 @@ class TraceMojoVerifierTest
     void testTracingWithMultipleLanguages() throws Exception
     {
         final Verifier verifier = mvnITEnv.getVerifier(PROJECT_WITH_MULTIPLE_LANGUAGES);
-        verifier.executeGoal("verify");
+        verifier.setCliOptions(List.of("-pl ."));
+        verifier.executeGoals(List.of("generate-sources", "generate-test-sources", OFT_GOAL));
         verifier.verifyErrorFreeLog();
         assertThat(fileContent(PROJECT_WITH_MULTIPLE_LANGUAGES.resolve("target/tracing-report.txt")))
                 .isEqualTo("ok - 6 total\n");
@@ -80,7 +84,8 @@ class TraceMojoVerifierTest
     void testTracingWithSubModule() throws Exception
     {
         final Verifier verifier = mvnITEnv.getVerifier(PROJECT_WITH_SUB_MODULE);
-        verifier.executeGoal("verify");
+        verifier.setCliOptions(List.of("-pl ."));
+        verifier.executeGoal(OFT_GOAL);
         verifier.verifyErrorFreeLog();
         assertThat(fileContent(PROJECT_WITH_SUB_MODULE.resolve("target/tracing-report.txt")))
                 .isEqualTo("ok - 3 total\n");
@@ -90,7 +95,8 @@ class TraceMojoVerifierTest
     void testTracingWithNestedSubModule() throws Exception
     {
         final Verifier verifier = mvnITEnv.getVerifier(PROJECT_WITH_NESTED_SUB_MODULE);
-        verifier.executeGoal("verify");
+        verifier.setCliOptions(List.of("-pl ."));// only check root project
+        verifier.executeGoal(OFT_GOAL);
         verifier.verifyErrorFreeLog();
         assertThat(fileContent(PROJECT_WITH_NESTED_SUB_MODULE.resolve("target/tracing-report.txt")))
                 .isEqualTo("ok - 3 total\n");
@@ -159,7 +165,7 @@ class TraceMojoVerifierTest
     private void runTracingMojo(Path projectDir) throws Exception
     {
         final Verifier verifier = mvnITEnv.getVerifier(projectDir);
-        verifier.executeGoal("openfasttrace:trace");
+        verifier.executeGoal(OFT_GOAL);
         verifier.verifyErrorFreeLog();
     }
 }
