@@ -34,7 +34,7 @@ Add the openfasttrace-maven-plugin to your `pom.xml`:
 <plugin>
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace-maven-plugin</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <executions>
         <execution>
             <id>trace-requirements</id>
@@ -84,6 +84,7 @@ If you want to build OFT:
 
 * `git clone https://github.com/itsallcode/openfasttrace-maven-plugin.git`
 * Run `mvn test` to run unit tests.
+* Run `mvn integration-test` to run integration tests.
 
 ### Using Eclipse
 
@@ -140,6 +141,7 @@ mvn versions:display-plugin-updates
                 </activation>
                 <properties>
                     <gpg.executable>gpg</gpg.executable>
+                    <gpg.keyname>ABCDEF1234567890</gpg.keyname>
                     <gpg.passphrase>the_pass_phrase</gpg.passphrase>
                 </properties>
             </profile>
@@ -154,5 +156,6 @@ mvn versions:display-plugin-updates
     ```bash
     mvn -DskipSigningArtifacts=false clean deploy
     ```
+
 1. Create a [release](https://github.com/itsallcode/openfasttrace-maven-plugin/releases) of the `develop` branch on GitHub.
 1. After some time the new version will appear at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace-maven-plugin/)

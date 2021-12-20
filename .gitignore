@@ -4,5 +4,6 @@
 /.settings/org.eclipse.core.resources.prefs
 /.settings/org.eclipse.jdt.apt.core.prefs
 /target/
-/src/test/resources/*/target/
-/src/test/resources/*/log.txt
+/src/test/resources/**/target/
+/src/test/resources/**/log.txt
+.idea/
