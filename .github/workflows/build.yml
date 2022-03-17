@@ -17,7 +17,7 @@ jobs:
       DEFAULT_JAVA: 11
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Fetch all history for all tags and branches
       run: git fetch --prune --unshallow
@@ -50,15 +50,15 @@ jobs:
     - name: Build example projects
       run: |
         cd src/test/resources/empty-project/
-        mvn verify
+        mvn --batch-mode verify
         cd ../simple-project/
-        mvn verify
+        mvn --batch-mode verify
         cd ../html-report/
-        mvn verify
+        mvn --batch-mode verify
         cd ../project-with-tracing-defects
-        mvn verify
+        mvn --batch-mode verify
         cd ../project-with-tracing-defects-fail-build/
-        mvn verify || true
+        mvn --batch-mode verify || true
 
     - name: Sonar analysis
       if: ${{ env.DEFAULT_JAVA == matrix.java && env.SONAR_TOKEN != null }}
