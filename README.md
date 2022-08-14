@@ -92,15 +92,6 @@ apt-get install openjdk-11-jdk maven
 
 Import as a Maven project using *"File" &rarr; "Import..." &rarr; "Maven" &rarr; "Existing Maven Projects"*
 
-### License File Header
-
-* We use [license-maven-plugin](http://www.mojohaus.org/license-maven-plugin) to check in `verify` phase that all files have the correct license header. The build will fail if there are any files with missing/outdated headers.
-* To update files with correct license headers and generate file `LICENSE.txt`, run command
-
-```bash
-mvn license:update-project-license license:update-file-header
-```
-
 ### Run local sonar analysis
 
 ```bash
@@ -116,7 +107,7 @@ See analysis results at https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopen
 ### Check for updated dependencies / plugins
 
 ```bash
-mvn versions:display-dependency-updates versions:display-plugin-updates
+mvn --update-snapshots versions:display-dependency-updates versions:display-plugin-updates
 ```
 
 ### Publishing to Maven Central

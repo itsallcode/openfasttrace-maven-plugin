@@ -362,38 +362,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>2.0.0</version>
-                <configuration>
-                    <verbose>false</verbose>
-                    <detail>true</detail>
-                    <licenseName>gpl_v3</licenseName>
-                    <organizationName>itsallcode.org</organizationName>
-                    <inceptionYear>2018</inceptionYear>
-                    <failOnMissingHeader>true</failOnMissingHeader>
-                    <failIfWarning>true</failIfWarning>
-                    <failOnNotUptodateHeader>true</failOnNotUptodateHeader>
-                    <addJavaLicenseAfterPackage>true</addJavaLicenseAfterPackage>
-                    <encoding>UTF-8</encoding>
-                    <dryRun>false</dryRun>
-                    <excludes>
-                        <exclude>plugin/org/itsallcode/openfasttrace/maven/HelpMojo.java</exclude>
-                        <exclude>test/resources/**/src/**</exclude>
-                        <exclude>test/resources/**/target/**</exclude>
-                    </excludes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>check-file-header</id>
-                        <goals>
-                            <goal>check-file-header</goal>
-                        </goals>
-                        <phase>validate</phase>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
                 <version>3.0.1</version>
