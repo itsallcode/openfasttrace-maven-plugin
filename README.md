@@ -78,7 +78,9 @@ By default the build will fail when there are errors found during tracing. To co
 
 If you want to build OFT:
 
-    apt-get install openjdk-11-jdk maven
+```bash
+apt-get install openjdk-11-jdk maven
+```
 
 ### Essential Build Steps
 
@@ -99,28 +101,25 @@ Import as a Maven project using *"File" &rarr; "Import..." &rarr; "Maven" &rarr;
 mvn license:update-project-license license:update-file-header
 ```
 
-## Run local sonar analysis
+### Run local sonar analysis
 
 ```bash
+sonar_token="[token]"
 mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
     -Dsonar.host.url=https://sonarcloud.io \
     -Dsonar.organization=itsallcode \
-    -Dsonar.login=[token]
+    -Dsonar.login=$sonar_token
 ```
 
 See analysis results at https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace-maven-plugin
 
-## Check for updated dependencies / plugins
+### Check for updated dependencies / plugins
 
 ```bash
-mvn versions:display-dependency-updates
+mvn versions:display-dependency-updates versions:display-plugin-updates
 ```
 
-```bash
-mvn versions:display-plugin-updates
-```
-
-## Publishing to JCenter and Maven Central
+### Publishing to Maven Central
 
 1. Add the following to your `~/.m2/settings.xml`:
 
