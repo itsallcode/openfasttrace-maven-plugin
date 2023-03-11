@@ -16,7 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
         <oft.version>3.7.0</oft.version>
-        <maven.core.version>3.9.0</maven.core.version>
+        <maven.core.version>3.8.1</maven.core.version>
         <skipSigningArtifacts>true</skipSigningArtifacts>
         <junit.version>5.9.2</junit.version>
         <jacoco.version>0.8.8</jacoco.version>
