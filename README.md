@@ -139,7 +139,7 @@ mvn --update-snapshots versions:display-dependency-updates versions:display-plug
     </settings>
     ```
 
-1. Checkout the `develop` branch.
+1. Checkout the `main` branch.
 1. Update version in `pom.xml`, `CHANGELOG.md` and `README.md`, commit and push.
 1. Run command
 
@@ -147,5 +147,5 @@ mvn --update-snapshots versions:display-dependency-updates versions:display-plug
     mvn -DskipSigningArtifacts=false clean deploy
     ```
 
-1. Create a [release](https://github.com/itsallcode/openfasttrace-maven-plugin/releases) of the `develop` branch on GitHub.
+1. Create a [release](https://github.com/itsallcode/openfasttrace-maven-plugin/releases) of the `main` branch on GitHub.
 1. After some time the new version will appear at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace-maven-plugin/)
