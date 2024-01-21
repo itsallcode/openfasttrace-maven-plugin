@@ -20,6 +20,8 @@
         <skipSigningArtifacts>true</skipSigningArtifacts>
         <junit.version>5.10.1</junit.version>
         <jacoco.version>0.8.11</jacoco.version>
+        <sonar.organization>itsallcode</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <licenses>
