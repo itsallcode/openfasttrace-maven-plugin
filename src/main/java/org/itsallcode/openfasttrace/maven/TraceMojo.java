@@ -83,6 +83,14 @@ public class TraceMojo extends AbstractMojo
     @Parameter(defaultValue = "${session}", readonly = true)
     private MavenSession session;
 
+    /**
+     * Create a new instance
+     */
+    public TraceMojo()
+    {
+        // Added default constructor to fix javadoc warning
+    }
+
     @Override
     public void execute() throws MojoFailureException
     {
@@ -129,7 +137,7 @@ public class TraceMojo extends AbstractMojo
         oft.reportToPath(trace, outputPath, reportSettings);
     }
 
-    private String formatSettings(ReportSettings reportSettings)
+    private String formatSettings(final ReportSettings reportSettings)
     {
         return "[output format: " + reportSettings.getOutputFormat()
                 + ", verbosity: " + reportSettings.getReportVerbosity()
@@ -179,7 +187,7 @@ public class TraceMojo extends AbstractMojo
         return getSourcePathOfProject(this.project);
     }
 
-    private Path getPomOfSubModule(String moduleName)
+    private Path getPomOfSubModule(final String moduleName)
     {
         return this.project.getBasedir().toPath().resolve(moduleName).resolve("pom.xml");
     }
@@ -199,7 +207,7 @@ public class TraceMojo extends AbstractMojo
         }
     }
 
-    private List<Path> getSourcePathOfProject(MavenProject project)
+    private List<Path> getSourcePathOfProject(final MavenProject project)
     {
         final Stream<Path> sourcePathsOfSubModules = project.getModules().stream()
                 .map(moduleName -> readProject(getPomOfSubModule(moduleName)))
@@ -211,7 +219,7 @@ public class TraceMojo extends AbstractMojo
         return Stream.concat(sourcePathsOfSubModules, thisProjectsSourcePaths).collect(Collectors.toList());
     }
 
-    private Optional<Path> getProjectSubPath(String dir)
+    private Optional<Path> getProjectSubPath(final String dir)
     {
         final File file = new File(project.getBasedir(), dir);
         return file.exists() ? Optional.of(file.toPath()) : Optional.empty();
