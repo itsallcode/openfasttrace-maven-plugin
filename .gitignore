@@ -8,4 +8,5 @@
 /target/
 /src/test/resources/**/target/
 /src/test/resources/**/log.txt
-.idea/
+/.idea/
+/pom.xml.versionsBackup
