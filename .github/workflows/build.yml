@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  matrix-build:
 
     runs-on: ubuntu-latest
     concurrency:
@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        java: [11, 17]
+        java: [11, 17, 21]
     name: "Build with Java ${{ matrix.java }}"
     env:
       DEFAULT_JAVA: 11
@@ -29,18 +29,21 @@ jobs:
     - uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: ${{ matrix.java }}
+        java-version: |
+          11
+          17
+          21
         cache: 'maven'
 
     - name: Cache SonarQube packages
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.sonar/cache
         key: ${{ runner.os }}-java-${{ matrix.java }}-sonar
         restore-keys: ${{ runner.os }}-java-${{ matrix.java }}-sonar
 
     - name: Build with Maven
-      run: mvn --errors --batch-mode clean org.jacoco:jacoco-maven-plugin:prepare-agent install
+      run: mvn --errors --batch-mode clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Djava.version=${{ matrix.java }}
 
     - name: Build example projects
       run: |
@@ -59,9 +62,7 @@ jobs:
       if: ${{ env.DEFAULT_JAVA == matrix.java && env.SONAR_TOKEN != null }}
       run: |
         mvn --errors --batch-mode \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.organization=itsallcode \
-          -Dsonar.login=$SONAR_TOKEN \
+          -Dsonar.token=$SONAR_TOKEN \
           org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -73,3 +74,9 @@ jobs:
       with:
         report_paths: '**/target/surefire-reports/TEST-*.xml,**/target/failsafe-reports/TEST-*.xml'
         github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    needs: matrix-build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Build successful"
