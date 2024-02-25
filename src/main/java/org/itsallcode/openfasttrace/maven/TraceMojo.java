@@ -22,7 +22,7 @@ import org.itsallcode.openfasttrace.core.OftRunner;
 /**
  * Trace requirements using OpenFastTrace
  */
-@Mojo(name = "trace", defaultPhase = LifecyclePhase.VERIFY)
+@Mojo(name = "trace", defaultPhase = LifecyclePhase.VERIFY, threadSafe = true)
 public class TraceMojo extends AbstractMojo
 {
     /**
