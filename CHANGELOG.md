@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- [PR #57](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/57) Mark plugin as thread safe
+  - This suppresses a warning when running the Maven build in parallel with `-T 1C`
+  - This suppresses warnings about vulnerabilities in `provided` dependency `com.google.guava:guava:jar:25.1-android` via `org.apache.maven:maven-core`:
+    - CVE-2023-2976 CWE-552: Files or Directories Accessible to External Parties (7.1)
+    - CVE-2020-8908 CWE-379: Creation of Temporary File in Directory with Incorrect Permissions (3.3)
+  - This also updates test dependencies and fixes the following vulnerabilities:
+    - `commons-io:commons-io:jar:2.2`
+      - CVE-2021-29425 CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal') (5.3)
+    - `org.codehaus.plexus:plexus-archiver:jar:2.2`
+      - CVE-2012-2098 CWE-310 (5.0)
+      - CVE-2023-37460 CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal') (9.8)
+
 ## [1.6.2] - 2023-03-12
 
 - [PR #49](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/49) Upgrade OpenFastTrace
