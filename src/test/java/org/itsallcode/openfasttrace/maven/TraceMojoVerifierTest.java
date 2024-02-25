@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.CoreMatchers.containsString;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.List;
@@ -23,10 +22,10 @@ class TraceMojoVerifierTest
     private static final String CURRENT_PLUGIN_VERSION = getCurrentProjectVersion();
     private static final String OFT_GOAL = "org.itsallcode:openfasttrace-maven-plugin:" + CURRENT_PLUGIN_VERSION
             + ":trace";
-    private static final File CURRENT_PLUGIN_JAR = Path
+    private static final Path CURRENT_PLUGIN_JAR = Path
             .of("target", "openfasttrace-maven-plugin-" + CURRENT_PLUGIN_VERSION + ".jar")
-            .toFile();
-    private static final File CURRENT_PLUGIN_POM = Path.of("pom.xml").toFile();
+            .toAbsolutePath();
+    private static final Path CURRENT_PLUGIN_POM = Path.of("pom.xml").toAbsolutePath();
     private static final Path PROJECT_WITH_MULTIPLE_LANGUAGES = BASE_TEST_DIR
             .resolve("project-with-multiple-languages");
     private static final Path PROJECT_WITH_SUB_MODULE = BASE_TEST_DIR.resolve("project-with-sub-module");
@@ -44,7 +43,7 @@ class TraceMojoVerifierTest
     static void beforeAll()
     {
         mvnITEnv = new MavenIntegrationTestEnvironment();
-        mvnITEnv.installPlugin(CURRENT_PLUGIN_JAR, CURRENT_PLUGIN_POM);
+        mvnITEnv.installPlugin(CURRENT_PLUGIN_JAR.toFile(), CURRENT_PLUGIN_POM.toFile());
     }
 
     @Test
@@ -73,14 +72,30 @@ class TraceMojoVerifierTest
     void testTracingWithNestedSubModule() throws Exception
     {
         final Verifier verifier = mvnITEnv.getVerifier(PROJECT_WITH_NESTED_SUB_MODULE);
-        verifier.setCliOptions(List.of("-pl ."));// only check root project
+        verifier.setCliOptions(List.of("-pl .")); // only check root project
         verifier.executeGoal(OFT_GOAL);
         verifier.verifyErrorFreeLog();
         assertThat(fileContent(PROJECT_WITH_NESTED_SUB_MODULE.resolve("target/tracing-report.txt")))
                 .isEqualTo("ok - 3 total\n");
     }
 
-    static void assertFileContent(Path file, String... lines) throws IOException
+    @Test
+    void testTracingParallel() throws Exception
+    {
+        final Verifier verifier = mvnITEnv.getVerifier(PROJECT_WITH_NESTED_SUB_MODULE);
+        verifier.setDebug(true);
+        verifier.setCliOptions(List.of("-pl .", "-T 2"));
+        verifier.executeGoal(OFT_GOAL);
+        verifier.verifyErrorFreeLog();
+        verifier.verifyTextInLog(CURRENT_PLUGIN_VERSION);
+        assertThat(fileContent(PROJECT_WITH_NESTED_SUB_MODULE.resolve("target/tracing-report.txt")))
+                .isEqualTo("ok - 3 total\n");
+
+        final Path logFile = Path.of(verifier.getBasedir(), verifier.getLogFileName());
+        System.out.println(Files.readString(logFile));
+    }
+
+    static void assertFileContent(final Path file, final String... lines) throws IOException
     {
         final String fileContent = fileContent(file);
         for (final String line : lines)
@@ -89,7 +104,7 @@ class TraceMojoVerifierTest
         }
     }
 
-    static String fileContent(Path file) throws IOException
+    static String fileContent(final Path file) throws IOException
     {
         Assertions.assertTrue(Files.exists(file), "File does not exist: " + file);
         return Files.readString(file);
@@ -140,7 +155,7 @@ class TraceMojoVerifierTest
                 .contains("<span class=\"green\">&check;</span> 3 total");
     }
 
-    private void runTracingMojo(Path projectDir) throws Exception
+    private void runTracingMojo(final Path projectDir) throws Exception
     {
         final Verifier verifier = mvnITEnv.getVerifier(projectDir);
         verifier.executeGoal(OFT_GOAL);
