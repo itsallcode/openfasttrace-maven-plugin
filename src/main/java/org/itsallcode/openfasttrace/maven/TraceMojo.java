@@ -46,7 +46,7 @@ public class TraceMojo extends AbstractMojo
      * <p>
      * Default: <code>html</code>
      */
-    @Parameter(defaultValue = "html", property = "reportOutputFormat", required = true)
+    @Parameter(property = "reportOutputFormat", defaultValue = "html", required = true)
     private String reportOutputFormat;
 
     /**
@@ -63,7 +63,7 @@ public class TraceMojo extends AbstractMojo
      * <p>
      * Default: <code>FAILURE_DETAILS</code>
      */
-    @Parameter(defaultValue = "FAILURE_DETAILS", property = "reportVerbosity", required = true)
+    @Parameter(property = "reportVerbosity", defaultValue = "FAILURE_DETAILS", required = true)
     private ReportVerbosity reportVerbosity;
 
     /**
@@ -71,7 +71,7 @@ public class TraceMojo extends AbstractMojo
      * <p>
      * Default: <code>false</code>
      */
-    @Parameter(defaultValue = "false", property = "reportShowOrigin", required = true)
+    @Parameter(property = "reportShowOrigin", defaultValue = "false", required = true)
     private boolean reportShowOrigin;
 
     @Parameter(defaultValue = "${project}", readonly = true)
