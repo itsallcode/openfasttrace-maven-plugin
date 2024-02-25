@@ -15,10 +15,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
-        <oft.version>3.7.1</oft.version>
+        <oft.version>3.7.2</oft.version>
         <maven.core.version>3.8.7</maven.core.version>
         <skipSigningArtifacts>true</skipSigningArtifacts>
-        <junit.version>5.10.1</junit.version>
+        <junit.version>5.10.2</junit.version>
         <jacoco.version>0.8.11</jacoco.version>
         <sonar.organization>itsallcode</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -119,6 +119,27 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <!-- Fix CVE-2021-29425 in transitive dependency of maven-plugin-testing-harness -->
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.15.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- Fix CVE-2012-2098 and CVE-2023-37460 in dependency of maven-plugin-testing-harness -->
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-archiver</artifactId>
+            <version>4.9.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- Fix CVE-2024-25710 and CVE-2024-26308 in dependency of plexus-archiver -->
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.26.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-compat</artifactId>
             <version>${maven.core.version}</version>
@@ -139,7 +160,7 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.25.1</version>
+            <version>3.25.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -226,6 +247,11 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <compilerArgs>
+                        <!-- Ignore warnings about annotations -->
+                        <arg>-Xlint:all,-processing</arg>
+                        <arg>-Werror</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
@@ -415,6 +441,41 @@
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.ossindex.maven</groupId>
+                <artifactId>ossindex-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>audit</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>audit</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludeVulnerabilityIds>
+                        <!-- com.google.guava:guava:jar:25.1-android has scope provided -->
+                        <exclude>CVE-2023-2976</exclude>
+                        <exclude>CVE-2020-8908</exclude>
+                    </excludeVulnerabilityIds>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.github.zlika</groupId>
+                <artifactId>reproducible-build-maven-plugin</artifactId>
+                <version>0.16</version>
+                <executions>
+                    <execution>
+                        <id>strip-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>strip-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
