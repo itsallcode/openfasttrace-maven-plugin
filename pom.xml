@@ -15,7 +15,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
-        <oft.version>3.7.2</oft.version>
+        <oft.version>3.7.1</oft.version>
         <maven.core.version>3.8.7</maven.core.version>
         <skipSigningArtifacts>true</skipSigningArtifacts>
         <junit.version>5.10.2</junit.version>
