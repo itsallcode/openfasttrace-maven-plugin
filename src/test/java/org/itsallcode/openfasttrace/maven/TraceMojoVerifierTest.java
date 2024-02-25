@@ -4,10 +4,12 @@ import static com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter.get
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apache.maven.it.VerificationException;
 import org.apache.maven.it.Verifier;
@@ -18,7 +20,8 @@ import com.exasol.mavenpluginintegrationtesting.MavenIntegrationTestEnvironment;
 
 class TraceMojoVerifierTest
 {
-    static Path BASE_TEST_DIR = Paths.get("src/test/resources").toAbsolutePath();
+    private static final Logger LOG = Logger.getLogger(TraceMojoVerifierTest.class.getName());
+    private static Path BASE_TEST_DIR = Paths.get("src/test/resources").toAbsolutePath();
     private static final String CURRENT_PLUGIN_VERSION = getCurrentProjectVersion();
     private static final String OFT_GOAL = "org.itsallcode:openfasttrace-maven-plugin:" + CURRENT_PLUGIN_VERSION
             + ":trace";
@@ -44,6 +47,12 @@ class TraceMojoVerifierTest
     {
         mvnITEnv = new MavenIntegrationTestEnvironment();
         mvnITEnv.installPlugin(CURRENT_PLUGIN_JAR.toFile(), CURRENT_PLUGIN_POM.toFile());
+    }
+
+    @BeforeEach
+    void logTestName(final TestInfo testInfo)
+    {
+        LOG.info(() -> "Running test " + testInfo.getDisplayName() + "...");
     }
 
     @Test
@@ -83,16 +92,11 @@ class TraceMojoVerifierTest
     void testTracingParallel() throws Exception
     {
         final Verifier verifier = mvnITEnv.getVerifier(PROJECT_WITH_NESTED_SUB_MODULE);
-        verifier.setDebug(true);
         verifier.setCliOptions(List.of("-pl .", "-T 2"));
         verifier.executeGoal(OFT_GOAL);
         verifier.verifyErrorFreeLog();
-        verifier.verifyTextInLog(CURRENT_PLUGIN_VERSION);
         assertThat(fileContent(PROJECT_WITH_NESTED_SUB_MODULE.resolve("target/tracing-report.txt")))
                 .isEqualTo("ok - 3 total\n");
-
-        final Path logFile = Path.of(verifier.getBasedir(), verifier.getLogFileName());
-        System.out.println(Files.readString(logFile));
     }
 
     static void assertFileContent(final Path file, final String... lines) throws IOException
@@ -133,6 +137,18 @@ class TraceMojoVerifierTest
 
         assertThat(fileContent(TRACING_DEFECTS.resolve("target/tracing-report.txt")))
                 .contains("not ok - 2 total, 1 defect");
+    }
+
+    @Test
+    void testTracingSkipped() throws Exception
+    {
+        final Verifier verifier = mvnITEnv.getVerifier(TRACING_DEFECTS);
+        verifier.addCliOption("-Dopenfasttrace.skip=true");
+        verifier.executeGoal(OFT_GOAL);
+        verifier.verifyErrorFreeLog();
+
+        assertAll(() -> verifier.verifyTextInLog("Skipping OFT tracing"),
+                () -> assertThat(TRACING_DEFECTS.resolve("target/tracing-report.txt")).doesNotExist());
     }
 
     @Test

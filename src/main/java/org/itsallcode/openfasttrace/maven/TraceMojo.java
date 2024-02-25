@@ -30,7 +30,7 @@ public class TraceMojo extends AbstractMojo
      * <p>
      * Default: <code>${project.build.directory}</code>
      */
-    @Parameter(defaultValue = "${project.build.directory}", property = "outputDirectory", required = true)
+    @Parameter(property = "outputDirectory", defaultValue = "${project.build.directory}", required = true)
     private File outputDirectory;
 
     /**
@@ -38,7 +38,7 @@ public class TraceMojo extends AbstractMojo
      * <p>
      * Default: <code>true</code>
      */
-    @Parameter(defaultValue = "true", property = "failBuild", required = true)
+    @Parameter(property = "failBuild", defaultValue = "true", required = true)
     private boolean failBuild;
 
     /**
@@ -74,6 +74,14 @@ public class TraceMojo extends AbstractMojo
     @Parameter(property = "reportShowOrigin", defaultValue = "false", required = true)
     private boolean reportShowOrigin;
 
+    /**
+     * Skip running OFT.
+     * <p>
+     * Default: <code>false</code>
+     */
+    @Parameter(property = "openfasttrace.skip", defaultValue = "false", required = false)
+    private boolean skip;
+
     @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
 
@@ -94,6 +102,11 @@ public class TraceMojo extends AbstractMojo
     @Override
     public void execute() throws MojoFailureException
     {
+        if (skip)
+        {
+            getLog().warn("Skipping OFT tracing");
+            return;
+        }
         final Oft oft = new OftRunner();
         getLog().info("Importing spec items...");
         final List<SpecificationItem> items = oft.importItems(createImportSettings());
