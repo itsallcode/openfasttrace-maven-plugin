@@ -155,7 +155,7 @@ class TraceMojoVerifierTest
                 .contains("<span class=\"green\">&check;</span> 3 total");
     }
 
-    private void runTracingMojo(final Path projectDir) throws Exception
+    private static void runTracingMojo(final Path projectDir) throws Exception
     {
         final Verifier verifier = mvnITEnv.getVerifier(projectDir);
         verifier.executeGoal(OFT_GOAL);

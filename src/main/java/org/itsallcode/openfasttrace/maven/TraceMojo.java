@@ -115,7 +115,7 @@ public class TraceMojo extends AbstractMojo
         }
     }
 
-    private void logTracingReport(final Oft oft, final Trace trace)
+    private static void logTracingReport(final Oft oft, final Trace trace)
     {
         final ReportSettings reportSettings = ReportSettings.builder()
                 .outputFormat("plain")
@@ -137,7 +137,7 @@ public class TraceMojo extends AbstractMojo
         oft.reportToPath(trace, outputPath, reportSettings);
     }
 
-    private String formatSettings(final ReportSettings reportSettings)
+    private static String formatSettings(final ReportSettings reportSettings)
     {
         return "[output format: " + reportSettings.getOutputFormat()
                 + ", verbosity: " + reportSettings.getReportVerbosity()
@@ -154,7 +154,7 @@ public class TraceMojo extends AbstractMojo
         return outputPath;
     }
 
-    private void createDir(final Path path)
+    private static void createDir(final Path path)
     {
         if (path.toFile().exists())
         {
@@ -207,14 +207,14 @@ public class TraceMojo extends AbstractMojo
         }
     }
 
-    private List<Path> getSourcePathOfProject(final MavenProject project)
+    private List<Path> getSourcePathOfProject(final MavenProject mavenProject)
     {
-        final Stream<Path> sourcePathsOfSubModules = project.getModules().stream()
+        final Stream<Path> sourcePathsOfSubModules = mavenProject.getModules().stream()
                 .map(moduleName -> readProject(getPomOfSubModule(moduleName)))
                 .flatMap(eachProject -> this.getSourcePathOfProject(eachProject).stream());
         final Stream<Path> thisProjectsSourcePaths = Stream
-                .concat(project.getCompileSourceRoots().stream(),
-                        project.getTestCompileSourceRoots().stream())
+                .concat(mavenProject.getCompileSourceRoots().stream(),
+                        mavenProject.getTestCompileSourceRoots().stream())
                 .map(Paths::get);
         return Stream.concat(sourcePathsOfSubModules, thisProjectsSourcePaths).collect(Collectors.toList());
     }
