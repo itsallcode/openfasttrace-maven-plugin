@@ -84,6 +84,7 @@ public class TraceMojo extends AbstractMojo
      * <li>{@code EXPAND}: show details section</li>
      * </ul>
      */
+    @Parameter(property = "detailsSectionDisplay", defaultValue = "COLLAPSE", required = true)
     private DetailsSectionDisplay detailsSectionDisplay;
     
     /**
