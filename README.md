@@ -81,6 +81,10 @@ The HTML report will have its details sections collapsed (i.e. hidden) by defaul
 
 By default the build will fail when there are errors found during tracing. To continue with the build when tracing fails, use configuration `<failBuild>false</failBuild>`.
 
+#### Skipping Execution
+
+To skip execution of the plugin, add command line option `-Dopenfasttrace.skip=true` when running Maven.
+
 ## Development
 
 ### Installation of Initial Build Dependencies on Linux
@@ -89,7 +93,7 @@ By default the build will fail when there are errors found during tracing. To co
 
 If you want to build OFT:
 
-```bash
+```sh
 apt-get install openjdk-11-jdk maven
 ```
 
@@ -105,7 +109,7 @@ Import as a Maven project using *"File" &rarr; "Import..." &rarr; "Maven" &rarr;
 
 ### Run local sonar analysis
 
-```bash
+```sh
 sonar_token="[token]"
 mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
     -Dsonar.host.url=https://sonarcloud.io \
@@ -117,7 +121,7 @@ See analysis results at https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopen
 
 ### Check for updated dependencies / plugins
 
-```bash
+```sh
 mvn --update-snapshots versions:display-dependency-updates versions:display-plugin-updates
 ```
 
@@ -154,7 +158,7 @@ mvn --update-snapshots versions:display-dependency-updates versions:display-plug
 1. Update version in `pom.xml`, `CHANGELOG.md` and `README.md`, commit and push.
 1. Run command
 
-    ```bash
+    ```sh
     mvn -DskipSigningArtifacts=false clean deploy
     ```
 
