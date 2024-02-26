@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - `org.codehaus.plexus:plexus-archiver:jar:2.2`
       - CVE-2012-2098 CWE-310 (5.0)
       - CVE-2023-37460 CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal') (9.8)
+- [Issue #55](https://github.com/itsallcode/openfasttrace-maven-plugin/issues/55) Allow skipping the execution of this plugin by adding option `-Dopenfasttrace.skip=true`
 
 ## [1.6.2] - 2023-03-12
 
