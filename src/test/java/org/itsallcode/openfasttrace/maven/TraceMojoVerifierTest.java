@@ -170,7 +170,20 @@ class TraceMojoVerifierTest
         runTracingMojo(HTML_REPORT_PROJECT);
 
         assertThat(fileContent(HTML_REPORT_PROJECT.resolve("target/tracing-report.html")))
-                .contains("<span class=\"green\">&check;</span> 3 total");
+                .contains("<span class=\"green\">&check;</span> 3 total") //
+                .contains("<details>");
+    }
+
+    @Test
+    void testHtmlReportWithExpandedDetails() throws Exception
+    {
+        final Verifier verifier = mvnITEnv.getVerifier(HTML_REPORT_PROJECT);
+        verifier.addCliOption("-DdetailsSectionDisplay=EXPAND");
+        verifier.executeGoal(OFT_GOAL);
+        verifier.verifyErrorFreeLog();
+
+        assertThat(fileContent(HTML_REPORT_PROJECT.resolve("target/tracing-report.html")))
+                .contains("<details open>");
     }
 
     private static void runTracingMojo(final Path projectDir) throws Exception

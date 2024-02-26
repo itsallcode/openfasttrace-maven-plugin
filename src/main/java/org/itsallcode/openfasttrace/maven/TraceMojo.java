@@ -12,6 +12,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.*;
 import org.apache.maven.project.*;
+import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
 import org.itsallcode.openfasttrace.api.ReportSettings;
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportSettings;
@@ -20,7 +21,8 @@ import org.itsallcode.openfasttrace.core.Oft;
 import org.itsallcode.openfasttrace.core.OftRunner;
 
 /**
- * Trace requirements using OpenFastTrace
+ * Trace requirements using
+ * <a href="https://github.com/itsallcode/openfasttrace">OpenFastTrace</a>.
  */
 @Mojo(name = "trace", defaultPhase = LifecyclePhase.VERIFY, threadSafe = true)
 public class TraceMojo extends AbstractMojo
@@ -36,32 +38,32 @@ public class TraceMojo extends AbstractMojo
     /**
      * Let build fail when tracing fails.
      * <p>
-     * Default: <code>true</code>
+     * Default: {@code true}
      */
     @Parameter(property = "failBuild", defaultValue = "true", required = true)
     private boolean failBuild;
 
     /**
-     * The report output format, e.g. <code>plain</code> or <code>html</code>.
-     * <p>
-     * Default: <code>html</code>
+     * The report output format.
+     * <ul>
+     * <li>{@code html}: HTML format (default)</li>
+     * <li>{@code plain}: Plain text format</li>
+     * </ul>
      */
     @Parameter(property = "reportOutputFormat", defaultValue = "html", required = true)
     private String reportOutputFormat;
 
     /**
-     * The report verbosity
+     * The report verbosity.
      * <ul>
-     * <li><code>QUIET</code></li>
-     * <li><code>MINIMAL</code></li>
-     * <li><code>SUMMARY</code></li>
-     * <li><code>FAILURES</code></li>
-     * <li><code>FAILURE_SUMMARIES</code></li>
-     * <li><code>FAILURE_DETAILS</code></li>
-     * <li><code>ALL</code></li>
+     * <li>{@code QUIET}</li>
+     * <li>{@code MINIMAL}</li>
+     * <li>{@code SUMMARY}</li>
+     * <li>{@code FAILURES}</li>
+     * <li>{@code FAILURE_SUMMARIES}</li>
+     * <li>{@code FAILURE_DETAILS} (default)</li>
+     * <li>{@code ALL}</li>
      * </ul>
-     * <p>
-     * Default: <code>FAILURE_DETAILS</code>
      */
     @Parameter(property = "reportVerbosity", defaultValue = "FAILURE_DETAILS", required = true)
     private ReportVerbosity reportVerbosity;
@@ -74,6 +76,17 @@ public class TraceMojo extends AbstractMojo
     @Parameter(property = "reportShowOrigin", defaultValue = "false", required = true)
     private boolean reportShowOrigin;
 
+    /**
+     * Determines if the details sections for specification items in the HTML
+     * report are hidden or visible.
+     * <ul>
+     * <li>{@code COLLAPSE}: hide details sections (default)</li>
+     * <li>{@code EXPAND}: show details section</li>
+     * </ul>
+     */
+    @Parameter(property = "detailsSectionDisplay", defaultValue = "COLLAPSE", required = true)
+    private DetailsSectionDisplay detailsSectionDisplay;
+    
     /**
      * Skip running OFT.
      * <p>
@@ -90,6 +103,7 @@ public class TraceMojo extends AbstractMojo
 
     @Parameter(defaultValue = "${session}", readonly = true)
     private MavenSession session;
+
 
     /**
      * Create a new instance
@@ -145,6 +159,7 @@ public class TraceMojo extends AbstractMojo
                 .outputFormat(reportOutputFormat)
                 .verbosity(reportVerbosity)
                 .showOrigin(reportShowOrigin)
+                .detailsSectionDisplay(detailsSectionDisplay)
                 .build();
         getLog().info("Writing tracing report to " + outputPath + " using settings " + formatSettings(reportSettings));
         oft.reportToPath(trace, outputPath, reportSettings);
@@ -156,6 +171,7 @@ public class TraceMojo extends AbstractMojo
                 + ", verbosity: " + reportSettings.getReportVerbosity()
                 + ", show origin: " + reportSettings.showOrigin()
                 + ", newline: " + reportSettings.getNewline().name()
+                + ", detailsSectionDisplay: " + reportSettings.getDetailsSectionDisplay().name()
                 + "]";
     }
 
@@ -185,7 +201,7 @@ public class TraceMojo extends AbstractMojo
 
     private ImportSettings createImportSettings()
     {
-        final ImportSettings.Builder settings = ImportSettings.builder() //
+        final ImportSettings.Builder settings = ImportSettings.builder()
                 .addInputs(getSourcePaths());
         final Optional<Path> docPath = getProjectSubPath("doc");
         if (docPath.isPresent())

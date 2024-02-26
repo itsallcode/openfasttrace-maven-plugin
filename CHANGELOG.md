@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2024-02-26
+
 - [PR #57](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/57) Mark plugin as thread safe
   - This suppresses a warning when running the Maven build in parallel with `-T 1C`
   - This suppresses warnings about vulnerabilities in `provided` dependency `com.google.guava:guava:jar:25.1-android` via `org.apache.maven:maven-core`:
@@ -18,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       - CVE-2012-2098 CWE-310 (5.0)
       - CVE-2023-37460 CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal') (9.8)
 - [Issue #55](https://github.com/itsallcode/openfasttrace-maven-plugin/issues/55) Allow skipping the execution of this plugin by adding option `-Dopenfasttrace.skip=true`
+- [Issue #56](https://github.com/itsallcode/openfasttrace-maven-plugin/issues/56) Upgrade to [OpenFastTrace 3.8.0](https://github.com/itsallcode/openfasttrace/releases/tag/3.8.0)
+  - This adds support for the new option `detailsSectionDisplay`
 
 ## [1.6.2] - 2023-03-12
 
