@@ -48,6 +48,7 @@ Add the openfasttrace-maven-plugin to your `pom.xml`:
         <reportOutputFormat>html</reportOutputFormat>
         <reportVerbosity>ALL</reportVerbosity>
         <reportShowOrigin>true</reportShowOrigin>
+        <detailsSectionDisplay>COLLAPSE</detailsSectionDisplay>
     </configuration>
 </plugin>
 ```
@@ -64,9 +65,19 @@ You can configure the plugin using the `<configuration>` element.
 
 #### Report
 
-The tracing report will be written to `target/tracing-report.txt` by default. You can configure the location with `<outputDirectory>${project.build.directory}/reports/</outputDirectory>`.
+##### Report Format
 
-#### Fail build
+The tracing report is in HTML format by default. You can configure plain text format with `<reportOutputFormat>plain</reportOutputFormat>`.
+
+##### Report Location
+
+The tracing report will be written to `target/tracing-report.html` by default. You can configure the location with `<outputDirectory>${project.build.directory}/reports/</outputDirectory>`.
+
+##### HTML Report Details Section Display
+
+The HTML report will have its details sections collapsed (i.e. hidden) by default. You can render the HTML with expanded details sections with `<detailsSectionDisplay>EXPAND</detailsSectionDisplay>`.
+
+#### Fail Build
 
 By default the build will fail when there are errors found during tracing. To continue with the build when tracing fails, use configuration `<failBuild>false</failBuild>`.
 
