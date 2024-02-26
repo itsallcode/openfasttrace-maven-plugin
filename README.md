@@ -159,7 +159,7 @@ mvn --update-snapshots versions:display-dependency-updates versions:display-plug
 1. Run command
 
     ```sh
-    mvn -DskipSigningArtifacts=false clean deploy
+    mvn clean deploy -Possrh -DautoReleaseAfterClose=true
     ```
 
 1. Create a [release](https://github.com/itsallcode/openfasttrace-maven-plugin/releases) of the `main` branch on GitHub.
