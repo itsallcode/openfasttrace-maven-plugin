@@ -147,7 +147,9 @@ class TraceMojoVerifierTest
         verifier.executeGoal(OFT_GOAL);
         verifier.verifyErrorFreeLog();
 
-        assertAll(() -> verifier.verifyTextInLog("Skipping OFT tracing"),
+        assertAll(
+                () -> verifier.verifyTextInLog(
+                        "Skipping OFT tracing because property 'openfasttrace.skip' was set to 'true'."),
                 () -> assertThat(TRACING_DEFECTS.resolve("target/tracing-report.txt")).doesNotExist());
     }
 

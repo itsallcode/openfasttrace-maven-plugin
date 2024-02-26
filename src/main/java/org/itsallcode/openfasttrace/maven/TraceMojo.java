@@ -104,7 +104,7 @@ public class TraceMojo extends AbstractMojo
     {
         if (skip)
         {
-            getLog().warn("Skipping OFT tracing");
+            getLog().warn("Skipping OFT tracing because property 'openfasttrace.skip' was set to 'true'.");
             return;
         }
         final Oft oft = new OftRunner();
