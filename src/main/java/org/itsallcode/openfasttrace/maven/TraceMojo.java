@@ -1,13 +1,16 @@
 package org.itsallcode.openfasttrace.maven;
 
+import static java.util.stream.Collectors.toList;
+
 import java.io.*;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.*;
@@ -193,22 +196,39 @@ public class TraceMojo extends AbstractMojo
         {
             Files.createDirectories(path);
         }
-        catch (final IOException e)
+        catch (final IOException exception)
         {
-            throw new UncheckedIOException("Error creating directory " + path, e);
+            throw new UncheckedIOException("Error creating directory '" + path + "': " + exception.getMessage(),
+                    exception);
         }
     }
 
     private ImportSettings createImportSettings()
     {
+        final List<Path> sourcePaths = getSourcePaths();
+        logSourcePaths(sourcePaths);
         final ImportSettings.Builder settings = ImportSettings.builder()
-                .addInputs(getSourcePaths());
+                .addInputs(sourcePaths);
         final Optional<Path> docPath = getProjectSubPath("doc");
         if (docPath.isPresent())
         {
+            getLog().info("Tracing doc directory " + docPath.get());
             settings.addInputs(docPath.get());
         }
         return settings.build();
+    }
+
+    private void logSourcePaths(final List<Path> sourcePaths)
+    {
+        if (!getLog().isInfoEnabled())
+        {
+            return;
+        }
+        final Path baseDir = project.getBasedir().toPath();
+        final List<Path> relativePaths = sourcePaths.stream().map(baseDir::relativize).collect(toList());
+        getLog().info(
+                "Tracing " + sourcePaths.size() + " sub-directories of base dir " + baseDir + ": "
+                        + relativePaths);
     }
 
     private List<Path> getSourcePaths()
@@ -241,11 +261,18 @@ public class TraceMojo extends AbstractMojo
         final Stream<Path> sourcePathsOfSubModules = mavenProject.getModules().stream()
                 .map(moduleName -> readProject(getPomOfSubModule(moduleName)))
                 .flatMap(eachProject -> this.getSourcePathOfProject(eachProject).stream());
-        final Stream<Path> thisProjectsSourcePaths = Stream
-                .concat(mavenProject.getCompileSourceRoots().stream(),
-                        mavenProject.getTestCompileSourceRoots().stream())
-                .map(Paths::get);
-        return Stream.concat(sourcePathsOfSubModules, thisProjectsSourcePaths).collect(Collectors.toList());
+        final List<String> compileSourceRoots = mavenProject.getCompileSourceRoots();
+        final List<String> testCompileSourceRoots = mavenProject.getTestCompileSourceRoots();
+        final List<String> resourceDirs = mavenProject.getResources().stream().map(Resource::getDirectory)
+                .collect(toList());
+        final List<String> testResourceDirs = mavenProject.getTestResources().stream().map(Resource::getDirectory)
+                .collect(toList());
+        final Stream<Path> sourcePaths = Stream
+                .of(compileSourceRoots, resourceDirs, testCompileSourceRoots, testResourceDirs)
+                .flatMap(List::stream)
+                .map(Path::of)
+                .filter(Files::exists);
+        return Stream.concat(sourcePathsOfSubModules, sourcePaths).collect(toList());
     }
 
     private Optional<Path> getProjectSubPath(final String dir)

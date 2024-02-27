@@ -13,3 +13,10 @@ Needs: impl, utest
 An example design specification for feature two.
 
 Needs: impl, utest
+
+## Covered in Custom Resource Directory
+`dsn~custom-resource~1`
+
+Requirement covered by a yaml file in custom resource directory.
+
+Needs: config

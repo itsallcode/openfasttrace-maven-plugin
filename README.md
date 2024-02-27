@@ -1,6 +1,6 @@
-# openfasttrace-maven
+# openfasttrace-maven-plugin
 
-Maven Plugin for [OpenFastTrace](https://github.com/itsallcode/openfasttrace)
+Maven Plugin for [OpenFastTrace](https://github.com/itsallcode/openfasttrace) (OFT).
 
 ## Project Information
 
@@ -62,6 +62,69 @@ See [src/test/resources/empty-project](src/test/resources/simple-project) for an
 ### Configuration
 
 You can configure the plugin using the `<configuration>` element.
+
+#### Traced Directories
+
+By default the OFT plugin imports requirements from the following directories:
+
+* The `doc` sub-directory of the module that includes the plugin if it exists
+* For each Maven module in the project if they exist:
+  * Compile source roots (default: `src/main/java`)
+  * Resources (default: `src/main/resources`)
+  * Test compile source roots (default: `src/test/java`)
+  * Test resources (default: `src/test/resources`)
+
+##### Adding Custom Source Directories
+
+You can add additional custom source directories using the [Build Helper Maven Plugin](https://www.mojohaus.org/build-helper-maven-plugin/):
+
+```xml
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>build-helper-maven-plugin</artifactId>
+    <version>3.5.0</version>
+    <executions>
+        <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+                <goal>add-source</goal>
+            </goals>
+            <configuration>
+                <sources>
+                    <source>src/main/rust</source>
+                </sources>
+            </configuration>
+        </execution>
+        <execution>
+            <id>add-test-source</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+                <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+                <sources>
+                    <source>src/test/rust</source>
+                </sources>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+```
+
+##### Adding Custom Resource Directories
+
+You can add additional resource directories using the [Maven Resources Plugin](https://maven.apache.org/plugins/maven-resources-plugin/examples/resource-directory.html):
+
+```xml
+<build>
+    <resources>
+        <resource>
+            <directory>custom-resources-dir</directory>
+        </resource>
+    </resources>
+</build>
+```
 
 #### Report
 
