@@ -34,7 +34,7 @@ Add the openfasttrace-maven-plugin to your `pom.xml`:
 <plugin>
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace-maven-plugin</artifactId>
-    <version>1.7.0</version>
+    <version>1.8.0</version>
     <executions>
         <execution>
             <id>trace-requirements</id>
@@ -222,7 +222,7 @@ mvn --update-snapshots versions:display-dependency-updates versions:display-plug
 1. Run command
 
     ```sh
-    mvn clean deploy -Possrh -DautoReleaseAfterClose=true
+    mvn clean deploy -Possrh
     ```
 
 1. Create a [release](https://github.com/itsallcode/openfasttrace-maven-plugin/releases) of the `main` branch on GitHub.

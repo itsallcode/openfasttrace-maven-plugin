@@ -4,7 +4,7 @@
 
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace-maven-plugin</artifactId>
-    <version>1.7.0</version>
+    <version>1.8.0</version>
     <packaging>maven-plugin</packaging>
 
     <name>OpenFastTrace Maven Plugin</name>
@@ -197,7 +197,7 @@
                         <configuration>
                             <serverId>ossrh</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
                     <plugin>
