@@ -1,6 +1,6 @@
-# openfasttrace-maven
+# openfasttrace-maven-plugin
 
-Maven Plugin for [OpenFastTrace](https://github.com/itsallcode/openfasttrace)
+Maven Plugin for [OpenFastTrace](https://github.com/itsallcode/openfasttrace) (OFT).
 
 ## Project Information
 
@@ -34,7 +34,7 @@ Add the openfasttrace-maven-plugin to your `pom.xml`:
 <plugin>
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace-maven-plugin</artifactId>
-    <version>1.7.0</version>
+    <version>1.8.0</version>
     <executions>
         <execution>
             <id>trace-requirements</id>
@@ -62,6 +62,73 @@ See [src/test/resources/empty-project](src/test/resources/simple-project) for an
 ### Configuration
 
 You can configure the plugin using the `<configuration>` element.
+
+#### Traced Directories
+
+By default the OFT plugin imports requirements from the following directories:
+
+* The `doc` sub-directory of the module that includes the plugin if it exists
+* For each Maven module in the project if they exist:
+  * Compile source roots (default: `src/main/java`)
+  * Resources (default: `src/main/resources`)
+  * Test compile source roots (default: `src/test/java`)
+  * Test resources (default: `src/test/resources`)
+
+##### Adding Custom Source Directories
+
+You can add additional custom source directories using the [Build Helper Maven Plugin](https://www.mojohaus.org/build-helper-maven-plugin/).
+
+Please note that the phases `generate-sources` and `generate-test-sources` have nothing to do with the phase in which OFT does its job, rather it defines in which phase the directory is added to the list of known source directories by the `build-helper-maven-plugin`.
+
+The following snipped adds source directory `src/main/rust` and test source directory `src/test/rust`:
+
+```xml
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>build-helper-maven-plugin</artifactId>
+    <version>3.5.0</version>
+    <executions>
+        <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+                <goal>add-source</goal>
+            </goals>
+            <configuration>
+                <sources>
+                    <source>src/main/rust</source>
+                </sources>
+            </configuration>
+        </execution>
+        <execution>
+            <id>add-test-source</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+                <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+                <sources>
+                    <source>src/test/rust</source>
+                </sources>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+```
+
+##### Adding Custom Resource Directories
+
+You can add additional resource directories using the [Maven Resources Plugin](https://maven.apache.org/plugins/maven-resources-plugin/examples/resource-directory.html). The following snipped adds `src/custom-resources` as additional resource directory:
+
+```xml
+<build>
+    <resources>
+        <resource>
+            <directory>src/custom-resources</directory>
+        </resource>
+    </resources>
+</build>
+```
 
 #### Report
 
@@ -159,7 +226,7 @@ mvn --update-snapshots versions:display-dependency-updates versions:display-plug
 1. Run command
 
     ```sh
-    mvn clean deploy -Possrh -DautoReleaseAfterClose=true
+    mvn clean deploy -Possrh
     ```
 
 1. Create a [release](https://github.com/itsallcode/openfasttrace-maven-plugin/releases) of the `main` branch on GitHub.

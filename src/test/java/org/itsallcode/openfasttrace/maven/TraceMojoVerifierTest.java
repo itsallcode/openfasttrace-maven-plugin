@@ -63,7 +63,7 @@ class TraceMojoVerifierTest
         verifier.executeGoals(List.of("generate-sources", "generate-test-sources", OFT_GOAL));
         verifier.verifyErrorFreeLog();
         assertThat(fileContent(PROJECT_WITH_MULTIPLE_LANGUAGES.resolve("target/tracing-report.txt")))
-                .isEqualTo("ok - 6 total\n");
+                .isEqualTo("ok - 8 total\n");
     }
 
     @Test
