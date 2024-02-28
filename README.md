@@ -76,7 +76,11 @@ By default the OFT plugin imports requirements from the following directories:
 
 ##### Adding Custom Source Directories
 
-You can add additional custom source directories using the [Build Helper Maven Plugin](https://www.mojohaus.org/build-helper-maven-plugin/):
+You can add additional custom source directories using the [Build Helper Maven Plugin](https://www.mojohaus.org/build-helper-maven-plugin/).
+
+Please note that the phases `generate-sources` and `generate-test-sources` have nothing to do with the phase in which OFT does its job, rather it defines in which phase the directory is added to the list of known source directories by the `build-helper-maven-plugin`.
+
+The following snipped adds source directory `src/main/rust` and test source directory `src/test/rust`:
 
 ```xml
 <plugin>
@@ -114,13 +118,13 @@ You can add additional custom source directories using the [Build Helper Maven P
 
 ##### Adding Custom Resource Directories
 
-You can add additional resource directories using the [Maven Resources Plugin](https://maven.apache.org/plugins/maven-resources-plugin/examples/resource-directory.html):
+You can add additional resource directories using the [Maven Resources Plugin](https://maven.apache.org/plugins/maven-resources-plugin/examples/resource-directory.html). The following snipped adds `src/custom-resources` as additional resource directory:
 
 ```xml
 <build>
     <resources>
         <resource>
-            <directory>custom-resources-dir</directory>
+            <directory>src/custom-resources</directory>
         </resource>
     </resources>
 </build>
