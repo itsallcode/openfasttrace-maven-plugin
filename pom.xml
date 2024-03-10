@@ -344,6 +344,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <!-- Upgrade to a version that supports reproducible builds -->
                 <version>3.3.0</version>
             </plugin>
             <plugin>

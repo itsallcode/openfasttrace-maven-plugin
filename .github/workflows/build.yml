@@ -78,7 +78,7 @@ jobs:
 
     - name: Verify reproducible build
       run: |
-        mvn --batch-mode -T 1C clean verify artifact:compare -DskipTests \
+        mvn --batch-mode clean verify artifact:compare -DskipTests \
             -Djava.version=${{ matrix.java }}
 
     - name: Archive aggregated reproducible build report
