@@ -75,6 +75,21 @@ jobs:
         report_paths: '**/target/surefire-reports/TEST-*.xml,**/target/failsafe-reports/TEST-*.xml'
         github_token: ${{ secrets.GITHUB_TOKEN }}
 
+
+    - name: Verify reproducible build
+      run: |
+        mvn --batch-mode -T 1C clean verify artifact:compare -DskipTests \
+            -Djava.version=${{ matrix.java }}
+
+    - name: Archive aggregated reproducible build report
+      uses: actions/upload-artifact@v4
+      with:
+        name: reproducible-build-report-java-${{ matrix.java }}
+        path: |
+          target/openfasttrace-root-0.0.0.buildcompare
+          target/openfasttrace-root-0.0.0.buildinfo
+        if-no-files-found: error
+
   build:
     needs: matrix-build
     runs-on: ubuntu-latest
