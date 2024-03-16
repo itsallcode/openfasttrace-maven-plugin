@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- [PR #63](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/63) Verify that the build produces reproducible artifacts
+
 ## [1.8.0] - 2024-02-28
 
 - [Issue #60](https://github.com/itsallcode/openfasttrace-maven-plugin/issues/60) Import coverage from resource directories
