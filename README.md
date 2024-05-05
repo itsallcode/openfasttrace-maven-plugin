@@ -188,8 +188,16 @@ See analysis results at https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopen
 
 ### Check for updated dependencies / plugins
 
+Display dependencies and plugins with newer versions:
+
 ```sh
 mvn --update-snapshots versions:display-dependency-updates versions:display-plugin-updates
+```
+
+Automatically upgrade dependencies:
+
+```sh
+mvn --update-snapshots versions:use-latest-releases versions:update-properties
 ```
 
 ### Publishing to Maven Central
