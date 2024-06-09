@@ -6,9 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.0.0] - 2024-06-??
+## [2.0.0] - 2024-06-09
 
-- Upgrade to [OpenFastTrace 4.0.0](https://github.com/itsallcode/openfasttrace/releases/tag/4.0.0)
+- [PR #64](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/64) Upgrade to [OpenFastTrace 4.0.0](https://github.com/itsallcode/openfasttrace/releases/tag/4.0.0)
   - This adds support for reading RST files
   - Breaking change: starting with this version the plugin requires Java 17 or later
 - [PR #63](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/63) Verify that the build produces reproducible artifacts
