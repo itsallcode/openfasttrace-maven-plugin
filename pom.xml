@@ -134,10 +134,10 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <!-- Fix CVE-2024-25710 and CVE-2024-26308 in dependency of plexus-archiver -->
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-compress</artifactId>
-            <version>1.26.2</version>
+            <!-- Fix CVE-2024-36124 in dependency of plexus-archiver -->
+            <groupId>org.iq80.snappy</groupId>
+            <artifactId>snappy</artifactId>
+            <version>0.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>
