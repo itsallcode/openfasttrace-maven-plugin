@@ -19,6 +19,6 @@ echo "Creating release:"
 echo "Git tag      : $tag"
 echo "Title        : $title"
 
-#release_url=$(gh release create --latest --title "$title" --target main "$tag")
-#readonly release_url
-#echo "Release URL: $release_url"
+release_url=$(gh release create --latest --title "$title" --target main "$tag")
+readonly release_url
+echo "Release URL: $release_url"
