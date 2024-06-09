@@ -456,6 +456,9 @@
                     <excludes>
                         <exclude>**VerifierTest.java</exclude>
                     </excludes>
+                    <systemPropertyVariables>
+                        <java.util.logging.config.file>src/test/resources/logging.properties</java.util.logging.config.file>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
             <plugin>
@@ -468,6 +471,7 @@
                     </includes>
                     <systemPropertyVariables>
                         <test.coverage>true</test.coverage>
+                        <java.util.logging.config.file>src/test/resources/logging.properties</java.util.logging.config.file>
                     </systemPropertyVariables>
                 </configuration>
                 <executions>
