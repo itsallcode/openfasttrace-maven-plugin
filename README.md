@@ -86,7 +86,7 @@ The following snipped adds source directory `src/main/rust` and test source dire
 <plugin>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>build-helper-maven-plugin</artifactId>
-    <version>3.5.0</version>
+    <version>3.6.0</version>
     <executions>
         <execution>
             <id>add-source</id>
@@ -162,6 +162,35 @@ If you want to build OFT:
 
 ```sh
 apt-get install openjdk-17-jdk maven
+```
+
+### Configure Maven Toolchain
+
+This project uses Maven Toolchains to configure the correct JDK version (see the [documentation](https://maven.apache.org/guides/mini/guide-using-toolchains.html) for details). To configure the Toolchains plugin create file ` ~/.m2/toolchains.xml` with the following content. Adapt the paths to your JDKs.
+
+```xml
+<toolchains xmlns="http://maven.apache.org/TOOLCHAINS/1.1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/TOOLCHAINS/1.1.0 http://maven.apache.org/xsd/toolchains-1.1.0.xsd">
+    <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>17</version>
+        </provides>
+        <configuration>
+            <jdkHome>/usr/lib/jvm/java-17-openjdk-amd64/</jdkHome>
+        </configuration>
+    </toolchain>
+        <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>21</version>
+        </provides>
+        <configuration>
+            <jdkHome>/usr/lib/jvm/java-21-openjdk-amd64/</jdkHome>
+        </configuration>
+    </toolchain>
+</toolchains>
 ```
 
 ### Essential Build Steps
