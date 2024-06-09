@@ -18,10 +18,10 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        java: [11, 17, 21]
+        java: [17, 21]
     name: "Build with Java ${{ matrix.java }}"
     env:
-      DEFAULT_JAVA: 11
+      DEFAULT_JAVA: 17
 
     steps:
     - uses: actions/checkout@v4
@@ -32,7 +32,6 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: |
-          11
           17
           21
         cache: 'maven'

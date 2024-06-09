@@ -34,7 +34,7 @@ Add the openfasttrace-maven-plugin to your `pom.xml`:
 <plugin>
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace-maven-plugin</artifactId>
-    <version>1.8.0</version>
+    <version>2.0.0</version>
     <executions>
         <execution>
             <id>trace-requirements</id>
@@ -86,7 +86,7 @@ The following snipped adds source directory `src/main/rust` and test source dire
 <plugin>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>build-helper-maven-plugin</artifactId>
-    <version>3.5.0</version>
+    <version>3.6.0</version>
     <executions>
         <execution>
             <id>add-source</id>
@@ -161,7 +161,36 @@ To skip execution of the plugin, add command line option `-Dopenfasttrace.skip=t
 If you want to build OFT:
 
 ```sh
-apt-get install openjdk-11-jdk maven
+apt-get install openjdk-17-jdk maven
+```
+
+### Configure Maven Toolchain
+
+This project uses Maven Toolchains to configure the correct JDK version (see the [documentation](https://maven.apache.org/guides/mini/guide-using-toolchains.html) for details). To configure the Toolchains plugin create file ` ~/.m2/toolchains.xml` with the following content. Adapt the paths to your JDKs.
+
+```xml
+<toolchains xmlns="http://maven.apache.org/TOOLCHAINS/1.1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/TOOLCHAINS/1.1.0 http://maven.apache.org/xsd/toolchains-1.1.0.xsd">
+    <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>17</version>
+        </provides>
+        <configuration>
+            <jdkHome>/usr/lib/jvm/java-17-openjdk-amd64/</jdkHome>
+        </configuration>
+    </toolchain>
+        <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>21</version>
+        </provides>
+        <configuration>
+            <jdkHome>/usr/lib/jvm/java-21-openjdk-amd64/</jdkHome>
+        </configuration>
+    </toolchain>
+</toolchains>
 ```
 
 ### Essential Build Steps
@@ -179,8 +208,6 @@ Import as a Maven project using *"File" &rarr; "Import..." &rarr; "Maven" &rarr;
 ```sh
 sonar_token="[token]"
 mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
-    -Dsonar.host.url=https://sonarcloud.io \
-    -Dsonar.organization=itsallcode \
     -Dsonar.login=$sonar_token
 ```
 
@@ -200,42 +227,19 @@ Automatically upgrade dependencies:
 mvn --update-snapshots versions:use-latest-releases versions:update-properties
 ```
 
-### Publishing to Maven Central
+### Creating a Release on Maven Central and GitHub
 
-1. Add the following to your `~/.m2/settings.xml`:
-
-    ```xml
-    <settings>
-        <servers>
-            <server>
-                <id>ossrh</id>
-                <username>your-jira-id</username>
-                <password>your-jira-pwd</password>
-            </server>
-        </servers>
-        <profiles>
-            <profile>
-                <id>ossrh</id>
-                <activation>
-                    <activeByDefault>true</activeByDefault>
-                </activation>
-                <properties>
-                    <gpg.executable>gpg</gpg.executable>
-                    <gpg.keyname>ABCDEF1234567890</gpg.keyname>
-                    <gpg.passphrase>the_pass_phrase</gpg.passphrase>
-                </properties>
-            </profile>
-        </profiles>
-    </settings>
-    ```
+#### Prepare the Release
 
 1. Checkout the `main` branch.
-1. Update version in `pom.xml`, `CHANGELOG.md` and `README.md`, commit and push.
-1. Run command
+2. Update version in `pom.xml`, `CHANGELOG.md` and `README.md`.
+3. Commit and push changes.
+4. Create a new pull request, have it reviewed and merged to `main`.
 
-    ```sh
-    mvn clean deploy -Possrh
-    ```
+### Perform the Release
 
-1. Create a [release](https://github.com/itsallcode/openfasttrace-maven-plugin/releases) of the `main` branch on GitHub.
-1. After some time the new version will appear at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace-maven-plugin/)
+1. Start the release workflow
+  * Run command `gh workflow run release.yml --repo itsallcode/openfasttrace-maven-plugin --ref main`
+  * or go to [GitHub Actions](https://github.com/itsallcode/openfasttrace-maven-plugin/actions/workflows/release.yml) and start the `release.yml` workflow on branch `main`.
+2. Update title and description of the newly created [GitHub release](https://github.com/itsallcode/openfasttrace-maven-plugin/releases).
+3. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace-maven-plugin/).
