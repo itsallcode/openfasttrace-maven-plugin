@@ -19,14 +19,6 @@
             <plugin>
                 <groupId>org.itsallcode</groupId>
                 <artifactId>openfasttrace-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>trace-requirements</id>
-                        <goals>
-                            <goal>trace</goal>
-                        </goals>
-                    </execution>
-                </executions>
                 <configuration>
                     <outputDirectory>${project.build.directory}/reports/</outputDirectory>
                     <reportOutputFormat>plain</reportOutputFormat>

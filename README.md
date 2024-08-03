@@ -59,6 +59,28 @@ The plugin binds to the `verify` lifecycle, so you can also use `mvn verify`.
 
 See [src/test/resources/empty-project](src/test/resources/simple-project) for an example project.
 
+### OpenFastTrace Plugins
+
+You can use OpenFastTrace plugins to import and export requirements in additional formats. Include plugins by adding them as a dependency to the `openfasttrace-maven-plugin`, see [project-with-plugins](src/test/resources/project-with-plugins/) as an example.
+
+```xml
+<plugin>
+    <groupId>org.itsallcode</groupId>
+    <artifactId>openfasttrace-maven-plugin</artifactId>
+    <version>2.0.0</version>
+    <configuration>
+        <failBuild>true</failBuild>
+    </configuration>
+    <dependencies>
+        <dependency>
+            <groupId>org.itsallcode</groupId>
+            <artifactId>openfasttrace-asciidoc-plugin</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+    </dependencies>
+</plugin>
+```
+
 ### Configuration
 
 You can configure the plugin using the `<configuration>` element.
