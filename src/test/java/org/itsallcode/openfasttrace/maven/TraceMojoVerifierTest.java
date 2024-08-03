@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -35,6 +36,7 @@ class TraceMojoVerifierTest
     private static final Path PROJECT_WITH_NESTED_SUB_MODULE = BASE_TEST_DIR.resolve("project-with-nested-sub-module");
     private static final Path EMPTY_PROJECT = BASE_TEST_DIR.resolve("empty-project");
     private static final Path SIMPLE_PROJECT = BASE_TEST_DIR.resolve("simple-project");
+    private static final Path PROJECT_WITH_PLUGINS = BASE_TEST_DIR.resolve("project-with-plugins");
     private static final Path TRACING_DEFECTS = BASE_TEST_DIR.resolve("project-with-tracing-defects");
     private static final Path TRACING_DEFECTS_FAIL_BUILD = BASE_TEST_DIR
             .resolve("project-with-tracing-defects-fail-build");
@@ -128,6 +130,25 @@ class TraceMojoVerifierTest
 
         assertThat(fileContent(SIMPLE_PROJECT.resolve("target/reports/tracing-report.txt")))
                 .isEqualTo("ok - 3 total\n");
+    }
+
+    @Test
+    void testTracingWithPlugins() throws Exception
+    {
+        installAsciiDocImporter();
+        runTracingMojo(PROJECT_WITH_PLUGINS);
+
+        assertThat(fileContent(PROJECT_WITH_PLUGINS.resolve("target/reports/tracing-report.txt")))
+                .isEqualTo("ok - 6 total\n");
+    }
+
+    private static void installAsciiDocImporter()
+    {
+        final Path pluginPath = Path.of("../openfasttrace-asciidoc-plugin").toAbsolutePath();
+        final Path pluginJar = pluginPath.resolve("target/openfasttrace-asciidoc-plugin-0.1.0.jar");
+        assertTrue(Files.exists(pluginJar), "AsciiDoc plugin exists at " + pluginJar);
+        mvnITEnv.installPlugin(pluginJar.toFile(),
+                pluginPath.resolve("pom.xml").toFile());
     }
 
     @Test
