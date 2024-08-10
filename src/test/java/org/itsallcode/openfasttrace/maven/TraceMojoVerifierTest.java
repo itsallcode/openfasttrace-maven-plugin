@@ -140,7 +140,6 @@ class TraceMojoVerifierTest
                 .isEqualTo("ok - 6 total\n");
     }
 
-
     @Test
     void testTracingFindsDefects() throws Exception
     {
