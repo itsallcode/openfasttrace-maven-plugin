@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -22,7 +21,7 @@ import com.exasol.mavenpluginintegrationtesting.MavenIntegrationTestEnvironment;
 class TraceMojoVerifierTest
 {
     private static final Logger LOG = Logger.getLogger(TraceMojoVerifierTest.class.getName());
-    private static Path BASE_TEST_DIR = Paths.get("src/test/resources").toAbsolutePath();
+    private static final Path BASE_TEST_DIR = Paths.get("src/test/resources").toAbsolutePath();
     private static final String CURRENT_PLUGIN_VERSION = getCurrentProjectVersion();
     private static final String OFT_GOAL = "org.itsallcode:openfasttrace-maven-plugin:" + CURRENT_PLUGIN_VERSION
             + ":trace";
@@ -135,21 +134,12 @@ class TraceMojoVerifierTest
     @Test
     void testTracingWithPlugins() throws Exception
     {
-        installAsciiDocImporter();
         runTracingMojo(PROJECT_WITH_PLUGINS);
 
         assertThat(fileContent(PROJECT_WITH_PLUGINS.resolve("target/reports/tracing-report.txt")))
                 .isEqualTo("ok - 6 total\n");
     }
 
-    private static void installAsciiDocImporter()
-    {
-        final Path pluginPath = Path.of("../openfasttrace-asciidoc-plugin").toAbsolutePath();
-        final Path pluginJar = pluginPath.resolve("target/openfasttrace-asciidoc-plugin-0.1.0.jar");
-        assertTrue(Files.exists(pluginJar), "AsciiDoc plugin exists at " + pluginJar);
-        mvnITEnv.installPlugin(pluginJar.toFile(),
-                pluginPath.resolve("pom.xml").toFile());
-    }
 
     @Test
     void testTracingFindsDefects() throws Exception

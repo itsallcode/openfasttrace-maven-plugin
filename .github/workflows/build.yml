@@ -43,13 +43,6 @@ jobs:
         key: ${{ runner.os }}-java-${{ matrix.java }}-sonar
         restore-keys: ${{ runner.os }}-java-${{ matrix.java }}-sonar
 
-    - name: Build AsciiDoc importer plugin
-      run: |
-        cd ..
-        git clone https://github.com/SoftwareDefinedVehicle/openfasttrace-asciidoc-plugin.git --depth 1 --single-branch --branch initial_contribution
-        cd openfasttrace-asciidoc-plugin
-        mvn --batch-mode clean package -DskipTests
-
     - name: Build with Maven
       run: mvn --errors --batch-mode clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Djava.version=${{ matrix.java }}
 

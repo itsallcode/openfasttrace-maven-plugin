@@ -11,6 +11,11 @@
     "java.sources.organizeImports.staticStarThreshold": 3,
     "java.configuration.updateBuildConfiguration": "automatic",
     "java.compile.nullAnalysis.mode": "automatic",
+    "java.test.config": {
+        "vmArgs": [
+            "-Djava.util.logging.config.file=src/test/resources/logging.properties"
+        ]
+    },
     "sonarlint.connectedMode.project": {
         "connectionId": "itsallcode",
         "projectKey": "org.itsallcode:openfasttrace-maven-plugin"
