@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- [PR #65](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/65) Add integration test using an OFT plugin
+## [2.1.0] -2024-08-11
+
+- [PR #65](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/65) Add integration test using an OFT plugin and upgrade to [OpenFastTrace 4.1.0](https://github.com/itsallcode/openfasttrace/releases/tag/4.1.0)
 
 ## [2.0.0] - 2024-06-09
 
