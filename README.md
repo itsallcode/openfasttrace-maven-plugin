@@ -34,7 +34,7 @@ Add the openfasttrace-maven-plugin to your `pom.xml`:
 <plugin>
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace-maven-plugin</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
     <executions>
         <execution>
             <id>trace-requirements</id>
@@ -58,6 +58,28 @@ Then you can run tracing by calling the goal directly: `mvn openfasttrace:trace`
 The plugin binds to the `verify` lifecycle, so you can also use `mvn verify`.
 
 See [src/test/resources/empty-project](src/test/resources/simple-project) for an example project.
+
+### OpenFastTrace Plugins
+
+You can use OpenFastTrace plugins to import and export requirements in additional formats. Include plugins by adding them as a dependency to the `openfasttrace-maven-plugin`, see [project-with-plugins](src/test/resources/project-with-plugins/) as an example.
+
+```xml
+<plugin>
+    <groupId>org.itsallcode</groupId>
+    <artifactId>openfasttrace-maven-plugin</artifactId>
+    <version>2.1.0</version>
+    <configuration>
+        <failBuild>true</failBuild>
+    </configuration>
+    <dependencies>
+        <dependency>
+            <groupId>org.itsallcode</groupId>
+            <artifactId>openfasttrace-asciidoc-plugin</artifactId>
+            <version>0.2.0</version>
+        </dependency>
+    </dependencies>
+</plugin>
+```
 
 ### Configuration
 

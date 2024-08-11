@@ -23,6 +23,13 @@
                     <outputDirectory>${project.build.directory}/reports/</outputDirectory>
                     <reportOutputFormat>plain</reportOutputFormat>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.itsallcode</groupId>
+                        <artifactId>openfasttrace-asciidoc-plugin</artifactId>
+                        <version>0.2.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

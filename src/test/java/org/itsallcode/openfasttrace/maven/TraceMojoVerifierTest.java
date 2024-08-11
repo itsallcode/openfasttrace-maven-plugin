@@ -21,7 +21,7 @@ import com.exasol.mavenpluginintegrationtesting.MavenIntegrationTestEnvironment;
 class TraceMojoVerifierTest
 {
     private static final Logger LOG = Logger.getLogger(TraceMojoVerifierTest.class.getName());
-    private static Path BASE_TEST_DIR = Paths.get("src/test/resources").toAbsolutePath();
+    private static final Path BASE_TEST_DIR = Paths.get("src/test/resources").toAbsolutePath();
     private static final String CURRENT_PLUGIN_VERSION = getCurrentProjectVersion();
     private static final String OFT_GOAL = "org.itsallcode:openfasttrace-maven-plugin:" + CURRENT_PLUGIN_VERSION
             + ":trace";
@@ -35,6 +35,7 @@ class TraceMojoVerifierTest
     private static final Path PROJECT_WITH_NESTED_SUB_MODULE = BASE_TEST_DIR.resolve("project-with-nested-sub-module");
     private static final Path EMPTY_PROJECT = BASE_TEST_DIR.resolve("empty-project");
     private static final Path SIMPLE_PROJECT = BASE_TEST_DIR.resolve("simple-project");
+    private static final Path PROJECT_WITH_PLUGINS = BASE_TEST_DIR.resolve("project-with-plugins");
     private static final Path TRACING_DEFECTS = BASE_TEST_DIR.resolve("project-with-tracing-defects");
     private static final Path TRACING_DEFECTS_FAIL_BUILD = BASE_TEST_DIR
             .resolve("project-with-tracing-defects-fail-build");
@@ -128,6 +129,15 @@ class TraceMojoVerifierTest
 
         assertThat(fileContent(SIMPLE_PROJECT.resolve("target/reports/tracing-report.txt")))
                 .isEqualTo("ok - 3 total\n");
+    }
+
+    @Test
+    void testTracingWithPlugins() throws Exception
+    {
+        runTracingMojo(PROJECT_WITH_PLUGINS);
+
+        assertThat(fileContent(PROJECT_WITH_PLUGINS.resolve("target/reports/tracing-report.txt")))
+                .isEqualTo("ok - 6 total\n");
     }
 
     @Test
