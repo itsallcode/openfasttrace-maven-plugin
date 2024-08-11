@@ -82,7 +82,7 @@
             <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace</artifactId>
             <version>${oft.version}</version>
-            <scope>runtime</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
