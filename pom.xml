@@ -80,11 +80,6 @@
         </dependency>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>
-            <artifactId>openfasttrace-core</artifactId>
-            <version>${oft.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace</artifactId>
             <version>${oft.version}</version>
             <scope>runtime</scope>
@@ -532,15 +527,20 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <printEqualFiles>true</printEqualFiles>
+                    <printEqualFiles>false</printEqualFiles>
                     <failBuildInCaseOfDifferentContentConflict>true</failBuildInCaseOfDifferentContentConflict>
-                    <failBuildInCaseOfEqualContentConflict>true</failBuildInCaseOfEqualContentConflict>
-                    <failBuildInCaseOfConflict>true</failBuildInCaseOfConflict>
+                    <!-- Workaround for https://github.com/itsallcode/openfasttrace/issues/428 -->
+                    <failBuildInCaseOfEqualContentConflict>false</failBuildInCaseOfEqualContentConflict>
+                    <failBuildInCaseOfConflict>false</failBuildInCaseOfConflict>
                     <checkCompileClasspath>true</checkCompileClasspath>
                     <checkRuntimeClasspath>true</checkRuntimeClasspath>
                     <checkTestClasspath>false</checkTestClasspath>
                     <preferLocal>true</preferLocal>
                     <useResultFile>false</useResultFile>
+                    <ignoredResourcePatterns>
+                         <!-- Suppress warning "Found duplicate and different resources in [org.eclipse.sisu:org.eclipse.sisu.inject:0.3.5, org.eclipse.sisu:org.eclipse.sisu.plexus:0.3.5]" -->
+                        <ignoredResourcePattern>about.html</ignoredResourcePattern>
+                    </ignoredResourcePatterns>
                 </configuration>
             </plugin>
             <plugin>
