@@ -5,8 +5,10 @@ import static java.util.stream.Collectors.toList;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.maven.execution.MavenSession;
@@ -16,6 +18,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.*;
 import org.apache.maven.project.*;
 import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
+import org.itsallcode.openfasttrace.api.FilterSettings;
 import org.itsallcode.openfasttrace.api.ReportSettings;
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportSettings;
@@ -89,13 +92,24 @@ public class TraceMojo extends AbstractMojo
      */
     @Parameter(property = "detailsSectionDisplay", defaultValue = "COLLAPSE", required = true)
     private DetailsSectionDisplay detailsSectionDisplay;
+
+    /**
+     * Determines which artifact types should be imported.
+     * <ul>
+     * <li>If the artifactTypes set is null, no filtering based on artifact type
+     * will be applied.</li>
+     * <li>If the artifactTypes set is not null, only artifacts with types that
+     * match the specified types will be imported.</li>
+     */
+    @Parameter(property = "artifactTypes")
+    private Set<String> artifactTypes;
     
     /**
      * Skip running OFT.
      * <p>
      * Default: <code>false</code>
      */
-    @Parameter(property = "openfasttrace.skip", defaultValue = "false", required = false)
+    @Parameter(property = "openfasttrace.skip", defaultValue = "false")
     private boolean skip;
 
     @Parameter(defaultValue = "${project}", readonly = true)
@@ -214,6 +228,13 @@ public class TraceMojo extends AbstractMojo
         {
             getLog().info("Tracing doc directory " + docPath.get());
             settings.addInputs(docPath.get());
+        }
+        if (artifactTypes != null)
+        {
+            FilterSettings filterSettings = FilterSettings.builder()
+                    .artifactTypes(artifactTypes)
+                    .build();
+            settings.filter(filterSettings);
         }
         return settings.build();
     }

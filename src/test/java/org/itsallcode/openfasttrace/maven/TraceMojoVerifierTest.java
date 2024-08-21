@@ -1,10 +1,11 @@
 package org.itsallcode.openfasttrace.maven;
 
 import static com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter.getCurrentProjectVersion;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.io.FileMatchers.anExistingFile;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -41,6 +42,7 @@ class TraceMojoVerifierTest
             .resolve("project-with-tracing-defects-fail-build");
     private static final Path HTML_REPORT_PROJECT = BASE_TEST_DIR
             .resolve("html-report");
+    public static final Path PARTIAL_ARTIFACT_COVERAGE_PROJECT = BASE_TEST_DIR.resolve("project-with-partial-artifact-coverage");
     private static MavenIntegrationTestEnvironment mvnITEnv;
 
     @BeforeAll
@@ -63,8 +65,8 @@ class TraceMojoVerifierTest
         verifier.setCliOptions(List.of("-pl ."));
         verifier.executeGoals(List.of("generate-sources", "generate-test-sources", OFT_GOAL));
         verifier.verifyErrorFreeLog();
-        assertThat(fileContent(PROJECT_WITH_MULTIPLE_LANGUAGES.resolve("target/tracing-report.txt")))
-                .isEqualTo("ok - 8 total\n");
+        assertThat(fileContent(PROJECT_WITH_MULTIPLE_LANGUAGES.resolve("target/tracing-report.txt"))
+                , equalTo("ok - 8 total\n"));
     }
 
     @Test
@@ -74,8 +76,8 @@ class TraceMojoVerifierTest
         verifier.setCliOptions(List.of("-pl ."));
         verifier.executeGoal(OFT_GOAL);
         verifier.verifyErrorFreeLog();
-        assertThat(fileContent(PROJECT_WITH_SUB_MODULE.resolve("target/tracing-report.txt")))
-                .isEqualTo("ok - 3 total\n");
+        assertThat(fileContent(PROJECT_WITH_SUB_MODULE.resolve("target/tracing-report.txt")),
+                equalTo("ok - 3 total\n"));
     }
 
     @Test
@@ -85,8 +87,8 @@ class TraceMojoVerifierTest
         verifier.setCliOptions(List.of("-pl .")); // only check root project
         verifier.executeGoal(OFT_GOAL);
         verifier.verifyErrorFreeLog();
-        assertThat(fileContent(PROJECT_WITH_NESTED_SUB_MODULE.resolve("target/tracing-report.txt")))
-                .isEqualTo("ok - 3 total\n");
+        assertThat(fileContent(PROJECT_WITH_NESTED_SUB_MODULE.resolve("target/tracing-report.txt")),
+                equalTo("ok - 3 total\n"));
     }
 
     @Test
@@ -96,8 +98,8 @@ class TraceMojoVerifierTest
         verifier.setCliOptions(List.of("-pl .", "-T 2"));
         verifier.executeGoal(OFT_GOAL);
         verifier.verifyErrorFreeLog();
-        assertThat(fileContent(PROJECT_WITH_NESTED_SUB_MODULE.resolve("target/tracing-report.txt")))
-                .isEqualTo("ok - 3 total\n");
+        assertThat(fileContent(PROJECT_WITH_NESTED_SUB_MODULE.resolve("target/tracing-report.txt")),
+                equalTo("ok - 3 total\n"));
     }
 
     static void assertFileContent(final Path file, final String... lines) throws IOException
@@ -127,8 +129,8 @@ class TraceMojoVerifierTest
     {
         runTracingMojo(SIMPLE_PROJECT);
 
-        assertThat(fileContent(SIMPLE_PROJECT.resolve("target/reports/tracing-report.txt")))
-                .isEqualTo("ok - 3 total\n");
+        assertThat(fileContent(SIMPLE_PROJECT.resolve("target/reports/tracing-report.txt")),
+                equalTo("ok - 3 total\n"));
     }
 
     @Test
@@ -136,8 +138,8 @@ class TraceMojoVerifierTest
     {
         runTracingMojo(PROJECT_WITH_PLUGINS);
 
-        assertThat(fileContent(PROJECT_WITH_PLUGINS.resolve("target/reports/tracing-report.txt")))
-                .isEqualTo("ok - 6 total\n");
+        assertThat(fileContent(PROJECT_WITH_PLUGINS.resolve("target/reports/tracing-report.txt")),
+                equalTo("ok - 6 total\n"));
     }
 
     @Test
@@ -145,8 +147,8 @@ class TraceMojoVerifierTest
     {
         runTracingMojo(TRACING_DEFECTS);
 
-        assertThat(fileContent(TRACING_DEFECTS.resolve("target/tracing-report.txt")))
-                .contains("not ok - 2 total, 1 defect");
+        assertThat(fileContent(TRACING_DEFECTS.resolve("target/tracing-report.txt")),
+                containsString("not ok - 2 total, 1 defect"));
     }
 
     @Test
@@ -160,18 +162,18 @@ class TraceMojoVerifierTest
         assertAll(
                 () -> verifier.verifyTextInLog(
                         "Skipping OFT tracing because property 'openfasttrace.skip' was set to 'true'."),
-                () -> assertThat(TRACING_DEFECTS.resolve("target/tracing-report.txt")).doesNotExist());
+                () -> assertThat(TRACING_DEFECTS.resolve("target/tracing-report.txt").toFile(),
+                        not(anExistingFile())));
     }
 
     @Test
-    void testTracingFindsDefectsFailBuild() throws Exception
+    void testTracingFindsDefectsFailBuild()
     {
-        assertThatThrownBy(() -> runTracingMojo(TRACING_DEFECTS_FAIL_BUILD))
-                .isInstanceOf(VerificationException.class)
-                .hasMessageContaining("Tracing found 1 defects out of 2 items");
-
-        assertThat(fileContent(TRACING_DEFECTS_FAIL_BUILD.resolve("target/tracing-report.txt")))
-                .contains("not ok - 2 total, 1 defect");
+        final VerificationException exception = assertThrows(VerificationException.class,
+                () -> runTracingMojo(TRACING_DEFECTS_FAIL_BUILD));
+        assertAll(() -> assertThat(exception.getMessage(), containsString("Tracing found 1 defects out of 2 items")),
+                () -> assertThat(fileContent(TRACING_DEFECTS_FAIL_BUILD.resolve("target/tracing-report.txt")),
+                containsString("not ok - 2 total, 1 defect")));
     }
 
     @Test
@@ -179,9 +181,9 @@ class TraceMojoVerifierTest
     {
         runTracingMojo(HTML_REPORT_PROJECT);
 
-        assertThat(fileContent(HTML_REPORT_PROJECT.resolve("target/tracing-report.html")))
-                .contains("<span class=\"green\">&check;</span> 3 total") //
-                .contains("<details>");
+        final String content = fileContent(HTML_REPORT_PROJECT.resolve("target/tracing-report.html"));
+        assertAll(() -> assertThat(content, containsString("<span class=\"green\">&check;</span> 3 total")),
+                () ->assertThat(content, containsString("<details>")));
     }
 
     @Test
@@ -192,8 +194,19 @@ class TraceMojoVerifierTest
         verifier.executeGoal(OFT_GOAL);
         verifier.verifyErrorFreeLog();
 
-        assertThat(fileContent(HTML_REPORT_PROJECT.resolve("target/tracing-report.html")))
-                .contains("<details open>");
+        assertThat(fileContent(HTML_REPORT_PROJECT.resolve("target/tracing-report.html")),
+                containsString("<details open>"));
+    }
+
+    @Test
+    void testTracingSelectedArtifactTypes() throws Exception
+    {
+        final Verifier verifier = mvnITEnv.getVerifier(PARTIAL_ARTIFACT_COVERAGE_PROJECT);
+        verifier.addCliOption("-DartifactTypes=one,two");
+        verifier.executeGoal(OFT_GOAL);
+        verifier.verifyErrorFreeLog();
+        assertThat(fileContent(PARTIAL_ARTIFACT_COVERAGE_PROJECT.resolve("target/tracing-report.txt")),
+                equalTo("ok - 2 total\n"));
     }
 
     private static void runTracingMojo(final Path projectDir) throws Exception
