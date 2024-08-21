@@ -58,7 +58,7 @@ Then you can run tracing by calling the goal directly: `mvn openfasttrace:trace`
 
 The plugin binds to the `verify` lifecycle, so you can also use `mvn verify`.
 
-See [src/test/resources/empty-project](src/test/resources/simple-project) for an example project.
+See [src/test/resources/empty-project](src/test/resources/simple-project/) for an example project.
 
 ### OpenFastTrace Plugins
 
