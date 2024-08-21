@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.2.0] - 2024-08-21
 
-- [PR #66](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/66) Add filter for artifact types.
+- [PR #66](https://github.com/itsallcode/openfasttrace-maven-plugin/issues/66) Add filter for artifact types.
 
 ## [2.1.0] - 2024-08-11
 
