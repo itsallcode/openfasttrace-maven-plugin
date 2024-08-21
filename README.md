@@ -49,6 +49,7 @@ Add the openfasttrace-maven-plugin to your `pom.xml`:
         <reportVerbosity>ALL</reportVerbosity>
         <reportShowOrigin>true</reportShowOrigin>
         <detailsSectionDisplay>COLLAPSE</detailsSectionDisplay>
+        <artifactTypes>feat,req</artifactTypes>
     </configuration>
 </plugin>
 ```
@@ -57,11 +58,11 @@ Then you can run tracing by calling the goal directly: `mvn openfasttrace:trace`
 
 The plugin binds to the `verify` lifecycle, so you can also use `mvn verify`.
 
-See [src/test/resources/empty-project](src/test/resources/simple-project) for an example project.
+See [src/test/resources/empty-project](src/test/resources/simple-project/) for an example project.
 
 ### OpenFastTrace Plugins
 
-You can use OpenFastTrace plugins to import and export requirements in additional formats. Include plugins by adding them as a dependency to the `openfasttrace-maven-plugin`, see [project-with-plugins](src/test/resources/project-with-plugins/) as an example.
+You can use OpenFastTrace plugins to import and export requirements in additional formats. Include plugins by adding them as a dependency to the `openfasttrace-maven-plugin`, see [project-with-plugins](src/test/resources/project-with-plugins) as an example.
 
 ```xml
 <plugin>
@@ -150,6 +151,20 @@ You can add additional resource directories using the [Maven Resources Plugin](h
         </resource>
     </resources>
 </build>
+```
+
+#### Selecting the Imported ArtifactTypes
+
+Sometimes you don't want to trace the whole requirement chain. Instead, you are interested in the consistency of a subset. For instance, if you need to deliver a system requirement specification to another team, your job is to assure that the document is consistent in itself.
+
+For those cases you can add an include list to the configuration that explicitly lists all artifact types to be imported. Note that this also affects which required coverage is imported — which is exactly what you want in this situation.
+
+The following example configuration limits import to artifact types `feat` and `req`.
+
+```xml
+<configuration>
+    <artifactTypes>feat,req</artifactTypes>
+</configuration>
 ```
 
 #### Report
