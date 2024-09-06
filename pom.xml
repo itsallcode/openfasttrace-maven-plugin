@@ -305,9 +305,16 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-plugin-plugin</artifactId>
+                            <version>3.14.0</version>
+                        </path>
+                    </annotationProcessorPaths>
                     <compilerArgs>
                         <!-- Ignore warnings about annotations -->
-                        <arg>-Xlint:all,-processing</arg>
+                        <arg>-Xlint:all</arg>
                         <arg>-Werror</arg>
                     </compilerArgs>
                 </configuration>
