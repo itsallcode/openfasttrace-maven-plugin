@@ -468,9 +468,6 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.4.0</version>
                 <configuration>
-                    <includes>
-                        <include>**VerifierTest.java</include>
-                    </includes>
                     <systemPropertyVariables>
                         <test.coverage>true</test.coverage>
                         <java.util.logging.config.file>src/test/resources/logging.properties</java.util.logging.config.file>

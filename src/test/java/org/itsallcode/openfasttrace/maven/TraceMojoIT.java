@@ -19,9 +19,9 @@ import org.junit.jupiter.api.*;
 
 import com.exasol.mavenpluginintegrationtesting.MavenIntegrationTestEnvironment;
 
-class TraceMojoVerifierTest
+class TraceMojoIT
 {
-    private static final Logger LOG = Logger.getLogger(TraceMojoVerifierTest.class.getName());
+    private static final Logger LOG = Logger.getLogger(TraceMojoIT.class.getName());
     private static final Path BASE_TEST_DIR = Paths.get("src/test/resources").toAbsolutePath();
     private static final String CURRENT_PLUGIN_VERSION = getCurrentProjectVersion();
     private static final String OFT_GOAL = "org.itsallcode:openfasttrace-maven-plugin:" + CURRENT_PLUGIN_VERSION
@@ -42,7 +42,8 @@ class TraceMojoVerifierTest
             .resolve("project-with-tracing-defects-fail-build");
     private static final Path HTML_REPORT_PROJECT = BASE_TEST_DIR
             .resolve("html-report");
-    public static final Path PARTIAL_ARTIFACT_COVERAGE_PROJECT = BASE_TEST_DIR.resolve("project-with-partial-artifact-coverage");
+    public static final Path PARTIAL_ARTIFACT_COVERAGE_PROJECT = BASE_TEST_DIR
+            .resolve("project-with-partial-artifact-coverage");
     private static MavenIntegrationTestEnvironment mvnITEnv;
 
     @BeforeAll
@@ -65,8 +66,8 @@ class TraceMojoVerifierTest
         verifier.setCliOptions(List.of("-pl ."));
         verifier.executeGoals(List.of("generate-sources", "generate-test-sources", OFT_GOAL));
         verifier.verifyErrorFreeLog();
-        assertThat(fileContent(PROJECT_WITH_MULTIPLE_LANGUAGES.resolve("target/tracing-report.txt"))
-                , equalTo("ok - 8 total\n"));
+        assertThat(fileContent(PROJECT_WITH_MULTIPLE_LANGUAGES.resolve("target/tracing-report.txt")),
+                equalTo("ok - 8 total\n"));
     }
 
     @Test
@@ -173,7 +174,7 @@ class TraceMojoVerifierTest
                 () -> runTracingMojo(TRACING_DEFECTS_FAIL_BUILD));
         assertAll(() -> assertThat(exception.getMessage(), containsString("Tracing found 1 defects out of 2 items")),
                 () -> assertThat(fileContent(TRACING_DEFECTS_FAIL_BUILD.resolve("target/tracing-report.txt")),
-                containsString("not ok - 2 total, 1 defect")));
+                        containsString("not ok - 2 total, 1 defect")));
     }
 
     @Test
@@ -183,7 +184,7 @@ class TraceMojoVerifierTest
 
         final String content = fileContent(HTML_REPORT_PROJECT.resolve("target/tracing-report.html"));
         assertAll(() -> assertThat(content, containsString("<span class=\"green\">&check;</span> 3 total")),
-                () ->assertThat(content, containsString("<details>")));
+                () -> assertThat(content, containsString("<details>")));
     }
 
     @Test
