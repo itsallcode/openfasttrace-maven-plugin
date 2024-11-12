@@ -5,10 +5,10 @@ import static java.util.stream.Collectors.toList;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
+
+import javax.inject.Inject;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
@@ -16,14 +16,13 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.*;
 import org.apache.maven.project.*;
-import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
-import org.itsallcode.openfasttrace.api.FilterSettings;
-import org.itsallcode.openfasttrace.api.ReportSettings;
+import org.itsallcode.openfasttrace.api.*;
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportSettings;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.core.Oft;
 import org.itsallcode.openfasttrace.core.OftRunner;
+
 
 /**
  * Trace requirements using
@@ -114,19 +113,21 @@ public class TraceMojo extends AbstractMojo
     @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
 
-    @Component
-    private ProjectBuilder mavenProjectBuilder;
-
     @Parameter(defaultValue = "${session}", readonly = true)
     private MavenSession session;
 
+    private final ProjectBuilder mavenProjectBuilder;
 
     /**
-     * Create a new instance
+     * Create a new instance.
+     * 
+     * @param mavenProjectBuilder
+     *            maven project builder
      */
-    public TraceMojo()
+    @Inject
+    public TraceMojo(final ProjectBuilder mavenProjectBuilder)
     {
-        // Added default constructor to fix javadoc warning
+        this.mavenProjectBuilder = mavenProjectBuilder;
     }
 
     @Override
@@ -230,7 +231,7 @@ public class TraceMojo extends AbstractMojo
         }
         if (artifactTypes != null)
         {
-            FilterSettings filterSettings = FilterSettings.builder()
+            final FilterSettings filterSettings = FilterSettings.builder()
                     .artifactTypes(artifactTypes)
                     .build();
             settings.filter(filterSettings);
