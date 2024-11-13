@@ -1,5 +1,6 @@
 package org.itsallcode.openfasttrace.maven;
 
+import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.toList;
 
 import java.io.*;
@@ -23,7 +24,6 @@ import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.core.Oft;
 import org.itsallcode.openfasttrace.core.OftRunner;
 
-
 /**
  * Trace requirements using
  * <a href="https://github.com/itsallcode/openfasttrace">OpenFastTrace</a>.
@@ -31,6 +31,8 @@ import org.itsallcode.openfasttrace.core.OftRunner;
 @Mojo(name = "trace", defaultPhase = LifecyclePhase.VERIFY, threadSafe = true)
 public class TraceMojo extends AbstractMojo
 {
+    private static final String WILDCARD_TAG = "_";
+
     /**
      * Location of the directory where the reports are generated.
      * <p>
@@ -98,10 +100,23 @@ public class TraceMojo extends AbstractMojo
      * will be applied.</li>
      * <li>If the artifactTypes set is not null, only artifacts with types that
      * match the specified types will be imported.</li>
+     * </ul>
      */
     @Parameter(property = "artifactTypes")
     Set<String> artifactTypes;
-    
+
+    /**
+     * Determines which tags should be imported.
+     * <p>
+     * Import only specification items that have at least one of the listed
+     * tags. If you add a single underscore {@code _}, specification items that
+     * have no tags at all are also imported.
+     * <p>
+     * Default: Import all specification items.
+     */
+    @Parameter(property = "tags")
+    Set<String> tags;
+
     /**
      * Skip running OFT.
      * <p>
@@ -243,14 +258,38 @@ public class TraceMojo extends AbstractMojo
             getLog().info("Tracing doc directory " + docPath.get());
             settings.addInputs(docPath.get());
         }
-        if (artifactTypes != null)
-        {
-            final FilterSettings filterSettings = FilterSettings.builder()
-                    .artifactTypes(artifactTypes)
-                    .build();
-            settings.filter(filterSettings);
-        }
+        final FilterSettings filterSettings = FilterSettings.builder()
+                .artifactTypes(getFilteredArtifactTypes())
+                .tags(getFilteredTags())
+                .withoutTags(isFilterWithoutTags())
+                .build();
+        settings.filter(filterSettings);
         return settings.build();
+    }
+
+    private Set<String> getFilteredArtifactTypes()
+    {
+        return artifactTypes == null ? emptySet() : artifactTypes;
+    }
+
+    private Set<String> getFilteredTags()
+    {
+        if (tags == null)
+        {
+            return emptySet();
+        }
+        final Set<String> copy = new HashSet<>(tags);
+        copy.remove(WILDCARD_TAG);
+        return copy;
+    }
+
+    private boolean isFilterWithoutTags()
+    {
+        if (tags == null || tags.isEmpty())
+        {
+            return true;
+        }
+        return tags.contains(WILDCARD_TAG);
     }
 
     private void logSourcePaths(final List<Path> sourcePaths)
