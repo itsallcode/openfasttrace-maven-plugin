@@ -168,8 +168,9 @@ public class TraceMojo extends AbstractMojo
         }
         final Oft oft = new OftRunner();
         getLog().info("Importing spec items...");
-        final List<SpecificationItem> items = oft.importItems(createImportSettings());
-        getLog().info("Imported " + items.size() + " items.");
+        final ImportSettings importSettings = createImportSettings();
+        final List<SpecificationItem> items = oft.importItems(importSettings);
+        getLog().info("Imported " + items.size() + " items using settings " + formatImportSettings(importSettings));
         final List<LinkedSpecificationItem> linkedItems = oft.link(items);
         final Trace trace = oft.trace(linkedItems);
         writeTracingReport(oft, trace);
@@ -185,6 +186,24 @@ public class TraceMojo extends AbstractMojo
         {
             throw new MojoFailureException(message);
         }
+    }
+
+    private static String formatImportSettings(final ImportSettings settings)
+    {
+        return "[inputs: " + settings.getInputs()
+                + ", path config: " + settings.getPathConfigs()
+                + ", filters: " + formatFilterSettings(settings.getFilters())
+                + "]";
+    }
+
+    private static String formatFilterSettings(final FilterSettings settings)
+    {
+        return "[any criteria set: " + settings.isAnyCriteriaSet() +
+                ", artifact type criteria set: " + settings.isArtifactTypeCriteriaSet() +
+                ", artifact types: " + settings.getArtifactTypes()
+                + ", tag criteria set: " + settings.isTagCriteriaSet()
+                + ", tags: " + settings.getTags() +
+                ", without tags: " + settings.withoutTags() + "]";
     }
 
     private static void logTracingReport(final Oft oft, final Trace trace)
