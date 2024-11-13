@@ -100,7 +100,7 @@ public class TraceMojo extends AbstractMojo
      * match the specified types will be imported.</li>
      */
     @Parameter(property = "artifactTypes")
-    private Set<String> artifactTypes;
+    Set<String> artifactTypes;
     
     /**
      * Skip running OFT.
@@ -128,6 +128,20 @@ public class TraceMojo extends AbstractMojo
     public TraceMojo(final ProjectBuilder mavenProjectBuilder)
     {
         this.mavenProjectBuilder = mavenProjectBuilder;
+    }
+
+    /**
+     * Constructor used in unit tests.
+     * 
+     * @param mavenProjectBuilder
+     *            maven project builder
+     * @param project
+     *            maven project
+     */
+    TraceMojo(final ProjectBuilder mavenProjectBuilder, final MavenProject project)
+    {
+        this(mavenProjectBuilder);
+        this.project = project;
     }
 
     @Override
@@ -217,7 +231,7 @@ public class TraceMojo extends AbstractMojo
         }
     }
 
-    private ImportSettings createImportSettings()
+    ImportSettings createImportSettings()
     {
         final List<Path> sourcePaths = getSourcePaths();
         logSourcePaths(sourcePaths);
@@ -285,15 +299,15 @@ public class TraceMojo extends AbstractMojo
         final List<String> compileSourceRoots = mavenProject.getCompileSourceRoots();
         final List<String> testCompileSourceRoots = mavenProject.getTestCompileSourceRoots();
         final List<String> resourceDirs = mavenProject.getResources().stream().map(Resource::getDirectory)
-                .collect(toList());
+                .toList();
         final List<String> testResourceDirs = mavenProject.getTestResources().stream().map(Resource::getDirectory)
-                .collect(toList());
+                .toList();
         final Stream<Path> sourcePaths = Stream
                 .of(compileSourceRoots, resourceDirs, testCompileSourceRoots, testResourceDirs)
                 .flatMap(List::stream)
                 .map(Path::of)
                 .filter(Files::exists);
-        return Stream.concat(sourcePathsOfSubModules, sourcePaths).collect(toList());
+        return Stream.concat(sourcePathsOfSubModules, sourcePaths).toList();
     }
 
     private Optional<Path> getProjectSubPath(final String dir)
