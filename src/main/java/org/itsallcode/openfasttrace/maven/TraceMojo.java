@@ -1,7 +1,6 @@
 package org.itsallcode.openfasttrace.maven;
 
 import static java.util.Collections.emptySet;
-import static java.util.stream.Collectors.toList;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -299,7 +298,7 @@ public class TraceMojo extends AbstractMojo
             return;
         }
         final Path baseDir = project.getBasedir().toPath();
-        final List<Path> relativePaths = sourcePaths.stream().map(baseDir::relativize).collect(toList());
+        final List<Path> relativePaths = sourcePaths.stream().map(baseDir::relativize).toList();
         getLog().info(
                 "Tracing " + sourcePaths.size() + " sub-directories of base dir " + baseDir + ": "
                         + relativePaths);

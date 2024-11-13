@@ -160,6 +160,8 @@ Sometimes you don't want to trace the whole requirement chain. Instead, you are 
 
 For those cases you can add an include list to the configuration that explicitly lists all artifact types or tags to be imported. Note that this also affects which required coverage is imported — which is exactly what you want in this situation.
 
+See the [OFT user guide on import options](https://github.com/itsallcode/openfasttrace/blob/main/doc/user_guide.md#import-options) for details.
+
 ##### Select Artifact Types
 
 The following example configuration limits import to artifact types `feat` and `req`.
@@ -169,6 +171,8 @@ The following example configuration limits import to artifact types `feat` and `
     <artifactTypes>feat,req</artifactTypes>
 </configuration>
 ```
+
+This works similar to OFT's command line argument `--wanted-artifact-types`.
 
 ##### Select Tags
 
@@ -180,9 +184,11 @@ The following example configuration limits import to tags `prototype` and `mvp`.
 </configuration>
 ```
 
-You can also specify the underscore `_` to import specification items without tags.
+This works similar to OFT's command line argument `--wanted-tags`.
 
-You can also specify the tags on the command line: `-Dtags=prototype,mvp`
+You can specify the underscore `_` to import specification items without tags.
+
+You can also specify the tags to import using CLI option `-Dtags=prototype,mvp`.
 
 #### Report
 

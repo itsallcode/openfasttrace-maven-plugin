@@ -7,7 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.3.0] - 2024-11-12
 
 - [#70](https://github.com/itsallcode/openfasttrace-maven-plugin/issues/70) Add support for OFT's command line option `--wanted-tags`
-- [PR #71](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/71) Upgrade dependencies and plugins, minor refactoring.
 
 ## [2.2.0] - 2024-08-21
 
