@@ -18,7 +18,7 @@
         <oft.version>4.1.0</oft.version>
         <maven.core.version>3.8.7</maven.core.version>
         <skipSigningArtifacts>true</skipSigningArtifacts>
-        <junit.version>5.11.0</junit.version>
+        <junit.version>5.11.3</junit.version>
         <jacoco.version>0.8.12</jacoco.version>
         <sonar.organization>itsallcode</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -98,7 +98,7 @@
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
-            <version>3.13.1</version>
+            <version>3.15.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -118,7 +118,7 @@
             <!-- Fix CVE-2021-29425 in transitive dependency of maven-plugin-testing-harness -->
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.16.1</version>
+            <version>2.17.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -172,6 +172,18 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>5.14.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.itsallcode</groupId>
+            <artifactId>hamcrest-auto-matcher</artifactId>
+            <version>0.8.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>org.jacoco.agent</artifactId>
             <version>${jacoco.version}</version>
@@ -199,7 +211,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.2.5</version>
+                        <version>3.2.7</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -322,7 +334,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>3.14.0</version>
+                <version>3.15.1</version>
                 <configuration>
                     <goalPrefix>openfasttrace</goalPrefix>
                     <skipErrorNoDescriptorsFound>false</skipErrorNoDescriptorsFound>
@@ -365,7 +377,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.11.1</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -379,7 +391,7 @@
                     <doclint></doclint>
                     <serialwarn>true</serialwarn>
                     <failOnError>true</failOnError>
-                    <!-- Generated class HelpMojo causes warning: use of default constructor, which does not provide a comment -->
+                    <!-- Generated class HelpMojo causes warning with Java 21: use of default constructor, which does not provide a comment -->
                     <failOnWarnings>false</failOnWarnings>
                 </configuration>
             </plugin>
@@ -433,7 +445,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.7.1</version>
+                <version>3.8.1</version>
                 <executions>
                     <execution>
                         <id>copy-jacoco</id>
@@ -453,11 +465,8 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.4.0</version>
+                <version>3.5.2</version>
                 <configuration>
-                    <excludes>
-                        <exclude>**VerifierTest.java</exclude>
-                    </excludes>
                     <systemPropertyVariables>
                         <java.util.logging.config.file>src/test/resources/logging.properties</java.util.logging.config.file>
                     </systemPropertyVariables>
@@ -466,11 +475,8 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.4.0</version>
+                <version>3.5.2</version>
                 <configuration>
-                    <includes>
-                        <include>**VerifierTest.java</include>
-                    </includes>
                     <systemPropertyVariables>
                         <test.coverage>true</test.coverage>
                         <java.util.logging.config.file>src/test/resources/logging.properties</java.util.logging.config.file>
@@ -553,7 +559,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-artifact-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.5.3</version>
                 <executions>
                     <execution>
                         <id>verify-reproducible-build</id>

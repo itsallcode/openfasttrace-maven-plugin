@@ -50,6 +50,7 @@ Add the openfasttrace-maven-plugin to your `pom.xml`:
         <reportShowOrigin>true</reportShowOrigin>
         <detailsSectionDisplay>COLLAPSE</detailsSectionDisplay>
         <artifactTypes>feat,req</artifactTypes>
+        <tags>prototype,mvp</tags>
     </configuration>
 </plugin>
 ```
@@ -62,7 +63,7 @@ See [src/test/resources/empty-project](src/test/resources/simple-project/) for a
 
 ### OpenFastTrace Plugins
 
-You can use OpenFastTrace plugins to import and export requirements in additional formats. Include plugins by adding them as a dependency to the `openfasttrace-maven-plugin`, see [project-with-plugins](src/test/resources/project-with-plugins) as an example.
+You can use OpenFastTrace plugins to import and export requirements in additional formats. Include plugins by adding them as a dependency to the `openfasttrace-maven-plugin`, see [project-with-plugins](./src/test/resources/project-with-plugins) as an example.
 
 ```xml
 <plugin>
@@ -153,11 +154,15 @@ You can add additional resource directories using the [Maven Resources Plugin](h
 </build>
 ```
 
-#### Selecting the Imported ArtifactTypes
+#### Selecting the Imported Specification Items
 
 Sometimes you don't want to trace the whole requirement chain. Instead, you are interested in the consistency of a subset. For instance, if you need to deliver a system requirement specification to another team, your job is to assure that the document is consistent in itself.
 
-For those cases you can add an include list to the configuration that explicitly lists all artifact types to be imported. Note that this also affects which required coverage is imported — which is exactly what you want in this situation.
+For those cases you can add an include list to the configuration that explicitly lists all artifact types or tags to be imported. Note that this also affects which required coverage is imported — which is exactly what you want in this situation.
+
+See the [OFT user guide on import options](https://github.com/itsallcode/openfasttrace/blob/main/doc/user_guide.md#import-options) for details.
+
+##### Select Artifact Types
 
 The following example configuration limits import to artifact types `feat` and `req`.
 
@@ -166,6 +171,24 @@ The following example configuration limits import to artifact types `feat` and `
     <artifactTypes>feat,req</artifactTypes>
 </configuration>
 ```
+
+This works similar to OFT's command line argument `--wanted-artifact-types`.
+
+##### Select Tags
+
+The following example configuration limits import to tags `prototype` and `mvp`.
+
+```xml
+<configuration>
+    <tags>prototype,mvp</tags>
+</configuration>
+```
+
+This works similar to OFT's command line argument `--wanted-tags`.
+
+You can specify the underscore `_` to import specification items without tags.
+
+You can also specify the tags to import using CLI option `-Dtags=prototype,mvp`.
 
 #### Report
 

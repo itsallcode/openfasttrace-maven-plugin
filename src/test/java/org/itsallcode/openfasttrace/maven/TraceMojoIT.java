@@ -16,12 +16,14 @@ import org.apache.maven.it.VerificationException;
 import org.apache.maven.it.Verifier;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import com.exasol.mavenpluginintegrationtesting.MavenIntegrationTestEnvironment;
 
-class TraceMojoVerifierTest
+class TraceMojoIT
 {
-    private static final Logger LOG = Logger.getLogger(TraceMojoVerifierTest.class.getName());
+    private static final Logger LOG = Logger.getLogger(TraceMojoIT.class.getName());
     private static final Path BASE_TEST_DIR = Paths.get("src/test/resources").toAbsolutePath();
     private static final String CURRENT_PLUGIN_VERSION = getCurrentProjectVersion();
     private static final String OFT_GOAL = "org.itsallcode:openfasttrace-maven-plugin:" + CURRENT_PLUGIN_VERSION
@@ -37,12 +39,14 @@ class TraceMojoVerifierTest
     private static final Path EMPTY_PROJECT = BASE_TEST_DIR.resolve("empty-project");
     private static final Path SIMPLE_PROJECT = BASE_TEST_DIR.resolve("simple-project");
     private static final Path PROJECT_WITH_PLUGINS = BASE_TEST_DIR.resolve("project-with-plugins");
+    private static final Path PROJECT_WITH_TAGS = BASE_TEST_DIR.resolve("project-with-tags");
     private static final Path TRACING_DEFECTS = BASE_TEST_DIR.resolve("project-with-tracing-defects");
     private static final Path TRACING_DEFECTS_FAIL_BUILD = BASE_TEST_DIR
             .resolve("project-with-tracing-defects-fail-build");
     private static final Path HTML_REPORT_PROJECT = BASE_TEST_DIR
             .resolve("html-report");
-    public static final Path PARTIAL_ARTIFACT_COVERAGE_PROJECT = BASE_TEST_DIR.resolve("project-with-partial-artifact-coverage");
+    public static final Path PARTIAL_ARTIFACT_COVERAGE_PROJECT = BASE_TEST_DIR
+            .resolve("project-with-partial-artifact-coverage");
     private static MavenIntegrationTestEnvironment mvnITEnv;
 
     @BeforeAll
@@ -65,8 +69,8 @@ class TraceMojoVerifierTest
         verifier.setCliOptions(List.of("-pl ."));
         verifier.executeGoals(List.of("generate-sources", "generate-test-sources", OFT_GOAL));
         verifier.verifyErrorFreeLog();
-        assertThat(fileContent(PROJECT_WITH_MULTIPLE_LANGUAGES.resolve("target/tracing-report.txt"))
-                , equalTo("ok - 8 total\n"));
+        assertThat(fileContent(PROJECT_WITH_MULTIPLE_LANGUAGES.resolve("target/tracing-report.txt")),
+                equalTo("ok - 8 total\n"));
     }
 
     @Test
@@ -173,7 +177,7 @@ class TraceMojoVerifierTest
                 () -> runTracingMojo(TRACING_DEFECTS_FAIL_BUILD));
         assertAll(() -> assertThat(exception.getMessage(), containsString("Tracing found 1 defects out of 2 items")),
                 () -> assertThat(fileContent(TRACING_DEFECTS_FAIL_BUILD.resolve("target/tracing-report.txt")),
-                containsString("not ok - 2 total, 1 defect")));
+                        containsString("not ok - 2 total, 1 defect")));
     }
 
     @Test
@@ -183,7 +187,7 @@ class TraceMojoVerifierTest
 
         final String content = fileContent(HTML_REPORT_PROJECT.resolve("target/tracing-report.html"));
         assertAll(() -> assertThat(content, containsString("<span class=\"green\">&check;</span> 3 total")),
-                () ->assertThat(content, containsString("<details>")));
+                () -> assertThat(content, containsString("<details>")));
     }
 
     @Test
@@ -207,6 +211,35 @@ class TraceMojoVerifierTest
         verifier.verifyErrorFreeLog();
         assertThat(fileContent(PARTIAL_ARTIFACT_COVERAGE_PROJECT.resolve("target/tracing-report.txt")),
                 equalTo("ok - 2 total\n"));
+    }
+
+    @ParameterizedTest(name = "wanted tags {0} finds {1} items")
+    @CsvSource(delimiter = ';', nullValues = "NULL", value =
+    { "NULL; 3", "tagA; 1", "tagB; 1", "tagA,tagB; 2", "tagA,tagB,_; 3", "tagC; 0", "_,tagA; 2",
+            // This should find 1 item but finds 3 due to a bug in OFT:
+            // https://github.com/itsallcode/openfasttrace/issues/432
+            "_; 3" })
+    void testTracingSelectedTags(final String tags, final int expectedItemCount) throws Exception
+    {
+        final Verifier verifier = mvnITEnv.getVerifier(PROJECT_WITH_TAGS);
+        verifier.addCliOption("-DfailBuild=false");
+        if (tags != null)
+        {
+            verifier.addCliOption("-Dtags=" + tags);
+        }
+        verifier.executeGoal(OFT_GOAL);
+        verifier.verifyErrorFreeLog();
+        final String expectedResult;
+        if (expectedItemCount > 0)
+        {
+            expectedResult = "not ok - %1$d total, %1$d defect".formatted(expectedItemCount);
+        }
+        else
+        {
+            expectedResult = "ok - 0 total";
+        }
+        assertThat(fileContent(PROJECT_WITH_TAGS.resolve("target/tracing-report.txt")),
+                containsString(expectedResult));
     }
 
     private static void runTracingMojo(final Path projectDir) throws Exception

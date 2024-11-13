@@ -1,14 +1,14 @@
 package org.itsallcode.openfasttrace.maven;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.Collections.emptySet;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
+
+import javax.inject.Inject;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
@@ -16,9 +16,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.*;
 import org.apache.maven.project.*;
-import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
-import org.itsallcode.openfasttrace.api.FilterSettings;
-import org.itsallcode.openfasttrace.api.ReportSettings;
+import org.itsallcode.openfasttrace.api.*;
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportSettings;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
@@ -32,6 +30,8 @@ import org.itsallcode.openfasttrace.core.OftRunner;
 @Mojo(name = "trace", defaultPhase = LifecyclePhase.VERIFY, threadSafe = true)
 public class TraceMojo extends AbstractMojo
 {
+    private static final String WILDCARD_TAG = "_";
+
     /**
      * Location of the directory where the reports are generated.
      * <p>
@@ -99,10 +99,23 @@ public class TraceMojo extends AbstractMojo
      * will be applied.</li>
      * <li>If the artifactTypes set is not null, only artifacts with types that
      * match the specified types will be imported.</li>
+     * </ul>
      */
     @Parameter(property = "artifactTypes")
-    private Set<String> artifactTypes;
-    
+    Set<String> artifactTypes;
+
+    /**
+     * Determines which tags should be imported.
+     * <p>
+     * Import only specification items that have at least one of the listed
+     * tags. If you add a single underscore {@code _}, specification items that
+     * have no tags at all are also imported.
+     * <p>
+     * Default: Import all specification items.
+     */
+    @Parameter(property = "tags")
+    Set<String> tags;
+
     /**
      * Skip running OFT.
      * <p>
@@ -114,19 +127,35 @@ public class TraceMojo extends AbstractMojo
     @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
 
-    @Component
-    private ProjectBuilder mavenProjectBuilder;
-
     @Parameter(defaultValue = "${session}", readonly = true)
     private MavenSession session;
 
+    private final ProjectBuilder mavenProjectBuilder;
 
     /**
-     * Create a new instance
+     * Create a new instance.
+     * 
+     * @param mavenProjectBuilder
+     *            maven project builder
      */
-    public TraceMojo()
+    @Inject
+    public TraceMojo(final ProjectBuilder mavenProjectBuilder)
     {
-        // Added default constructor to fix javadoc warning
+        this.mavenProjectBuilder = mavenProjectBuilder;
+    }
+
+    /**
+     * Constructor used in unit tests.
+     * 
+     * @param mavenProjectBuilder
+     *            maven project builder
+     * @param project
+     *            maven project
+     */
+    TraceMojo(final ProjectBuilder mavenProjectBuilder, final MavenProject project)
+    {
+        this(mavenProjectBuilder);
+        this.project = project;
     }
 
     @Override
@@ -216,7 +245,7 @@ public class TraceMojo extends AbstractMojo
         }
     }
 
-    private ImportSettings createImportSettings()
+    ImportSettings createImportSettings()
     {
         final List<Path> sourcePaths = getSourcePaths();
         logSourcePaths(sourcePaths);
@@ -228,14 +257,38 @@ public class TraceMojo extends AbstractMojo
             getLog().info("Tracing doc directory " + docPath.get());
             settings.addInputs(docPath.get());
         }
-        if (artifactTypes != null)
-        {
-            FilterSettings filterSettings = FilterSettings.builder()
-                    .artifactTypes(artifactTypes)
-                    .build();
-            settings.filter(filterSettings);
-        }
+        final FilterSettings filterSettings = FilterSettings.builder()
+                .artifactTypes(getFilteredArtifactTypes())
+                .tags(getFilteredTags())
+                .withoutTags(isFilterWithoutTags())
+                .build();
+        settings.filter(filterSettings);
         return settings.build();
+    }
+
+    private Set<String> getFilteredArtifactTypes()
+    {
+        return artifactTypes == null ? emptySet() : artifactTypes;
+    }
+
+    private Set<String> getFilteredTags()
+    {
+        if (tags == null)
+        {
+            return emptySet();
+        }
+        final Set<String> copy = new HashSet<>(tags);
+        copy.remove(WILDCARD_TAG);
+        return copy;
+    }
+
+    private boolean isFilterWithoutTags()
+    {
+        if (tags == null || tags.isEmpty())
+        {
+            return true;
+        }
+        return tags.contains(WILDCARD_TAG);
     }
 
     private void logSourcePaths(final List<Path> sourcePaths)
@@ -245,7 +298,7 @@ public class TraceMojo extends AbstractMojo
             return;
         }
         final Path baseDir = project.getBasedir().toPath();
-        final List<Path> relativePaths = sourcePaths.stream().map(baseDir::relativize).collect(toList());
+        final List<Path> relativePaths = sourcePaths.stream().map(baseDir::relativize).toList();
         getLog().info(
                 "Tracing " + sourcePaths.size() + " sub-directories of base dir " + baseDir + ": "
                         + relativePaths);
@@ -284,15 +337,15 @@ public class TraceMojo extends AbstractMojo
         final List<String> compileSourceRoots = mavenProject.getCompileSourceRoots();
         final List<String> testCompileSourceRoots = mavenProject.getTestCompileSourceRoots();
         final List<String> resourceDirs = mavenProject.getResources().stream().map(Resource::getDirectory)
-                .collect(toList());
+                .toList();
         final List<String> testResourceDirs = mavenProject.getTestResources().stream().map(Resource::getDirectory)
-                .collect(toList());
+                .toList();
         final Stream<Path> sourcePaths = Stream
                 .of(compileSourceRoots, resourceDirs, testCompileSourceRoots, testResourceDirs)
                 .flatMap(List::stream)
                 .map(Path::of)
                 .filter(Files::exists);
-        return Stream.concat(sourcePathsOfSubModules, sourcePaths).collect(toList());
+        return Stream.concat(sourcePathsOfSubModules, sourcePaths).toList();
     }
 
     private Optional<Path> getProjectSubPath(final String dir)
