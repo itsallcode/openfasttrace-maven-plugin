@@ -215,7 +215,10 @@ class TraceMojoIT
 
     @ParameterizedTest(name = "wanted tags {0} finds {1} items")
     @CsvSource(delimiter = ';', nullValues = "NULL", value =
-    { "NULL; 3", "tagA; 1", "tagB; 1", "tagA,tagB; 2", "tagA,tagB,_; 3", "tagC; 0" })
+    { "NULL; 3", "tagA; 1", "tagB; 1", "tagA,tagB; 2", "tagA,tagB,_; 3", "tagC; 0", "_,tagA; 2",
+            // This should find 1 item but finds 3 due to a bug in OFT:
+            // https://github.com/itsallcode/openfasttrace/issues/432
+            "_; 3" })
     void testTracingSelectedTags(final String tags, final int expectedItemCount) throws Exception
     {
         final Verifier verifier = mvnITEnv.getVerifier(PROJECT_WITH_TAGS);
