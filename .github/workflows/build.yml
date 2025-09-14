@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        java: [17, 21]
+        java: [17, 21, 24]
     name: "Build with Java ${{ matrix.java }}"
     env:
       DEFAULT_JAVA: 17
@@ -34,6 +34,7 @@ jobs:
         java-version: |
           17
           21
+          24
         cache: 'maven'
 
     - name: Cache SonarQube packages
