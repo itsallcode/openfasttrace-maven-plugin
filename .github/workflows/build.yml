@@ -76,7 +76,7 @@ jobs:
             -Djava.version=${{ matrix.java }}
 
     - name: Archive aggregated reproducible build report
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: reproducible-build-report-java-${{ matrix.java }}
         path: |
