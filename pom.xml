@@ -88,7 +88,7 @@
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-utils</artifactId>
             <!-- Build fails with version > 4.0.0 -->
-            <version>3.6.0</version>
+            <version>4.0.3</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
