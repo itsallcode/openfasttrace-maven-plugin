@@ -59,7 +59,7 @@ jobs:
       - name: Publish to Maven Central Repository
         if: ${{ !inputs.skip-deploy-maven-central }}
         run: |
-          mvn --batch-mode deploy -PcentralPublishing -DossindexSkip=true \
+          mvn --batch-mode deploy -Pcentral-publishing -DossindexSkip=true \
               -DcentralPublishingSkipPublishing=false \
               -DcentralPublishingAutoPublish=${AUTO_PUBLISH} \
               -DcentralPublishingDeploymentName="Deploy OFT Maven Plugin via release.yml"
