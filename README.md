@@ -34,7 +34,7 @@ Add the openfasttrace-maven-plugin to your `pom.xml`:
 <plugin>
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace-maven-plugin</artifactId>
-    <version>2.3.0</version>
+    <version>2.3.1</version>
     <executions>
         <execution>
             <id>trace-requirements</id>
@@ -69,7 +69,7 @@ You can use OpenFastTrace plugins to import and export requirements in additiona
 <plugin>
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace-maven-plugin</artifactId>
-    <version>2.3.0</version>
+    <version>2.3.1</version>
     <configuration>
         <failBuild>true</failBuild>
     </configuration>
@@ -110,7 +110,7 @@ The following snipped adds source directory `src/main/rust` and test source dire
 <plugin>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>build-helper-maven-plugin</artifactId>
-    <version>3.6.0</version>
+    <version>3.6.1</version>
     <executions>
         <execution>
             <id>add-source</id>
@@ -138,6 +138,12 @@ The following snipped adds source directory `src/main/rust` and test source dire
         </execution>
     </executions>
 </plugin>
+```
+
+**Important:** When you add a directory via `build-helper-maven-plugin`, you need to resolve source directories before running OFT. This happens automatically when running `mvn verify`. If you want to run only OFT tracing, you need to do the following:
+
+```sh
+mvn generate-sources openfasttrace:trace
 ```
 
 ##### Adding Custom Resource Directories
