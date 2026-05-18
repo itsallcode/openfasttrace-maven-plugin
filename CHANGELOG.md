@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.3.2] - Unreleased
 
-## [2.3.1] - 2026-05-??
+## [2.3.1] - 2026-05-18
 
 - [#75](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/75) Upgrade dependencies
 - [#]() Upgrade to OFT 4.4.0, upgrade dependencies and Maven Central release process
