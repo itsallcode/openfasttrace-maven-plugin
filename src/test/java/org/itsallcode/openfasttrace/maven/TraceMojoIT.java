@@ -244,6 +244,7 @@ class TraceMojoIT
 
     private static void runTracingMojo(final Path projectDir) throws Exception
     {
+        LOG.info("Running tracing in " + projectDir + "...");
         final Verifier verifier = mvnITEnv.getVerifier(projectDir);
         verifier.executeGoal(OFT_GOAL);
         verifier.verifyErrorFreeLog();
