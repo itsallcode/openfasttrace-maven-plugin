@@ -186,12 +186,12 @@
     <profiles>
         <profile>
             <id>central-publishing</id>
+            <properties>
+                <centralPublishingSkipPublishing>false</centralPublishingSkipPublishing>
+                <centralPublishingAutoPublish>false</centralPublishingAutoPublish>
+                <centralPublishingDeploymentName>Manual deployment of OFT Maven Plugin</centralPublishingDeploymentName>
+            </properties>
             <build>
-                <properties>
-                    <centralPublishingSkipPublishing>false</centralPublishingSkipPublishing>
-                    <centralPublishingAutoPublish>false</centralPublishingAutoPublish>
-                    <centralPublishingDeploymentName>Manual deployment of OFT Maven Plugin</centralPublishingDeploymentName>
-                </properties>
                 <plugins>
                     <plugin>
                         <groupId>org.sonatype.central</groupId>
