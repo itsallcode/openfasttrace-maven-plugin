@@ -4,9 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.3.1] - Unreleased
+## [2.3.2] - Unreleased
 
-- [#75](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/75) Upgrade dependencies
+## [2.3.1] - 2026-05-18
+
+- [PR #75](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/75) Upgrade dependencies
+- [PR #87](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/87) Upgrade to OFT 4.4.0, upgrade dependencies and Maven Central release process
+- [#85](https://github.com/itsallcode/openfasttrace-maven-plugin/issues/85) Document how to run tracing with custom directories
 
 ## [2.3.0] - 2024-11-13
 

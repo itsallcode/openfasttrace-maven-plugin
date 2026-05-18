@@ -4,7 +4,7 @@
 
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace-maven-plugin</artifactId>
-    <version>2.3.0</version>
+    <version>2.3.1</version>
     <packaging>maven-plugin</packaging>
 
     <name>OpenFastTrace Maven Plugin</name>
@@ -15,14 +15,15 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
-        <oft.version>4.2.0</oft.version>
-        <!-- Maven version available in Ubuntu -->
-        <maven.core.version>3.8.7</maven.core.version>
-        <skipSigningArtifacts>true</skipSigningArtifacts>
-        <jacoco.version>0.8.13</jacoco.version>
+        <oft.version>4.4.0</oft.version>
+        <!-- Maven version available in Debian 13 -->
+        <maven.core.version>3.8.9</maven.core.version>
+        <jacoco.version>0.8.14</jacoco.version>
+        <mavenPluginPluginVersion>3.15.2</mavenPluginPluginVersion>
         <sonar.organization>itsallcode</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <project.build.outputTimestamp>${git.commit.time}</project.build.outputTimestamp>
+        <ossindexSkip>false</ossindexSkip>
     </properties>
 
     <licenses>
@@ -56,18 +57,6 @@
         <url>https://github.com/itsallcode/openfasttrace-maven-plugin</url>
     </scm>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
-
     <prerequisites>
         <maven>${maven.core.version}</maven>
     </prerequisites>
@@ -88,7 +77,9 @@
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-utils</artifactId>
             <!-- Build fails with version > 4.0.0 -->
-            <version>3.6.0</version>
+            <!-- Fix CVE-2025-67030 -->
+            <version>3.6.1</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -112,7 +103,7 @@
             <!-- Upgrade transitive dependency of maven-core to fix CVE-2025-48924 -->
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.18.0</version>
+            <version>3.20.0</version>
             <scope>provided</scope>
         </dependency>
         <!-- Test dependencies -->
@@ -126,14 +117,14 @@
             <!-- Fix CVE-2021-29425 in transitive dependency of maven-plugin-testing-harness -->
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.20.0</version>
+            <version>2.22.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <!-- Fix CVE-2012-2098 and CVE-2023-37460 in dependency of maven-plugin-testing-harness -->
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-archiver</artifactId>
-            <version>4.10.1</version>
+            <version>4.11.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -158,31 +149,31 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>maven-project-version-getter</artifactId>
-            <version>1.2.1</version>
+            <version>1.2.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>maven-plugin-integration-testing</artifactId>
-            <version>1.1.3</version>
+            <version>1.1.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <version>5.13.4</version>
+            <artifactId>junit-jupiter</artifactId>
+            <version>6.0.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>5.19.0</version>
+            <version>5.23.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>hamcrest-auto-matcher</artifactId>
-            <version>0.8.2</version>
+            <version>0.8.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -196,18 +187,23 @@
 
     <profiles>
         <profile>
-            <id>ossrh</id>
+            <id>central-publishing</id>
+            <properties>
+                <centralPublishingSkipPublishing>false</centralPublishingSkipPublishing>
+                <centralPublishingAutoPublish>false</centralPublishingAutoPublish>
+                <centralPublishingDeploymentName>Manual deployment of OFT Maven Plugin</centralPublishingDeploymentName>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.7.0</version>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.10.0</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>validated</waitUntil>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -239,7 +235,7 @@
             <plugin>
                 <groupId>io.github.git-commit-id</groupId>
                 <artifactId>git-commit-id-maven-plugin</artifactId>
-                <version>9.0.2</version>
+                <version>10.0.0</version>
                 <executions>
                     <execution>
                         <id>get-the-git-infos</id>
@@ -280,7 +276,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.6.1</version>
+                <version>3.6.2</version>
                 <executions>
                     <execution>
                         <id>enforce-maven</id>
@@ -315,7 +311,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.14.0</version>
+                <version>3.15.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -323,7 +319,7 @@
                         <path>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-plugin-plugin</artifactId>
-                            <version>3.14.0</version>
+                            <version>${mavenPluginPluginVersion}</version>
                         </path>
                     </annotationProcessorPaths>
                     <compilerArgs>
@@ -336,7 +332,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>3.15.1</version>
+                <version>${mavenPluginPluginVersion}</version>
                 <configuration>
                     <goalPrefix>openfasttrace</goalPrefix>
                     <skipErrorNoDescriptorsFound>false</skipErrorNoDescriptorsFound>
@@ -361,12 +357,12 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <!-- Upgrade to a version that supports reproducible builds -->
-                <version>3.4.2</version>
+                <version>3.5.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>3.4.0</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -379,7 +375,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.11.3</version>
+                <version>3.12.0</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -447,7 +443,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.10.0</version>
                 <executions>
                     <execution>
                         <id>copy-jacoco</id>
@@ -467,7 +463,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.4</version>
+                <version>3.5.5</version>
                 <configuration>
                     <systemPropertyVariables>
                         <java.util.logging.config.file>src/test/resources/logging.properties</java.util.logging.config.file>
@@ -477,7 +473,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.5.4</version>
+                <version>3.5.5</version>
                 <configuration>
                     <systemPropertyVariables>
                         <test.coverage>true</test.coverage>
@@ -496,7 +492,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>2.19.0</version>
+                <version>2.21.0</version>
                 <configuration>
                     <excludes>
                         <!-- Pin Maven version to 3.x -->
@@ -521,6 +517,8 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <authId>ossindex</authId>
+                    <skip>${ossindexSkip}</skip>
                     <excludeVulnerabilityIds>
                         <!-- com.google.guava:guava:jar:25.1-android has scope provided -->
                         <exclude>CVE-2023-2976</exclude>
@@ -561,7 +559,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-artifact-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>3.6.1</version>
                 <executions>
                     <execution>
                         <id>verify-reproducible-build</id>

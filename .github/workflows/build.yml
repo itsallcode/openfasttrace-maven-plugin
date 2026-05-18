@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        java: [17, 21, 24]
+        java: [17, 21, 25]
     name: "Build with Java ${{ matrix.java }}"
     env:
       DEFAULT_JAVA: 17
@@ -27,14 +27,12 @@ jobs:
     - uses: actions/checkout@v6
       with:
         fetch-depth: 0
+        persist-credentials: false
 
     - uses: actions/setup-java@v5
       with:
         distribution: 'temurin'
-        java-version: |
-          17
-          21
-          24
+        java-version: ${{ matrix.java }}
         cache: 'maven'
 
     - name: Cache SonarQube packages
@@ -45,7 +43,7 @@ jobs:
         restore-keys: ${{ runner.os }}-java-${{ matrix.java }}-sonar
 
     - name: Build with Maven
-      run: mvn --errors --batch-mode clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Djava.version=${{ matrix.java }}
+      run: mvn --errors --batch-mode clean org.jacoco:jacoco-maven-plugin:prepare-agent install -DossindexSkip=true -Djava.version=${{ matrix.java }}
 
     - name: Build example projects
       run: |
@@ -73,6 +71,7 @@ jobs:
     - name: Verify reproducible build
       run: |
         mvn --batch-mode clean verify artifact:compare -DskipTests \
+            -DossindexSkip=true \
             -Djava.version=${{ matrix.java }}
 
     - name: Archive aggregated reproducible build report
@@ -84,8 +83,38 @@ jobs:
           target/*.buildinfo
         if-no-files-found: error
 
-  build:
-    needs: matrix-build
+  ossindex:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
+    - uses: actions/setup-java@v5
+      with:
+        cache: maven
+        distribution: temurin
+        java-version: 17
+        server-id: ossindex
+        server-username: OSSINDEX_USERNAME
+        server-password: OSSINDEX_TOKEN
+    - name: Ossindex
+      if: ${{ env.OSSINDEX_USERNAME != null && env.OSSINDEX_TOKEN != null }}
+      run: |
+        mvn --errors --batch-mode test-compile -Djava.version=17 \
+            org.sonatype.ossindex.maven:ossindex-maven-plugin:audit \
+            org.sonatype.ossindex.maven:ossindex-maven-plugin:audit-aggregate
+      env:
+        OSSINDEX_USERNAME: ${{ secrets.OSSINDEX_USERNAME }}
+        OSSINDEX_TOKEN: ${{ secrets.OSSINDEX_TOKEN }}
+
+  build:
+    permissions:
+      contents: read
+    needs:
+      - matrix-build
+      - ossindex
+    runs-on: ubuntu-slim
     steps:
       - run: echo "Build successful"
