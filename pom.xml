@@ -4,7 +4,7 @@
 
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace-maven-plugin</artifactId>
-    <version>2.3.1</version>
+    <version>2.4.0</version>
     <packaging>maven-plugin</packaging>
 
     <name>OpenFastTrace Maven Plugin</name>
@@ -15,7 +15,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
-        <oft.version>4.4.0</oft.version>
+        <oft.version>4.5.0</oft.version>
         <!-- Maven version available in Debian 13 -->
         <maven.core.version>3.8.9</maven.core.version>
         <jacoco.version>0.8.14</jacoco.version>
@@ -110,21 +110,7 @@
         <dependency>
             <groupId>org.apache.maven.plugin-testing</groupId>
             <artifactId>maven-plugin-testing-harness</artifactId>
-            <version>3.3.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <!-- Fix CVE-2021-29425 in transitive dependency of maven-plugin-testing-harness -->
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.22.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <!-- Fix CVE-2012-2098 and CVE-2023-37460 in dependency of maven-plugin-testing-harness -->
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-archiver</artifactId>
-            <version>4.11.0</version>
+            <version>3.5.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -161,7 +147,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>6.0.3</version>
+            <version>6.1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -311,7 +297,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.15.0</version>
+                <version>3.15.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -569,6 +555,30 @@
                 </executions>
                 <configuration>
                     <failOnNonReproducible>true</failOnNonReproducible>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.spdx</groupId>
+                <artifactId>spdx-maven-plugin</artifactId>
+                <version>1.0.3</version>
+                <executions>
+                    <execution>
+                        <id>aggregate-spdx</id>
+                        <goals>
+                            <goal>aggregateSPDX</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sbomType>build</sbomType>
+                    <includeTestScope>false</includeTestScope>
+                    <licenseDeclared>GPL-3.0-only</licenseDeclared>
+                    <licenseConcluded>GPL-3.0-only</licenseConcluded>
+                    <copyrightText>Copyright (c) itsallcode.org</copyrightText>
+                    <createExternalRefs>false</createExternalRefs>
+                    <defaultFileConcludedLicense>GPL-3.0-only</defaultFileConcludedLicense>
+                    <defaultLicenseInformationInFile>GPL-3.0-only</defaultLicenseInformationInFile>
+                    <defaultFileCopyright>Copyright (c) itsallcode.org</defaultFileCopyright>
                 </configuration>
             </plugin>
         </plugins>
