@@ -595,7 +595,7 @@
                         <configuration>
                             <artifacts>
                                 <artifact>
-                                    <file>${project.build.directory}/site/${project.groupId}_${project.artifactId}-${project.version}.spdx</file>
+                                    <file>${project.build.directory}/site/${project.groupId}_${project.artifactId}-${project.version}.spdx.json</file>
                                     <type>spdx</type>
                                     <classifier>sbom</classifier>
                                 </artifact>
