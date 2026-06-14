@@ -13,9 +13,9 @@ All commands should be run from the repository root.
 
 | Task                     | Command                                                                  |
 |:-------------------------|:-------------------------------------------------------------------------|
-| **Verify (All tests)**   | `mvn -T 1C verify`                                                       |
-| **Build (full)**         | `mvn -T 1C clean package -DskipTests`                                    |
-| **Run Unit Tests**       | `mvn -T 1C test`                                                         |
+| **Verify (All tests)**   | `mvn verify`                                                       |
+| **Build (full)**         | `mvn clean package -DskipTests`                                    |
+| **Run Unit Tests**       | `mvn test`                                                         |
 | **Run Single Test**      | `mvn test -Dtest=ClassName`                                              |
 | **Run Integration Test** | `mvn failsafe:integration-test`                                          |
 | **Check Dependencies**   | `mvn versions:display-dependency-updates`                                |
@@ -28,7 +28,6 @@ You are an expert Java developer specializing in requirement tracing and Maven p
 
 - **Always**:
   - Follow the branching strategy: `<type>/<number>_<short-description-lower-snake-case>` (e.g., `feature/533_update_agents_md`).
-  - Place coverage markers at the narrowest possible scope (method or class).
 - **Ask First**:
   - Before adding new external dependencies to `pom.xml`.
 - **Never**:
