@@ -117,6 +117,21 @@ public class TraceMojo extends AbstractMojo
     Set<String> tags;
 
     /**
+     * Determines which statuses should be imported.
+     * <ul>
+     * <li>If the statuses set is null or empty, no filtering based on status
+     * will be applied.</li>
+     * <li>If the statuses set is not null, only artifacts with statuses that
+     * match the specified statuses will be imported.</li>
+     * </ul>
+     * <p>
+     * Valid values: {@code APPROVED}, {@code PROPOSED}, {@code DRAFT},
+     * {@code REJECTED}.
+     */
+    @Parameter(property = "statuses")
+    Set<ItemStatus> statuses;
+
+    /**
      * Skip running OFT.
      * <p>
      * Default: <code>false</code>
@@ -203,6 +218,8 @@ public class TraceMojo extends AbstractMojo
                 ", artifact types: " + settings.getArtifactTypes()
                 + ", tag criteria set: " + settings.isTagCriteriaSet()
                 + ", tags: " + settings.getTags() +
+                ", status criteria set: " + settings.isStatusCriteriaSet() +
+                ", statuses: " + settings.getWantedStatuses() +
                 ", without tags: " + settings.withoutTags() + "]";
     }
 
@@ -279,6 +296,7 @@ public class TraceMojo extends AbstractMojo
         final FilterSettings filterSettings = FilterSettings.builder()
                 .artifactTypes(getFilteredArtifactTypes())
                 .tags(getFilteredTags())
+                .wantedStatuses(getFilteredStatuses())
                 .withoutTags(isFilterWithoutTags())
                 .build();
         settings.filter(filterSettings);
@@ -288,6 +306,11 @@ public class TraceMojo extends AbstractMojo
     private Set<String> getFilteredArtifactTypes()
     {
         return artifactTypes == null ? emptySet() : artifactTypes;
+    }
+
+    private Set<ItemStatus> getFilteredStatuses()
+    {
+        return statuses == null ? emptySet() : statuses;
     }
 
     private Set<String> getFilteredTags()

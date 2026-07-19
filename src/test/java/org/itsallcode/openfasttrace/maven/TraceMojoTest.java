@@ -15,6 +15,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuilder;
 import org.itsallcode.matcher.auto.AutoMatcher;
 import org.itsallcode.openfasttrace.api.FilterSettings;
+import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.importer.ImportSettings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -147,6 +148,27 @@ class TraceMojoTest
     {
         testee.tags = Set.of("_");
         assertFilterSettings(FilterSettings.builder().tags(emptySet()).withoutTags(true));
+    }
+
+    @Test
+    void createImportSettingsWithNullStatuses()
+    {
+        testee.statuses = null;
+        assertFilterSettings(FilterSettings.builder());
+    }
+
+    @Test
+    void createImportSettingsWithEmptyStatuses()
+    {
+        testee.statuses = emptySet();
+        assertFilterSettings(FilterSettings.builder());
+    }
+
+    @Test
+    void createImportSettingsWithStatuses()
+    {
+        testee.statuses = Set.of(ItemStatus.APPROVED, ItemStatus.DRAFT);
+        assertFilterSettings(FilterSettings.builder().wantedStatuses(Set.of(ItemStatus.APPROVED, ItemStatus.DRAFT)));
     }
 
     private void assertImportSettings(final ImportSettings.Builder importSettingsBuilder)

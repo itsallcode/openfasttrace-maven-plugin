@@ -15,7 +15,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
-        <oft.version>4.4.0</oft.version>
+        <oft.version>4.6.0</oft.version>
         <!-- Maven version available in Debian 13 -->
         <maven.core.version>3.8.9</maven.core.version>
         <jacoco.version>0.8.14</jacoco.version>

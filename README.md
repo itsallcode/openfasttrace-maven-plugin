@@ -51,6 +51,7 @@ Add the openfasttrace-maven-plugin to your `pom.xml`:
         <detailsSectionDisplay>COLLAPSE</detailsSectionDisplay>
         <artifactTypes>feat,req</artifactTypes>
         <tags>prototype,mvp</tags>
+        <statuses>APPROVED,DRAFT</statuses>
     </configuration>
 </plugin>
 ```
@@ -195,6 +196,20 @@ This works similar to OFT's command line argument `--wanted-tags`.
 You can specify the underscore `_` to import specification items without tags.
 
 You can also specify the tags to import using CLI option `-Dtags=prototype,mvp`.
+
+##### Select Statuses
+
+The following example configuration limits import to statuses `APPROVED` and `DRAFT`.
+
+```xml
+<configuration>
+    <statuses>APPROVED,DRAFT</statuses>
+</configuration>
+```
+
+This works similar to OFT's command line argument `--wanted-statuses`.
+
+You can also specify the statuses to import using CLI option `-Dstatuses=APPROVED,DRAFT`.
 
 #### Report
 

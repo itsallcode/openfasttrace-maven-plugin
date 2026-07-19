@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.3.2] - Unreleased
 
+- Update OpenFastTrace to 4.6.0.
+- Add support for filtering by item status using the `statuses` property.
+
 ## [2.3.1] - 2026-05-18
 
 - [PR #75](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/75) Upgrade dependencies
