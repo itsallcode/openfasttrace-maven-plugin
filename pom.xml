@@ -4,7 +4,7 @@
 
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace-maven-plugin</artifactId>
-    <version>2.3.1</version>
+    <version>2.4.0</version>
     <packaging>maven-plugin</packaging>
 
     <name>OpenFastTrace Maven Plugin</name>
@@ -15,11 +15,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
-        <oft.version>4.4.0</oft.version>
+        <oft.version>4.5.0</oft.version>
         <!-- Maven version available in Debian 13 -->
-        <maven.core.version>3.8.9</maven.core.version>
+        <maven.core.version>3.9.9</maven.core.version>
+        <!-- Below is not a typo. It's the version of the Maven Plugin Plugin. -->
+        <maven.plugin.plugin.version>3.15.2</maven.plugin.plugin.version>
         <jacoco.version>0.8.14</jacoco.version>
-        <mavenPluginPluginVersion>3.15.2</mavenPluginPluginVersion>
         <sonar.organization>itsallcode</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <project.build.outputTimestamp>${git.commit.time}</project.build.outputTimestamp>
@@ -78,7 +79,7 @@
             <artifactId>plexus-utils</artifactId>
             <!-- Build fails with version > 4.0.0 -->
             <!-- Fix CVE-2025-67030 -->
-            <version>3.6.1</version>
+            <version>4.0.3</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -90,7 +91,7 @@
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
-            <version>3.15.1</version>
+            <version>${maven.plugin.plugin.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -99,39 +100,11 @@
             <version>${maven.core.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <!-- Upgrade transitive dependency of maven-core to fix CVE-2025-48924 -->
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.20.0</version>
-            <scope>provided</scope>
-        </dependency>
         <!-- Test dependencies -->
         <dependency>
             <groupId>org.apache.maven.plugin-testing</groupId>
             <artifactId>maven-plugin-testing-harness</artifactId>
-            <version>3.3.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <!-- Fix CVE-2021-29425 in transitive dependency of maven-plugin-testing-harness -->
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.22.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <!-- Fix CVE-2012-2098 and CVE-2023-37460 in dependency of maven-plugin-testing-harness -->
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-archiver</artifactId>
-            <version>4.11.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <!-- Fix CVE-2024-36124 in dependency of plexus-archiver -->
-            <groupId>org.iq80.snappy</groupId>
-            <artifactId>snappy</artifactId>
-            <version>0.5</version>
+            <version>3.5.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -161,7 +134,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>6.0.3</version>
+            <version>6.1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -319,7 +292,7 @@
                         <path>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-plugin-plugin</artifactId>
-                            <version>${mavenPluginPluginVersion}</version>
+                            <version>${maven.plugin.plugin.version}</version>
                         </path>
                     </annotationProcessorPaths>
                     <compilerArgs>
@@ -332,7 +305,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>${mavenPluginPluginVersion}</version>
+                <version>${maven.plugin.plugin.version}</version>
                 <configuration>
                     <goalPrefix>openfasttrace</goalPrefix>
                     <skipErrorNoDescriptorsFound>false</skipErrorNoDescriptorsFound>
@@ -386,7 +359,7 @@
                 </executions>
                 <configuration>
                     <charset>UTF-8</charset>
-                    <doclint></doclint>
+                    <doclint/>
                     <serialwarn>true</serialwarn>
                     <failOnError>true</failOnError>
                     <!-- Generated class HelpMojo causes warning with Java 21: use of default constructor, which does not provide a comment -->
@@ -554,6 +527,13 @@
                          <!-- Suppress warning "Found duplicate and different resources in [org.eclipse.sisu:org.eclipse.sisu.inject:0.3.5, org.eclipse.sisu:org.eclipse.sisu.plexus:0.3.5]" -->
                         <ignoredResourcePattern>about.html</ignoredResourcePattern>
                     </ignoredResourcePatterns>
+                    <ignoredDependencies>
+                        <!-- Workaround for https://github.com/itsallcode/openfasttrace/issues/428: API and openfasttrace module have overlaps -->
+                        <ignoredDependency>
+                            <groupId>org.itsallcode.openfasttrace</groupId>
+                            <artifactId>openfasttrace</artifactId>
+                        </ignoredDependency>
+                    </ignoredDependencies>
                 </configuration>
             </plugin>
             <plugin>
@@ -570,6 +550,59 @@
                 <configuration>
                     <failOnNonReproducible>true</failOnNonReproducible>
                 </configuration>
+            </plugin>
+            <plugin>
+                <!-- Create an aggregated SPDX SBOM -->
+                <groupId>org.spdx</groupId>
+                <artifactId>spdx-maven-plugin</artifactId>
+                <version>1.0.3</version>
+                <executions>
+                    <execution>
+                        <id>aggregate-spdx</id>
+                        <goals>
+                            <goal>aggregateSPDX</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sbomType>build</sbomType>
+                    <includeCompileScope>true</includeCompileScope>
+                    <includeRuntimeScope>true</includeRuntimeScope>
+                    <includeProvidedScope>true</includeProvidedScope>
+                    <includeSystemScope>false</includeSystemScope>
+                    <includeTestScope>false</includeTestScope>
+                    <licenseDeclared>GPL-3.0-only</licenseDeclared>
+                    <licenseConcluded>GPL-3.0-only</licenseConcluded>
+                    <copyrightText>Copyright (c) itsallcode.org</copyrightText>
+                    <createExternalRefs>false</createExternalRefs>
+                    <defaultFileConcludedLicense>GPL-3.0-only</defaultFileConcludedLicense>
+                    <defaultLicenseInformationInFile>GPL-3.0-only</defaultLicenseInformationInFile>
+                    <defaultFileCopyright>Copyright (c) itsallcode.org</defaultFileCopyright>
+                </configuration>
+            </plugin>
+            <plugin>
+                <!-- Bundle the SPDX SBOM with the Maven artifact -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-spdx-sbom</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>${project.build.directory}/site/${project.groupId}_${project.artifactId}-${project.version}.spdx.json</file>
+                                    <type>spdx</type>
+                                    <classifier>sbom</classifier>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
