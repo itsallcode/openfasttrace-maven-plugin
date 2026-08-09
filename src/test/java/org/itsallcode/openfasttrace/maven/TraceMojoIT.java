@@ -47,6 +47,7 @@ class TraceMojoIT
             .resolve("html-report");
     public static final Path PARTIAL_ARTIFACT_COVERAGE_PROJECT = BASE_TEST_DIR
             .resolve("project-with-partial-artifact-coverage");
+    private static final Path PROJECT_WITH_STATUSES = BASE_TEST_DIR.resolve("project-with-statuses");
     private static MavenIntegrationTestEnvironment mvnITEnv;
 
     @BeforeAll
@@ -239,6 +240,32 @@ class TraceMojoIT
             expectedResult = "ok - 0 total";
         }
         assertThat(fileContent(PROJECT_WITH_TAGS.resolve("target/tracing-report.txt")),
+                containsString(expectedResult));
+    }
+
+    @ParameterizedTest(name = "wanted statuses {0} finds {1} items")
+    @CsvSource(delimiter = ';', nullValues = "NULL", value =
+    { "NULL; 2", "APPROVED; 2", "PROPOSED; 1", "APPROVED,PROPOSED; 3", "DRAFT; 0" })
+    void testTracingSelectedStatuses(final String statuses, final int expectedItemCount) throws Exception
+    {
+        final Verifier verifier = mvnITEnv.getVerifier(PROJECT_WITH_STATUSES);
+        verifier.addCliOption("-Dopenfasttrace.failBuild=false");
+        if (statuses != null)
+        {
+            verifier.addCliOption("-Dopenfasttrace.statuses=" + statuses);
+        }
+        verifier.executeGoal(OFT_GOAL);
+        verifier.verifyErrorFreeLog();
+        final String expectedResult;
+        if (expectedItemCount > 0)
+        {
+            expectedResult = "not ok - %1$d total".formatted(expectedItemCount);
+        }
+        else
+        {
+            expectedResult = "ok - 0 total";
+        }
+        assertThat(fileContent(PROJECT_WITH_STATUSES.resolve("target/tracing-report.txt")),
                 containsString(expectedResult));
     }
 

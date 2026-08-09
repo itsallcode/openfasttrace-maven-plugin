@@ -37,7 +37,7 @@ Add the openfasttrace-maven-plugin to your `pom.xml`:
 <plugin>
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace-maven-plugin</artifactId>
-    <version>2.3.1</version>
+    <version>3.0.0</version>
     <executions>
         <execution>
             <id>trace-requirements</id>
@@ -73,7 +73,7 @@ You can use OpenFastTrace plugins to import and export requirements in additiona
 <plugin>
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace-maven-plugin</artifactId>
-    <version>2.3.1</version>
+    <version>3.0.0</version>
     <configuration>
         <failBuild>true</failBuild>
     </configuration>

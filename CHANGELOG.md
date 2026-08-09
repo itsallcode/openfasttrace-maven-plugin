@@ -4,11 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.4.0] - 2026-06-14
+## [3.0.0] - 2026-08-09
 
+* **Breaking change**: Add `openfasttrace.` prefix to all plugin properties to avoid conflicts and allow consistent command-line overrides ([#80](https://github.com/itsallcode/openfasttrace-maven-plugin/issues/80)). Existing configurations using the old names in `pom.xml` remain compatible.
+* **Breaking change**: Set default value for `statuses` to `APPROVED` to align with OpenFastTrace core behavior. Items without an explicit status are considered `APPROVED` by default.
 * [PR# 88](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/88) Updated to [OpenFastTrace 4.9.0](https://github.com/itsallcode/openfasttrace/releases/tag/4.9.0)
 * We also now generate an SPDX SBOM
-* [#80](https://github.com/itsallcode/openfasttrace-maven-plugin/issues/80) Add `openfasttrace.` prefix to all plugin properties to avoid conflicts and allow consistent command-line overrides. Existing configurations using the old names in `pom.xml` remain compatible.
 * Added compatibility shim for `RegexMatchingImporterFactory` to support older OpenFastTrace plugins with OpenFastTrace 4.8.0.
 
 - Update OpenFastTrace to 4.6.0.

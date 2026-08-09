@@ -118,17 +118,17 @@ public class TraceMojo extends AbstractMojo
 
     /**
      * Determines which statuses should be imported.
-     * <ul>
-     * <li>If the statuses set is null or empty, no filtering based on status
-     * will be applied.</li>
-     * <li>If the statuses set is not null, only artifacts with statuses that
-     * match the specified statuses will be imported.</li>
-     * </ul>
+     * <p>
+     * Only artifacts with statuses that match the specified statuses will be
+     * imported. Artifacts without an explicit status are considered
+     * {@code APPROVED}.
+     * <p>
+     * Default: {@code APPROVED}
      * <p>
      * Valid values: {@code APPROVED}, {@code PROPOSED}, {@code DRAFT},
      * {@code REJECTED}.
      */
-    @Parameter(property = "openfasttrace.statuses")
+    @Parameter(property = "openfasttrace.statuses", defaultValue = "APPROVED")
     Set<ItemStatus> statuses;
 
     /**
