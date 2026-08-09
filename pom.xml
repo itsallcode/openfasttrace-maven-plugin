@@ -20,7 +20,7 @@
         <maven.core.version>3.9.9</maven.core.version>
         <!-- Below is not a typo. It's the version of the "Maven Plugin-Plugin". -->
         <maven.plugin.plugin.version>3.15.2</maven.plugin.plugin.version>
-        <jacoco.version>0.8.14</jacoco.version>
+        <jacoco.version>0.8.15</jacoco.version>
         <sonar.organization>itsallcode</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <project.build.outputTimestamp>${git.commit.time}</project.build.outputTimestamp>
@@ -134,7 +134,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>6.1.0</version>
+            <version>6.1.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -171,7 +171,7 @@
                     <plugin>
                         <groupId>org.sonatype.central</groupId>
                         <artifactId>central-publishing-maven-plugin</artifactId>
-                        <version>0.10.0</version>
+                        <version>0.11.0</version>
                         <extensions>true</extensions>
                         <configuration>
                             <publishingServerId>central</publishingServerId>
@@ -229,7 +229,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-toolchains-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <?m2e ignore?>
@@ -249,7 +249,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.6.2</version>
+                <version>3.6.3</version>
                 <executions>
                     <execution>
                         <id>enforce-maven</id>
@@ -330,7 +330,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <!-- Upgrade to a version that supports reproducible builds -->
-                <version>3.5.0</version>
+                <version>3.5.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -416,7 +416,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.10.0</version>
+                <version>3.11.0</version>
                 <executions>
                     <execution>
                         <id>copy-jacoco</id>
@@ -436,7 +436,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.5</version>
+                <version>3.5.6</version>
                 <configuration>
                     <systemPropertyVariables>
                         <java.util.logging.config.file>src/test/resources/logging.properties</java.util.logging.config.file>
@@ -446,7 +446,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.5.5</version>
+                <version>3.5.6</version>
                 <configuration>
                     <systemPropertyVariables>
                         <test.coverage>true</test.coverage>
@@ -555,7 +555,7 @@
                 <!-- Create an aggregated SPDX SBOM -->
                 <groupId>org.spdx</groupId>
                 <artifactId>spdx-maven-plugin</artifactId>
-                <version>1.0.3</version>
+                <version>1.0.4</version>
                 <executions>
                     <execution>
                         <id>aggregate-spdx</id>

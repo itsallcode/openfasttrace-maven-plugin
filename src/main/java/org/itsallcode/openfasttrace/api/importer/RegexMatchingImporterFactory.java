@@ -7,7 +7,9 @@ import java.util.Collection;
  * AbstractRegexMatchingImporterFactory in OpenFastTrace 4.5.0.
  * <p>
  * Shim can be removed when the following issue is fixed:
- * https://github.com/itsallcode/openfasttrace-asciidoc-plugin/issues/27
+ * <a href="https://github.com/itsallcode/openfasttrace-asciidoc-plugin/issues/27>
+ * itsallcode/openffasttrace-asciidoc-plugin # 27
+ * </a>
  * </p>
  * 
  * @deprecated use {@link AbstractRegexMatchingImporterFactory} instead.
