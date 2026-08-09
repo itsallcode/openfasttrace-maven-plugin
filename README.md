@@ -198,7 +198,7 @@ This works similar to OFT's command line argument `--wanted-tags`.
 
 You can specify the underscore `_` to import specification items without tags.
 
-You can also specify the tags to import using CLI option `-Dtags=prototype,mvp`.
+You can also specify the tags to import using CLI option `-Dopenfasttrace.tags=prototype,mvp`.
 
 ##### Select Statuses
 
@@ -212,7 +212,7 @@ The following example configuration limits import to statuses `APPROVED` and `DR
 
 This works similar to OFT's command line argument `--wanted-statuses`.
 
-You can also specify the statuses to import using CLI option `-Dstatuses=APPROVED,DRAFT`.
+You can also specify the statuses to import using CLI option `-Dopenfasttrace.statuses=APPROVED,DRAFT`.
 
 #### Report
 
@@ -230,7 +230,7 @@ The HTML report will have its details sections collapsed (i.e. hidden) by defaul
 
 #### Fail Build
 
-By default, the build will fail when there are errors found during tracing. To continue with the build when tracing fails, use configuration `<failBuild>false</failBuild>`.
+By default, the build will fail when there are errors found during tracing. To continue with the build when tracing fails, use configuration `<failBuild>false</failBuild>` or command line option `-Dopenfasttrace.failBuild=false`.
 
 #### Skipping Execution
 
@@ -316,7 +316,7 @@ mvn --update-snapshots versions:use-latest-releases versions:update-properties
 #### Prepare the Release
 
 1. Checkout the `main` branch.
-2. Update version in `pom.xml`, `CHANGELOG.md` and `README.md`.
+2. Update the version in `pom.xml`, `CHANGELOG.md` and `README.md`.
 3. Commit and push changes.
 4. Create a new pull request, have it reviewed and merged to `main`.
 
@@ -325,5 +325,5 @@ mvn --update-snapshots versions:use-latest-releases versions:update-properties
 1. Start the release workflow
     * Run command `gh workflow run release.yml --repo itsallcode/openfasttrace-maven-plugin --ref main`
     * or go to [GitHub Actions](https://github.com/itsallcode/openfasttrace-maven-plugin/actions/workflows/release.yml) and start the `release.yml` workflow on branch `main`.
-2. Update title and description of the newly created [GitHub release](https://github.com/itsallcode/openfasttrace-maven-plugin/releases).
+2. Update the title and description of the newly created [GitHub release](https://github.com/itsallcode/openfasttrace-maven-plugin/releases).
 3. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace-maven-plugin/).

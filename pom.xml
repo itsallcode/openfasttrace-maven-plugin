@@ -15,10 +15,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
-        <oft.version>4.6.0</oft.version>
+        <oft.version>4.9.0</oft.version>
         <!-- Maven version available in Debian 13 -->
         <maven.core.version>3.9.9</maven.core.version>
-        <!-- Below is not a typo. It's the version of the Maven Plugin Plugin. -->
+        <!-- Below is not a typo. It's the version of the "Maven Plugin-Plugin". -->
         <maven.plugin.plugin.version>3.15.2</maven.plugin.plugin.version>
         <jacoco.version>0.8.14</jacoco.version>
         <sonar.organization>itsallcode</sonar.organization>

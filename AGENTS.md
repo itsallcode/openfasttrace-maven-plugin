@@ -11,14 +11,14 @@ This file provides guidance for AI agents and LLMs working on the OpenFastTrace 
 
 All commands should be run from the repository root.
 
-| Task                     | Command                                                                  |
-|:-------------------------|:-------------------------------------------------------------------------|
-| **Verify (All tests)**   | `mvn verify`                                                       |
-| **Build (full)**         | `mvn clean package -DskipTests`                                    |
-| **Run Unit Tests**       | `mvn test`                                                         |
-| **Run Single Test**      | `mvn test -Dtest=ClassName`                                              |
-| **Run Integration Test** | `mvn failsafe:integration-test`                                          |
-| **Check Dependencies**   | `mvn versions:display-dependency-updates`                                |
+| Task                     | Command                                   |
+|:-------------------------|:------------------------------------------|
+| **Verify (All tests)**   | `mvn verify`                              |
+| **Build (full)**         | `mvn clean package -DskipTests`           |
+| **Run Unit Tests**       | `mvn test`                                |
+| **Run Single Test**      | `mvn test -Dtest=ClassName`               |
+| **Run Integration Test** | `mvn failsafe:integration-test`           |
+| **Check Dependencies**   | `mvn versions:display-dependency-updates` |
 
 ### Agent Role & Persona
 

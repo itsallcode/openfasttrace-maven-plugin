@@ -152,7 +152,7 @@ class TraceMojoIT
         runTracingMojo(TRACING_DEFECTS);
 
         assertThat(fileContent(TRACING_DEFECTS.resolve("target/tracing-report.txt")),
-                containsString("not ok - 2 total, 1 defect"));
+                containsString("not ok - 2 total, 1 direct, 0 transitive defects"));
     }
 
     @Test
@@ -177,7 +177,7 @@ class TraceMojoIT
                 () -> runTracingMojo(TRACING_DEFECTS_FAIL_BUILD));
         assertAll(() -> assertThat(exception.getMessage(), containsString("Tracing found 1 defects out of 2 items")),
                 () -> assertThat(fileContent(TRACING_DEFECTS_FAIL_BUILD.resolve("target/tracing-report.txt")),
-                        containsString("not ok - 2 total, 1 defect")));
+                        containsString("not ok - 2 total, 1 direct, 0 transitive defects")));
     }
 
     @Test
@@ -194,7 +194,7 @@ class TraceMojoIT
     void testHtmlReportWithExpandedDetails() throws Exception
     {
         final Verifier verifier = mvnITEnv.getVerifier(HTML_REPORT_PROJECT);
-        verifier.addCliOption("-DdetailsSectionDisplay=EXPAND");
+        verifier.addCliOption("-Dopenfasttrace.detailsSectionDisplay=EXPAND");
         verifier.executeGoal(OFT_GOAL);
         verifier.verifyErrorFreeLog();
 
@@ -206,7 +206,7 @@ class TraceMojoIT
     void testTracingSelectedArtifactTypes() throws Exception
     {
         final Verifier verifier = mvnITEnv.getVerifier(PARTIAL_ARTIFACT_COVERAGE_PROJECT);
-        verifier.addCliOption("-DartifactTypes=one,two");
+        verifier.addCliOption("-Dopenfasttrace.artifactTypes=one,two");
         verifier.executeGoal(OFT_GOAL);
         verifier.verifyErrorFreeLog();
         assertThat(fileContent(PARTIAL_ARTIFACT_COVERAGE_PROJECT.resolve("target/tracing-report.txt")),
@@ -222,17 +222,17 @@ class TraceMojoIT
     void testTracingSelectedTags(final String tags, final int expectedItemCount) throws Exception
     {
         final Verifier verifier = mvnITEnv.getVerifier(PROJECT_WITH_TAGS);
-        verifier.addCliOption("-DfailBuild=false");
+        verifier.addCliOption("-Dopenfasttrace.failBuild=false");
         if (tags != null)
         {
-            verifier.addCliOption("-Dtags=" + tags);
+            verifier.addCliOption("-Dopenfasttrace.tags=" + tags);
         }
         verifier.executeGoal(OFT_GOAL);
         verifier.verifyErrorFreeLog();
         final String expectedResult;
         if (expectedItemCount > 0)
         {
-            expectedResult = "not ok - %1$d total, %1$d defect".formatted(expectedItemCount);
+            expectedResult = "not ok - %1$d total, %1$d direct, 0 transitive defects".formatted(expectedItemCount);
         }
         else
         {

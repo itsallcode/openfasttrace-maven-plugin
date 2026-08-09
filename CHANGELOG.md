@@ -6,8 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.4.0] - 2026-06-14
 
-* [PR# 88](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/88) Updated to [OpenFastTrace 4.5.0](https://github.com/itsallcode/openfasttrace/releases/tag/4.5.0)
+* [PR# 88](https://github.com/itsallcode/openfasttrace-maven-plugin/pull/88) Updated to [OpenFastTrace 4.9.0](https://github.com/itsallcode/openfasttrace/releases/tag/4.9.0)
 * We also now generate an SPDX SBOM
+* [#80](https://github.com/itsallcode/openfasttrace-maven-plugin/issues/80) Add `openfasttrace.` prefix to all plugin properties to avoid conflicts and allow consistent command-line overrides. Existing configurations using the old names in `pom.xml` remain compatible.
+* Added compatibility shim for `RegexMatchingImporterFactory` to support older OpenFastTrace plugins with OpenFastTrace 4.8.0.
 
 - Update OpenFastTrace to 4.6.0.
 - Add support for filtering by item status using the `statuses` property.
