@@ -7,7 +7,7 @@ Maven Plugin for [OpenFastTrace](https://github.com/itsallcode/openfasttrace) (O
 [![Build](https://github.com/itsallcode/openfasttrace-maven-plugin/actions/workflows/build.yml/badge.svg)](https://github.com/itsallcode/openfasttrace-maven-plugin/actions/workflows/build.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/org.itsallcode/openfasttrace-maven-plugin.svg?label=Maven%20Central)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.itsallcode%22%20a%3A%22openfasttrace-maven-plugin%22)
 
-Sonarcloud status:
+SonarCloud status:
 
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace-maven-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace-maven-plugin)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace-maven-plugin&metric=bugs)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace-maven-plugin)
@@ -21,10 +21,13 @@ Sonarcloud status:
 [![Technical Dept](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace-maven-plugin&metric=sqale_index)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace-maven-plugin)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace-maven-plugin&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace-maven-plugin)
 
-* [Blog](https://blog.itsallcode.org/)
-* [Changelog](CHANGELOG.md)
-* [Contributing guide](CONTRIBUTING.md)
-* [OpenFastTrace stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
+* [📢 Blog](https://blog.itsallcode.org/)
+* [➕ Changelog](CHANGELOG.md)
+* [🎁 Contributing Guide](CONTRIBUTING.md)
+* [🤝 Code of Conduct](CODE_OF_CONDUCT.md)
+* [🛡️ Security Policy](SECURITY.md)
+* [✨ OpenFastTrace Stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
+* [🤖 AI Agent Guide](AGENTS.md)
 
 ## Usage
 
@@ -59,7 +62,7 @@ Then you can run tracing by calling the goal directly: `mvn openfasttrace:trace`
 
 The plugin binds to the `verify` lifecycle, so you can also use `mvn verify`.
 
-See [src/test/resources/empty-project](src/test/resources/simple-project/) for an example project.
+See [src/test/resources/empty-project](src/test/resources/simple-project) for an example project.
 
 ### OpenFastTrace Plugins
 
@@ -89,9 +92,9 @@ You can configure the plugin using the `<configuration>` element.
 
 #### Traced Directories
 
-By default the OFT plugin imports requirements from the following directories:
+By default, the OFT plugin imports requirements from the following directories:
 
-* The `doc` sub-directory of the module that includes the plugin if it exists
+* The `doc` subdirectory of the module that includes the plugin if it exists
 * For each Maven module in the project if they exist:
   * Compile source roots (default: `src/main/java`)
   * Resources (default: `src/main/resources`)
@@ -212,7 +215,7 @@ The HTML report will have its details sections collapsed (i.e. hidden) by defaul
 
 #### Fail Build
 
-By default the build will fail when there are errors found during tracing. To continue with the build when tracing fails, use configuration `<failBuild>false</failBuild>`.
+By default, the build will fail when there are errors found during tracing. To continue with the build when tracing fails, use configuration `<failBuild>false</failBuild>`.
 
 #### Skipping Execution
 
@@ -235,9 +238,9 @@ apt-get install openjdk-17-jdk maven
 This project uses Maven Toolchains to configure the correct JDK version (see the [documentation](https://maven.apache.org/guides/mini/guide-using-toolchains.html) for details). To configure the Toolchains plugin create file ` ~/.m2/toolchains.xml` with the following content. Adapt the paths to your JDKs.
 
 ```xml
-<toolchains xmlns="http://maven.apache.org/TOOLCHAINS/1.1.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/TOOLCHAINS/1.1.0 http://maven.apache.org/xsd/toolchains-1.1.0.xsd">
+<toolchains xmlns="https://maven.apache.org/TOOLCHAINS/1.1.0"
+    xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://maven.apache.org/TOOLCHAINS/1.1.0 https://maven.apache.org/xsd/toolchains-1.0.0.xsd">
     <toolchain>
         <type>jdk</type>
         <provides>
@@ -305,7 +308,7 @@ mvn --update-snapshots versions:use-latest-releases versions:update-properties
 ### Perform the Release
 
 1. Start the release workflow
-  * Run command `gh workflow run release.yml --repo itsallcode/openfasttrace-maven-plugin --ref main`
-  * or go to [GitHub Actions](https://github.com/itsallcode/openfasttrace-maven-plugin/actions/workflows/release.yml) and start the `release.yml` workflow on branch `main`.
+    * Run command `gh workflow run release.yml --repo itsallcode/openfasttrace-maven-plugin --ref main`
+    * or go to [GitHub Actions](https://github.com/itsallcode/openfasttrace-maven-plugin/actions/workflows/release.yml) and start the `release.yml` workflow on branch `main`.
 2. Update title and description of the newly created [GitHub release](https://github.com/itsallcode/openfasttrace-maven-plugin/releases).
 3. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace-maven-plugin/).
