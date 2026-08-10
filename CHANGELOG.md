@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * We also now generate an SPDX SBOM
 * Added compatibility shim for `RegexMatchingImporterFactory` to support older OpenFastTrace plugins with OpenFastTrace 4.8.0.
 
-- Update OpenFastTrace to 4.6.0.
+- Update OpenFastTrace to 4.9.0.
 - Add support for filtering by item status using the `statuses` property.
 
 ## [2.3.1] - 2026-05-18
