@@ -37,7 +37,7 @@ public class TraceMojo extends AbstractMojo
      * <p>
      * Default: <code>${project.build.directory}</code>
      */
-    @Parameter(property = "outputDirectory", defaultValue = "${project.build.directory}", required = true)
+    @Parameter(property = "openfasttrace.outputDirectory", defaultValue = "${project.build.directory}", required = true)
     private File outputDirectory;
 
     /**
@@ -45,7 +45,7 @@ public class TraceMojo extends AbstractMojo
      * <p>
      * Default: {@code true}
      */
-    @Parameter(property = "failBuild", defaultValue = "true", required = true)
+    @Parameter(property = "openfasttrace.failBuild", defaultValue = "true", required = true)
     private boolean failBuild;
 
     /**
@@ -55,7 +55,7 @@ public class TraceMojo extends AbstractMojo
      * <li>{@code plain}: Plain text format</li>
      * </ul>
      */
-    @Parameter(property = "reportOutputFormat", defaultValue = "html", required = true)
+    @Parameter(property = "openfasttrace.reportOutputFormat", defaultValue = "html", required = true)
     private String reportOutputFormat;
 
     /**
@@ -70,7 +70,7 @@ public class TraceMojo extends AbstractMojo
      * <li>{@code ALL}</li>
      * </ul>
      */
-    @Parameter(property = "reportVerbosity", defaultValue = "FAILURE_DETAILS", required = true)
+    @Parameter(property = "openfasttrace.reportVerbosity", defaultValue = "FAILURE_DETAILS", required = true)
     private ReportVerbosity reportVerbosity;
 
     /**
@@ -78,7 +78,7 @@ public class TraceMojo extends AbstractMojo
      * <p>
      * Default: <code>false</code>
      */
-    @Parameter(property = "reportShowOrigin", defaultValue = "false", required = true)
+    @Parameter(property = "openfasttrace.reportShowOrigin", defaultValue = "false", required = true)
     private boolean reportShowOrigin;
 
     /**
@@ -89,7 +89,7 @@ public class TraceMojo extends AbstractMojo
      * <li>{@code EXPAND}: show details section</li>
      * </ul>
      */
-    @Parameter(property = "detailsSectionDisplay", defaultValue = "COLLAPSE", required = true)
+    @Parameter(property = "openfasttrace.detailsSectionDisplay", defaultValue = "COLLAPSE", required = true)
     private DetailsSectionDisplay detailsSectionDisplay;
 
     /**
@@ -101,7 +101,7 @@ public class TraceMojo extends AbstractMojo
      * match the specified types will be imported.</li>
      * </ul>
      */
-    @Parameter(property = "artifactTypes")
+    @Parameter(property = "openfasttrace.artifactTypes")
     Set<String> artifactTypes;
 
     /**
@@ -113,8 +113,23 @@ public class TraceMojo extends AbstractMojo
      * <p>
      * Default: Import all specification items.
      */
-    @Parameter(property = "tags")
+    @Parameter(property = "openfasttrace.tags")
     Set<String> tags;
+
+    /**
+     * Determines which statuses should be imported.
+     * <p>
+     * Only artifacts with statuses that match the specified statuses will be
+     * imported. Artifacts without an explicit status are considered
+     * {@code APPROVED}.
+     * <p>
+     * Default: {@code APPROVED}
+     * <p>
+     * Valid values: {@code APPROVED}, {@code PROPOSED}, {@code DRAFT},
+     * {@code REJECTED}.
+     */
+    @Parameter(property = "openfasttrace.statuses", defaultValue = "APPROVED")
+    Set<ItemStatus> statuses;
 
     /**
      * Skip running OFT.
@@ -203,6 +218,8 @@ public class TraceMojo extends AbstractMojo
                 ", artifact types: " + settings.getArtifactTypes()
                 + ", tag criteria set: " + settings.isTagCriteriaSet()
                 + ", tags: " + settings.getTags() +
+                ", status criteria set: " + settings.isStatusCriteriaSet() +
+                ", statuses: " + settings.getWantedStatuses() +
                 ", without tags: " + settings.withoutTags() + "]";
     }
 
@@ -279,6 +296,7 @@ public class TraceMojo extends AbstractMojo
         final FilterSettings filterSettings = FilterSettings.builder()
                 .artifactTypes(getFilteredArtifactTypes())
                 .tags(getFilteredTags())
+                .wantedStatuses(getFilteredStatuses())
                 .withoutTags(isFilterWithoutTags())
                 .build();
         settings.filter(filterSettings);
@@ -288,6 +306,11 @@ public class TraceMojo extends AbstractMojo
     private Set<String> getFilteredArtifactTypes()
     {
         return artifactTypes == null ? emptySet() : artifactTypes;
+    }
+
+    private Set<ItemStatus> getFilteredStatuses()
+    {
+        return statuses == null ? emptySet() : statuses;
     }
 
     private Set<String> getFilteredTags()

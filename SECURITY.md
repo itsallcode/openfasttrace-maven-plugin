@@ -10,4 +10,4 @@ To report a vulnerability, please use the [GitHub Security Advisory reporting fe
 
 ## Software Bill of Materials (SBOM)
 
-To enhance transparency and security, SPDX SBOMs (Software Bill of Materials) are included with the plugin releases starting from version 2.4.0. These files provide a comprehensive list of all components and dependencies used in the project.
+To enhance transparency and security, SPDX SBOMs (Software Bill of Materials) are included with the plugin releases starting from version 3.0.0. These files provide a comprehensive list of all components and dependencies used in the project.
