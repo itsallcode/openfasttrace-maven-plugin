@@ -170,7 +170,7 @@ Sometimes you don't want to trace the whole requirement chain. Instead, you are 
 
 For those cases you can add an include list to the configuration that explicitly lists all artifact types or tags to be imported. Note that this also affects which required coverage is imported — which is exactly what you want in this situation.
 
-See the [OFT user guide on import options](https://github.com/itsallcode/openfasttrace/blob/main/doc/user_guide.md#import-options) for details.
+See the [OFT user guide on import options](https://github.com/itsallcode/openfasttrace/blob/main/doc/user_guide/user_guide.md#import-options) for details.
 
 ##### Select Artifact Types
 
