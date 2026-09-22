@@ -13,7 +13,7 @@ project_version=$(grep "<version>" "$pom_file" | sed --regexp-extended 's/\s*<ve
 readonly project_version
 echo "Read project version '$project_version' from $pom_file"
 
-readonly title="Release $project_version"
+readonly title="$project_version"
 readonly tag="$project_version"
 echo "Creating release:"
 echo "Git tag      : $tag"
