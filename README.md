@@ -81,7 +81,7 @@ You can use OpenFastTrace plugins to import and export requirements in additiona
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-asciidoc-plugin</artifactId>
-            <version>0.2.0</version>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 </plugin>

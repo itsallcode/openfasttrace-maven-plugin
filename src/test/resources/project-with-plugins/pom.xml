@@ -27,7 +27,7 @@
                     <dependency>
                         <groupId>org.itsallcode</groupId>
                         <artifactId>openfasttrace-asciidoc-plugin</artifactId>
-                        <version>0.3.0</version>
+                        <version>1.0.0</version>
                     </dependency>
                 </dependencies>
             </plugin>
